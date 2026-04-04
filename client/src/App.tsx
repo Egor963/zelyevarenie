@@ -367,11 +367,12 @@ export default function App() {
                         onError={(e) => {
                           // Если изображение не загрузилось, показываем элемент
                           (e.target as HTMLImageElement).style.display = 'none';
+                          (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
                         }}
                       />
                     ) : null}
                     {/* Запасной вариант - элемент если картинка не загрузилась */}
-                    <div style={{ fontSize: '10px', marginTop: '2px' }}>
+                    <div className="element-fallback" style={{ fontSize: '10px', display: 'none' }}>
                       <ElementBadge el={c.bottomElement} />
                     </div>
                   </button>

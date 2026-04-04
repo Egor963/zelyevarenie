@@ -346,10 +346,15 @@ export function placeOnTable(game: GameState, playerId: string, handIndex: numbe
   if (handIndex < 0 || handIndex >= p.hand.length) return "Нет такой карты";
 
   const [removed] = p.hand.splice(handIndex, 1);
-  game.table.push(removed!);
+  const card = removed!;
+  
+  // Проверяем есть ли уже такой элемент на столе
+  const elementAlreadyOnTable = game.table.some(c => c.bottomElement === card.bottomElement);
+  
+  game.table.push(card);
 
-  if (!game.seenElements.has(removed!.bottomElement)) {
-    game.seenElements.add(removed!.bottomElement);
+  // Начисляем +1 очко только если такого элемента еще нет на столе
+  if (!elementAlreadyOnTable) {
     p.score += 1;
   }
 
