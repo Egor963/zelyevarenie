@@ -21,7 +21,7 @@ const ELEMENTS: ElementId[] = [
   "металл",
 ];
 
-const START_HAND = 7; // 7 карточек в руке как в настольной игре
+const START_HAND = 8; // 8 карточек в руке как в настольной игре
 const START_TABLE = 8; // 8 карточек на столе (в шкафу)
 
 export { RECIPES };
@@ -279,7 +279,7 @@ function beginTurn(game: GameState) {
   skipEmptyPlayers(game);
   if (game.phase !== "playing") return;
   const p = currentPlayer(game);
-  while (p.hand.length < 7 && game.deck.length > 0) { // Дозабор до 7 карточек
+  while (p.hand.length < 8 && game.deck.length > 0) { // Дозабор до 8 карточек
     p.hand.push(game.deck.pop()!);
   }
 }

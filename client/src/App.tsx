@@ -337,6 +337,8 @@ export default function App() {
               {snap.table.map((c) => {
                 const sel = craftTableIds.includes(c.id);
                 const click = canAct && (craftHandIndex !== null || spellTakeIdx !== null || (spellSwap && !spellSwap.tableId));
+                const cardData = getCardById(c.id);
+                
                 return (
                   <button
                     key={c.id}
@@ -344,8 +346,34 @@ export default function App() {
                     className={`table-card-btn ${sel ? "selected" : ""}`}
                     disabled={!click}
                     onClick={() => onTableClick(c.id)}
+                    style={{ 
+                      padding: '4px',
+                      border: sel ? '2px solid #3498db' : '1px solid #ddd',
+                      borderRadius: '8px',
+                      background: 'white',
+                      cursor: click ? 'pointer' : 'not-allowed'
+                    }}
                   >
-                    <ElementBadge el={c.bottomElement} />
+                    {cardData ? (
+                      <img 
+                        src={cardData.image} 
+                        alt={`${cardData.topContent} - ${cardData.bottomElement}`}
+                        style={{ 
+                          width: '80px', 
+                          height: '112px', 
+                          objectFit: 'contain',
+                          borderRadius: '4px'
+                        }}
+                        onError={(e) => {
+                          // Если изображение не загрузилось, показываем элемент
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                    ) : null}
+                    {/* Запасной вариант - элемент если картинка не загрузилась */}
+                    <div style={{ fontSize: '10px', marginTop: '2px' }}>
+                      <ElementBadge el={c.bottomElement} />
+                    </div>
                   </button>
                 );
               })}
