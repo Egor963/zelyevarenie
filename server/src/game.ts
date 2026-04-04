@@ -1,11 +1,12 @@
 import { randomUUID } from "node:crypto";
-import type {
-  BuiltRecipe,
-  ElementId,
-  GameCard,
+import type { 
+  ElementId, 
+  GameCard, 
+  CardFace, 
+  SpellKind,
   GameState,
   PlayerState,
-  SpellKind,
+  BuiltRecipe
 } from "./types.js";
 import { getRecipeDef, RECIPES } from "./recipes.js";
 
@@ -33,38 +34,165 @@ function makeCard(face: GameCard["face"], bottomElement: ElementId): GameCard {
   return { id: randomUUID(), bottomElement, face };
 }
 
-/** Колода: рецепты + заклинания; размер в духе настолки. */
+/** Колода: реальные 76 карточек из папки /client/public/cards/ */
 export function makeDeck(): GameCard[] {
   const d: GameCard[] = [];
-  const spellKinds: SpellKind[] = [
-    "take_table",
-    "take_table",
-    "take_table",
-    "break_built",
-    "break_built",
-    "break_built",
-    "swap_elements",
-    "swap_elements",
-    "swap_elements",
+  
+  // Реальные ID карточек из папки /client/public/cards/
+  const cardIds = [
+    'page01_card01', 'page01_card02', 'page01_card03', 'page01_card04', 'page01_card05', 'page01_card06', 'page01_card07', 'page01_card08', 'page01_card09',
+    'page02_card01', 'page02_card02', 'page02_card03', 'page02_card04', 'page02_card05', 'page02_card06', 'page02_card07', 'page02_card08', 'page02_card09',
+    'page03_card01', 'page03_card02', 'page03_card03', 'page03_card04', 'page03_card05', 'page03_card06', 'page03_card07', 'page03_card08', 'page03_card09',
+    'page04_card01', 'page04_card02', 'page04_card03', 'page04_card04', 'page04_card05', 'page04_card06', 'page04_card07', 'page04_card08', 'page04_card09',
+    'page05_card01', 'page05_card02', 'page05_card03', 'page05_card04', 'page05_card05', 'page05_card06', 'page05_card07', 'page05_card08', 'page05_card09',
+    'page06_card01', 'page06_card02', 'page06_card03', 'page06_card04', 'page06_card05', 'page06_card06', 'page06_card07', 'page06_card08', 'page06_card09',
+    'page07_card01', 'page07_card02', 'page07_card03', 'page07_card04', 'page07_card05', 'page07_card06', 'page07_card07', 'page07_card08', 'page07_card09',
+    'page08_card01', 'page08_card02', 'page08_card03', 'page08_card04', 'page08_card05', 'page08_card06', 'page08_card07', 'page08_card08', 'page08_card09',
+    'page09_card01', 'page09_card02', 'page09_card03', 'page09_card04'
   ];
-  for (const sk of spellKinds) {
-    d.push(makeCard({ kind: "spell", spell: sk }, randomElement()));
+
+  // Маппинг карточек на игровые данные
+  const cardMappings: Record<string, { topType: 'recipe' | 'spell'; topContent: string; bottomElement: string; points?: number }> = {
+    // Page 1
+    'page01_card01': { topType: 'recipe', topContent: 'Туман', bottomElement: 'огонь', points: 3 },
+    'page01_card02': { topType: 'recipe', topContent: 'Туман', bottomElement: 'вода', points: 3 },
+    'page01_card03': { topType: 'recipe', topContent: 'Ил', bottomElement: 'земля', points: 3 },
+    'page01_card04': { topType: 'recipe', topContent: 'Ил', bottomElement: 'вода', points: 3 },
+    'page01_card05': { topType: 'recipe', topContent: 'Искра', bottomElement: 'металл', points: 4 },
+    'page01_card06': { topType: 'recipe', topContent: 'Искра', bottomElement: 'огонь', points: 4 },
+    'page01_card07': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'свет', points: 4 },
+    'page01_card08': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'воздух', points: 4 },
+    'page01_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'тьма' },
+    
+    // Page 2
+    'page02_card01': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'жизнь' },
+    'page02_card02': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'металл' },
+    'page02_card03': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'огонь' },
+    'page02_card04': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'вода' },
+    'page02_card05': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'земля' },
+    'page02_card06': { topType: 'spell', topContent: 'Обмен', bottomElement: 'воздух' },
+    'page02_card07': { topType: 'spell', topContent: 'Обмен', bottomElement: 'свет' },
+    'page02_card08': { topType: 'spell', topContent: 'Обмен', bottomElement: 'тьма' },
+    'page02_card09': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'тьма', points: 5 },
+    
+    // Page 3
+    'page03_card01': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'жизнь', points: 5 },
+    'page03_card02': { topType: 'recipe', topContent: 'Буря', bottomElement: 'воздух', points: 6 },
+    'page03_card03': { topType: 'recipe', topContent: 'Буря', bottomElement: 'вода', points: 6 },
+    'page03_card04': { topType: 'recipe', topContent: 'Буря', bottomElement: 'металл', points: 6 },
+    'page03_card05': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'огонь', points: 8 },
+    'page03_card06': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'вода', points: 8 },
+    'page03_card07': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'земля', points: 8 },
+    'page03_card08': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'воздух', points: 8 },
+    'page03_card09': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'земля', points: 6 },
+    
+    // Page 4
+    'page04_card01': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'огонь' },
+    'page04_card02': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'вода' },
+    'page04_card03': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'жизнь', points: 10 },
+    'page04_card04': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'тьма' },
+    'page04_card05': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'свет' },
+    'page04_card06': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'металл' },
+    'page04_card07': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'земля' },
+    'page04_card08': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'воздух' },
+    'page04_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'свет' },
+    
+    // Page 5
+    'page05_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'жизнь' },
+    'page05_card02': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'металл' },
+    'page05_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'огонь' },
+    'page05_card04': { topType: 'spell', topContent: 'Обмен', bottomElement: 'вода' },
+    'page05_card05': { topType: 'recipe', topContent: 'Туман', bottomElement: 'воздух' },
+    'page05_card06': { topType: 'recipe', topContent: 'Туман', bottomElement: 'свет' },
+    'page05_card07': { topType: 'recipe', topContent: 'Ил', bottomElement: 'тьма' },
+    'page05_card08': { topType: 'recipe', topContent: 'Ил', bottomElement: 'жизнь' },
+    'page05_card09': { topType: 'recipe', topContent: 'Искра', bottomElement: 'воздух' },
+    
+    // Page 6
+    'page06_card01': { topType: 'recipe', topContent: 'Искра', bottomElement: 'свет' },
+    'page06_card02': { topType: 'recipe', topContent: 'Искра', bottomElement: 'тьма' },
+    'page06_card03': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'огонь' },
+    'page06_card04': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'вода' },
+    'page06_card05': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'земля' },
+    'page06_card06': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'металл' },
+    'page06_card07': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'огонь' },
+    'page06_card08': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'вода' },
+    'page06_card09': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'земля' },
+    
+    // Page 7
+    'page07_card01': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'воздух' },
+    'page07_card02': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'свет' },
+    'page07_card03': { topType: 'recipe', topContent: 'Буря', bottomElement: 'огонь' },
+    'page07_card04': { topType: 'recipe', topContent: 'Буря', bottomElement: 'земля' },
+    'page07_card05': { topType: 'recipe', topContent: 'Буря', bottomElement: 'тьма' },
+    'page07_card06': { topType: 'recipe', topContent: 'Буря', bottomElement: 'жизнь' },
+    'page07_card07': { topType: 'recipe', topContent: 'Буря', bottomElement: 'свет' },
+    'page07_card08': { topType: 'recipe', topContent: 'Буря', bottomElement: 'металл' },
+    'page07_card09': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'воздух' },
+    
+    // Page 8
+    'page08_card01': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'свет' },
+    'page08_card02': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'тьма' },
+    'page08_card03': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'жизнь' },
+    'page08_card04': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'металл' },
+    'page08_card05': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'огонь' },
+    'page08_card06': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'вода' },
+    'page08_card07': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'земля' },
+    'page08_card08': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'воздух' },
+    'page08_card09': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'тьма' },
+    
+    // Page 9
+    'page09_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'свет' },
+    'page09_card02': { topType: 'spell', topContent: 'Обмен', bottomElement: 'жизнь' },
+    'page09_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'металл' },
+    'page09_card04': { topType: 'spell', topContent: 'Обмен', bottomElement: 'земля' }
+  };
+
+  // Создаем карточки с реальными ID
+  for (const cardId of cardIds) {
+    const mapping = cardMappings[cardId];
+    if (!mapping) {
+      console.warn(`No mapping found for card: ${cardId}`);
+      continue;
+    }
+
+    let face: CardFace;
+    if (mapping.topType === 'recipe') {
+      // Находим соответствующий рецепт
+      const recipe = RECIPES.find(r => r.name === mapping.topContent);
+      if (recipe) {
+        face = { kind: 'recipe', defId: recipe.id };
+      } else {
+        face = { kind: 'recipe', defId: mapping.topContent.toLowerCase().replace(/\s+/g, '_') };
+      }
+    } else {
+      // Заклинания
+      let spell: SpellKind;
+      switch (mapping.topContent) {
+        case 'Взять со стола':
+          spell = 'take_table';
+          break;
+        case 'Разобрать рецепт':
+          spell = 'break_built';
+          break;
+        case 'Обмен':
+          spell = 'swap_elements';
+          break;
+        default:
+          spell = 'take_table';
+      }
+      face = { kind: 'spell', spell };
+    }
+
+    const gameCard: GameCard = {
+      id: cardId, // Используем реальный ID из папки cards!
+      bottomElement: mapping.bottomElement as ElementId,
+      face
+    };
+
+    d.push(gameCard);
   }
 
-  const simple = RECIPES.filter((r) => !r.needsBuilt?.length);
-  const complex = RECIPES.filter((r) => r.needsBuilt?.length);
-  for (const r of simple) {
-    for (let i = 0; i < 4; i++) {
-      const be = pickBottomForRecipe(r, i);
-      d.push(makeCard({ kind: "recipe", defId: r.id }, be));
-    }
-  }
-  for (const r of complex) {
-    for (let i = 0; i < 2; i++) {
-      const be = pickBottomForRecipe(r, i);
-      d.push(makeCard({ kind: "recipe", defId: r.id }, be));
-    }
-  }
   return d;
 }
 
