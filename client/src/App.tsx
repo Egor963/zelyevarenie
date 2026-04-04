@@ -9,6 +9,7 @@ import type {
   RecipeDef,
   SpellKind,
 } from "./types";
+import { getCardById } from "./data/cards";
 
 function socketUrl() {
   const fixed = import.meta.env.VITE_SOCKET_URL;
@@ -573,22 +574,53 @@ function HandCardBlock({
 
   return (
     <div className="hand-card">
-      {card.face.kind === "recipe" ? (
-        <>
-          <div className="face-line">Рецепт</div>
-          <div className="face-title">{recipeByCatalog(catalog, card.face.defId)?.name ?? card.face.defId}</div>
-          <div className="face-line">
-            Цена: {recipeByCatalog(catalog, card.face.defId)?.points ?? "?"} очк.
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="face-line">Заклинание</div>
-          <div className="face-title">{spellTitle(card.face.spell)}</div>
-        </>
-      )}
-      <div className="face-line">
-        Низ (элемент): <ElementBadge el={card.bottomElement} />
+      {/* Пытаемся показать реальное изображение карточки */}
+      {(() => {
+        const cardData = getCardById(card.id);
+        if (cardData) {
+          return (
+            <div className="card-image-container">
+              <img 
+                src={cardData.image} 
+                alt={`${cardData.topContent} - ${cardData.bottomElement}`}
+                style={{ 
+                  width: '100%', 
+                  height: '120px', 
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  marginBottom: '8px'
+                }}
+                onError={(e) => {
+                  // Если изображение не загрузилось, показываем текст
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            </div>
+          );
+        }
+        // Запасной вариант - текстовое отображение
+        return null;
+      })()}
+      
+      {/* Сохраняем оригинальное текстовое отображение как запасной вариант */}
+      <div className="card-text-content" style={{ display: 'none' }}>
+        {card.face.kind === "recipe" ? (
+          <>
+            <div className="face-line">Рецепт</div>
+            <div className="face-title">{recipeByCatalog(catalog, card.face.defId)?.name ?? card.face.defId}</div>
+            <div className="face-line">
+              Цена: {recipeByCatalog(catalog, card.face.defId)?.points ?? "?"} очк.
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="face-line">Заклинание</div>
+            <div className="face-title">{spellTitle(card.face.spell)}</div>
+          </>
+        )}
+        <div className="face-line">
+          Низ (элемент): <ElementBadge el={card.bottomElement} />
+        </div>
       </div>
       <div className="row" style={{ flexWrap: "wrap", marginTop: 4 }}>
         <button type="button" disabled={!canAct || busyCraft || !!spellSwap} onClick={onPlace}>
