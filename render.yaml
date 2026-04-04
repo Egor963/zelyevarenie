@@ -1,0 +1,9 @@
+# https://render.com — один бесплатный Web Service: сайт + игра по Socket.io
+services:
+  - type: web
+    name: zelyevarenie
+    runtime: node
+    plan: free
+    buildCommand: npm install --prefix client && npm install --prefix server && npm run build --prefix client && npm run build --prefix server
+    startCommand: node server/dist/index.js
+    healthCheckPath: /health
