@@ -11,14 +11,14 @@ import type {
 import { getRecipeDef, RECIPES } from "./recipes.js";
 
 const ELEMENTS: ElementId[] = [
-  "огонь",
-  "вода",
-  "земля",
-  "воздух",
-  "свет",
-  "тьма",
-  "жизнь",
-  "металл",
+  "огненный свет",
+  "кристалл воды",
+  "кристалл земли",
+  "кристалл воздуха",
+  "кристалл света",
+  "кристалл тьмы",
+  "кристалл жизни",
+  "кристалл металла",
 ];
 
 const START_HAND = 8; // 8 карточек в руке как в настольной игре
@@ -51,119 +51,119 @@ export function makeDeck(): GameCard[] {
     'page09_card01', 'page09_card02', 'page09_card03', 'page09_card04'
   ];
 
-  // Маппинг карточек на игровые данные
+  // Маппинг карточек на игровые данные с НАСТОЯЩИМИ названиями элементов с карточек
   const cardMappings: Record<string, { topType: 'recipe' | 'spell'; topContent: string; bottomElement: string; points?: number }> = {
-    // Page 1 - Туман (огонь+вода)
-    'page01_card01': { topType: 'recipe', topContent: 'Туман', bottomElement: 'огонь', points: 3 },
-    'page01_card02': { topType: 'recipe', topContent: 'Туман', bottomElement: 'вода', points: 3 },
-    // Page 1 - Ил (земля+вода)
-    'page01_card03': { topType: 'recipe', topContent: 'Ил', bottomElement: 'земля', points: 3 },
-    'page01_card04': { topType: 'recipe', topContent: 'Ил', bottomElement: 'вода', points: 3 },
-    // Page 1 - Искра (металл+огонь)
-    'page01_card05': { topType: 'recipe', topContent: 'Искра', bottomElement: 'металл', points: 4 },
-    'page01_card06': { topType: 'recipe', topContent: 'Искра', bottomElement: 'огонь', points: 4 },
-    // Page 1 - Рассвет (свет+воздух)
-    'page01_card07': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'свет', points: 4 },
-    'page01_card08': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'воздух', points: 4 },
-    'page01_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'тьма' },
+    // Page 1 - Туман (огненный свет + кристалл воды)
+    'page01_card01': { topType: 'recipe', topContent: 'Туман', bottomElement: 'огненный свет', points: 3 },
+    'page01_card02': { topType: 'recipe', topContent: 'Туман', bottomElement: 'кристалл воды', points: 3 },
+    // Page 1 - Ил (кристалл земли + кристалл воды)
+    'page01_card03': { topType: 'recipe', topContent: 'Ил', bottomElement: 'кристалл земли', points: 3 },
+    'page01_card04': { topType: 'recipe', topContent: 'Ил', bottomElement: 'кристалл воды', points: 3 },
+    // Page 1 - Искра (огненный свет + кристалл металла)
+    'page01_card05': { topType: 'recipe', topContent: 'Искра', bottomElement: 'кристалл металла', points: 4 },
+    'page01_card06': { topType: 'recipe', topContent: 'Искра', bottomElement: 'огненный свет', points: 4 },
+    // Page 1 - Рассвет (кристалл света + кристалл воздуха)
+    'page01_card07': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'кристалл света', points: 4 },
+    'page01_card08': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'кристалл воздуха', points: 4 },
+    'page01_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'кристалл тьмы' },
     
     // Page 2 - заклинания
-    'page02_card01': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'жизнь' },
-    'page02_card02': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'металл' },
-    'page02_card03': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'огонь' },
-    'page02_card04': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'вода' },
-    'page02_card05': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'земля' },
-    'page02_card06': { topType: 'spell', topContent: 'Обмен', bottomElement: 'воздух' },
-    'page02_card07': { topType: 'spell', topContent: 'Обмен', bottomElement: 'свет' },
-    'page02_card08': { topType: 'spell', topContent: 'Обмен', bottomElement: 'тьма' },
-    // Page 2 - Тенежизнь (тьма+жизнь)
-    'page02_card09': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'тьма', points: 5 },
+    'page02_card01': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'кристалл жизни' },
+    'page02_card02': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'кристалл металла' },
+    'page02_card03': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'огненный свет' },
+    'page02_card04': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'кристалл воды' },
+    'page02_card05': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'кристалл земли' },
+    'page02_card06': { topType: 'spell', topContent: 'Обмен', bottomElement: 'кристалл воздуха' },
+    'page02_card07': { topType: 'spell', topContent: 'Обмен', bottomElement: 'кристалл света' },
+    'page02_card08': { topType: 'spell', topContent: 'Обмен', bottomElement: 'кристалл тьмы' },
+    // Page 2 - Тенежизнь (кристалл тьмы + кристалл жизни)
+    'page02_card09': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'кристалл тьмы', points: 5 },
     
-    // Page 3 - Тенежизнь (тьма+жизнь)
-    'page03_card01': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'жизнь', points: 5 },
-    // Page 3 - Буря (воздух+вода+металл)
-    'page03_card02': { topType: 'recipe', topContent: 'Буря', bottomElement: 'воздух', points: 6 },
-    'page03_card03': { topType: 'recipe', topContent: 'Буря', bottomElement: 'вода', points: 6 },
-    'page03_card04': { topType: 'recipe', topContent: 'Буря', bottomElement: 'металл', points: 6 },
-    // Page 3 - Квинтэссенция (огонь+вода+земля+воздух)
-    'page03_card05': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'огонь', points: 8 },
-    'page03_card06': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'вода', points: 8 },
-    'page03_card07': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'земля', points: 8 },
-    'page03_card08': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'воздух', points: 8 },
-    // Page 3 - Сильный эликсир (все элементы)
-    'page03_card09': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'земля', points: 6 },
+    // Page 3 - Тенежизнь (кристалл тьмы + кристалл жизни)
+    'page03_card01': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'кристалл жизни', points: 5 },
+    // Page 3 - Буря (кристалл воздуха + кристалл воды + кристалл металла)
+    'page03_card02': { topType: 'recipe', topContent: 'Буря', bottomElement: 'кристалл воздуха', points: 6 },
+    'page03_card03': { topType: 'recipe', topContent: 'Буря', bottomElement: 'кристалл воды', points: 6 },
+    'page03_card04': { topType: 'recipe', topContent: 'Буря', bottomElement: 'кристалл металла', points: 6 },
+    // Page 3 - Квинтэссенция (огненный свет + кристалл воды + кристалл земли + кристалл воздуха)
+    'page03_card05': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'огненный свет', points: 8 },
+    'page03_card06': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'кристалл воды', points: 8 },
+    'page03_card07': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'кристалл земли', points: 8 },
+    'page03_card08': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'кристалл воздуха', points: 8 },
+    // Page 3 - Сильный эликсир
+    'page03_card09': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'кристалл земли', points: 6 },
     
     // Page 4 - Сильный эликсир
-    'page04_card01': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'огонь' },
-    'page04_card02': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'вода' },
-    // Page 4 - Чародейская связь (жизнь+тьма+свет+металл)
-    'page04_card03': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'жизнь', points: 10 },
-    'page04_card04': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'тьма' },
-    'page04_card05': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'свет' },
-    'page04_card06': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'металл' },
+    'page04_card01': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'огненный свет' },
+    'page04_card02': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'кристалл воды' },
+    // Page 4 - Чародейская связь
+    'page04_card03': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'кристалл жизни', points: 10 },
+    'page04_card04': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'кристалл тьмы' },
+    'page04_card05': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'кристалл света' },
+    'page04_card06': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'кристалл металла' },
     // Page 4 - заклинания
-    'page04_card07': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'земля' },
-    'page04_card08': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'воздух' },
-    'page04_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'свет' },
+    'page04_card07': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'кристалл земли' },
+    'page04_card08': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'кристалл воздуха' },
+    'page04_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'кристалл света' },
     
     // Page 5 - заклинания
-    'page05_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'жизнь' },
-    'page05_card02': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'металл' },
-    'page05_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'огонь' },
-    'page05_card04': { topType: 'spell', topContent: 'Обмен', bottomElement: 'вода' },
+    'page05_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'кристалл жизни' },
+    'page05_card02': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'кристалл металла' },
+    'page05_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'огненный свет' },
+    'page05_card04': { topType: 'spell', topContent: 'Обмен', bottomElement: 'кристалл воды' },
     // Page 5 - Туман (дополнительные)
-    'page05_card05': { topType: 'recipe', topContent: 'Туман', bottomElement: 'воздух' },
-    'page05_card06': { topType: 'recipe', topContent: 'Туман', bottomElement: 'свет' },
+    'page05_card05': { topType: 'recipe', topContent: 'Туман', bottomElement: 'кристалл воздуха' },
+    'page05_card06': { topType: 'recipe', topContent: 'Туман', bottomElement: 'кристалл света' },
     // Page 5 - Ил (дополнительные)
-    'page05_card07': { topType: 'recipe', topContent: 'Ил', bottomElement: 'тьма' },
-    'page05_card08': { topType: 'recipe', topContent: 'Ил', bottomElement: 'жизнь' },
+    'page05_card07': { topType: 'recipe', topContent: 'Ил', bottomElement: 'кристалл тьмы' },
+    'page05_card08': { topType: 'recipe', topContent: 'Ил', bottomElement: 'кристалл жизни' },
     // Page 5 - Искра (дополнительные)
-    'page05_card09': { topType: 'recipe', topContent: 'Искра', bottomElement: 'воздух' },
+    'page05_card09': { topType: 'recipe', topContent: 'Искра', bottomElement: 'кристалл воздуха' },
     
     // Page 6 - Искра (дополнительные)
-    'page06_card01': { topType: 'recipe', topContent: 'Искра', bottomElement: 'свет' },
-    'page06_card02': { topType: 'recipe', topContent: 'Искра', bottomElement: 'тьма' },
+    'page06_card01': { topType: 'recipe', topContent: 'Искра', bottomElement: 'кристалл света' },
+    'page06_card02': { topType: 'recipe', topContent: 'Искра', bottomElement: 'кристалл тьмы' },
     // Page 6 - Рассвет (дополнительные)
-    'page06_card03': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'огонь' },
-    'page06_card04': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'вода' },
-    'page06_card05': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'земля' },
-    'page06_card06': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'металл' },
+    'page06_card03': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'огненный свет' },
+    'page06_card04': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'кристалл воды' },
+    'page06_card05': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'кристалл земли' },
+    'page06_card06': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'кристалл металла' },
     // Page 6 - Тенежизнь (дополнительные)
-    'page06_card07': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'огонь' },
-    'page06_card08': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'вода' },
-    'page06_card09': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'земля' },
+    'page06_card07': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'огненный свет' },
+    'page06_card08': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'кристалл воды' },
+    'page06_card09': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'кристалл земли' },
     
     // Page 7 - Тенежизнь (дополнительные)
-    'page07_card01': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'воздух' },
-    'page07_card02': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'свет' },
+    'page07_card01': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'кристалл воздуха' },
+    'page07_card02': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'кристалл света' },
     // Page 7 - Буря (дополнительные)
-    'page07_card03': { topType: 'recipe', topContent: 'Буря', bottomElement: 'огонь' },
-    'page07_card04': { topType: 'recipe', topContent: 'Буря', bottomElement: 'земля' },
-    'page07_card05': { topType: 'recipe', topContent: 'Буря', bottomElement: 'тьма' },
-    'page07_card06': { topType: 'recipe', topContent: 'Буря', bottomElement: 'жизнь' },
-    'page07_card07': { topType: 'recipe', topContent: 'Буря', bottomElement: 'свет' },
-    'page07_card08': { topType: 'recipe', topContent: 'Буря', bottomElement: 'металл' },
+    'page07_card03': { topType: 'recipe', topContent: 'Буря', bottomElement: 'огненный свет' },
+    'page07_card04': { topType: 'recipe', topContent: 'Буря', bottomElement: 'кристалл земли' },
+    'page07_card05': { topType: 'recipe', topContent: 'Буря', bottomElement: 'кристалл тьмы' },
+    'page07_card06': { topType: 'recipe', topContent: 'Буря', bottomElement: 'кристалл жизни' },
+    'page07_card07': { topType: 'recipe', topContent: 'Буря', bottomElement: 'кристалл света' },
+    'page07_card08': { topType: 'recipe', topContent: 'Буря', bottomElement: 'кристалл металла' },
     // Page 7 - Сильный эликсир (дополнительные)
-    'page07_card09': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'воздух' },
+    'page07_card09': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'кристалл воздуха' },
     
     // Page 8 - Сильный эликсир (дополнительные)
-    'page08_card01': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'свет' },
-    'page08_card02': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'тьма' },
-    'page08_card03': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'жизнь' },
-    'page08_card04': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'металл' },
+    'page08_card01': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'кристалл света' },
+    'page08_card02': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'кристалл тьмы' },
+    'page08_card03': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'кристалл жизни' },
+    'page08_card04': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'кристалл металла' },
     // Page 8 - Чародейская связь (дополнительные)
-    'page08_card05': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'огонь' },
-    'page08_card06': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'вода' },
-    'page08_card07': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'земля' },
-    'page08_card08': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'воздух' },
+    'page08_card05': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'огненный свет' },
+    'page08_card06': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'кристалл воды' },
+    'page08_card07': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'кристалл земли' },
+    'page08_card08': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'кристалл воздуха' },
     // Page 8 - заклинания
-    'page08_card09': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'тьма' },
+    'page08_card09': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'кристалл тьмы' },
     
     // Page 9 - заклинания
-    'page09_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'свет' },
-    'page09_card02': { topType: 'spell', topContent: 'Обмен', bottomElement: 'жизнь' },
-    'page09_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'металл' },
-    'page09_card04': { topType: 'spell', topContent: 'Обмен', bottomElement: 'земля' }
+    'page09_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'кристалл света' },
+    'page09_card02': { topType: 'spell', topContent: 'Обмен', bottomElement: 'кристалл жизни' },
+    'page09_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'кристалл металла' },
+    'page09_card04': { topType: 'spell', topContent: 'Обмен', bottomElement: 'кристалл земли' }
   };
 
   // Создаем карточки с реальными ID
