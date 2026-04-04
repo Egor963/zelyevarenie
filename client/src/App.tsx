@@ -165,19 +165,25 @@ export default function App() {
 
   const place = (handIndex: number) => {
     clearModes();
+    console.log('Placing card at index:', handIndex);
     socketRef.current?.emit("placeOnTable", { handIndex }, (r: { ok: boolean; error?: string }) => {
       if (!r.ok) setError(r.error ?? "Ошибка");
+      else console.log('Card placed successfully');
     });
   };
 
   const submitCraft = () => {
     if (craftHandIndex === null) return;
+    console.log('Submitting craft:', { handIndex: craftHandIndex, tableCardIds: craftTableIds, builtInstanceIds: craftBuiltIds });
     socketRef.current?.emit(
       "craftRecipe",
       { handIndex: craftHandIndex, tableCardIds: craftTableIds, builtInstanceIds: craftBuiltIds },
       (r: { ok: boolean; error?: string }) => {
         if (!r.ok) setError(r.error ?? "Ошибка");
-        else clearModes();
+        else {
+          console.log('Craft successful');
+          clearModes();
+        }
       }
     );
   };

@@ -351,11 +351,16 @@ export function placeOnTable(game: GameState, playerId: string, handIndex: numbe
   // Проверяем есть ли уже такой элемент на столе
   const elementAlreadyOnTable = game.table.some(c => c.bottomElement === card.bottomElement);
   
+  console.log(`Placing card: ${card.id}, element: ${card.bottomElement}, alreadyOnTable: ${elementAlreadyOnTable}`);
+  
   game.table.push(card);
 
   // Начисляем +1 очко только если такого элемента еще нет на столе
   if (!elementAlreadyOnTable) {
     p.score += 1;
+    console.log(`Added 1 point to player ${p.id}, new score: ${p.score}`);
+  } else {
+    console.log(`No points added - element already on table`);
   }
 
   finishMainAction(game);
