@@ -585,10 +585,11 @@ function HandCardBlock({
                 alt={`${cardData.topContent} - ${cardData.bottomElement}`}
                 style={{ 
                   width: '100%', 
-                  height: '120px', 
-                  objectFit: 'cover',
+                  height: '180px', // Увеличиваем высоту
+                  objectFit: 'contain', // Меняем на contain чтобы видеть всю карточку
                   borderRadius: '8px',
-                  marginBottom: '8px'
+                  marginBottom: '8px',
+                  border: '1px solid #ddd'
                 }}
                 onError={(e) => {
                   // Если изображение не загрузилось, показываем текст
