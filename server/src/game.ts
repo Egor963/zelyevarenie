@@ -53,18 +53,21 @@ export function makeDeck(): GameCard[] {
 
   // Маппинг карточек на игровые данные
   const cardMappings: Record<string, { topType: 'recipe' | 'spell'; topContent: string; bottomElement: string; points?: number }> = {
-    // Page 1
+    // Page 1 - Туман (огонь+вода)
     'page01_card01': { topType: 'recipe', topContent: 'Туман', bottomElement: 'огонь', points: 3 },
     'page01_card02': { topType: 'recipe', topContent: 'Туман', bottomElement: 'вода', points: 3 },
+    // Page 1 - Ил (земля+вода)
     'page01_card03': { topType: 'recipe', topContent: 'Ил', bottomElement: 'земля', points: 3 },
     'page01_card04': { topType: 'recipe', topContent: 'Ил', bottomElement: 'вода', points: 3 },
+    // Page 1 - Искра (металл+огонь)
     'page01_card05': { topType: 'recipe', topContent: 'Искра', bottomElement: 'металл', points: 4 },
     'page01_card06': { topType: 'recipe', topContent: 'Искра', bottomElement: 'огонь', points: 4 },
+    // Page 1 - Рассвет (свет+воздух)
     'page01_card07': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'свет', points: 4 },
     'page01_card08': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'воздух', points: 4 },
     'page01_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'тьма' },
     
-    // Page 2
+    // Page 2 - заклинания
     'page02_card01': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'жизнь' },
     'page02_card02': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'металл' },
     'page02_card03': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'огонь' },
@@ -73,75 +76,90 @@ export function makeDeck(): GameCard[] {
     'page02_card06': { topType: 'spell', topContent: 'Обмен', bottomElement: 'воздух' },
     'page02_card07': { topType: 'spell', topContent: 'Обмен', bottomElement: 'свет' },
     'page02_card08': { topType: 'spell', topContent: 'Обмен', bottomElement: 'тьма' },
+    // Page 2 - Тенежизнь (тьма+жизнь)
     'page02_card09': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'тьма', points: 5 },
     
-    // Page 3
+    // Page 3 - Тенежизнь (тьма+жизнь)
     'page03_card01': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'жизнь', points: 5 },
+    // Page 3 - Буря (воздух+вода+металл)
     'page03_card02': { topType: 'recipe', topContent: 'Буря', bottomElement: 'воздух', points: 6 },
     'page03_card03': { topType: 'recipe', topContent: 'Буря', bottomElement: 'вода', points: 6 },
     'page03_card04': { topType: 'recipe', topContent: 'Буря', bottomElement: 'металл', points: 6 },
+    // Page 3 - Квинтэссенция (огонь+вода+земля+воздух)
     'page03_card05': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'огонь', points: 8 },
     'page03_card06': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'вода', points: 8 },
     'page03_card07': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'земля', points: 8 },
     'page03_card08': { topType: 'recipe', topContent: 'Квинтэссенция', bottomElement: 'воздух', points: 8 },
+    // Page 3 - Сильный эликсир (все элементы)
     'page03_card09': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'земля', points: 6 },
     
-    // Page 4
+    // Page 4 - Сильный эликсир
     'page04_card01': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'огонь' },
     'page04_card02': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'вода' },
+    // Page 4 - Чародейская связь (жизнь+тьма+свет+металл)
     'page04_card03': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'жизнь', points: 10 },
     'page04_card04': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'тьма' },
     'page04_card05': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'свет' },
     'page04_card06': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'металл' },
+    // Page 4 - заклинания
     'page04_card07': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'земля' },
     'page04_card08': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'воздух' },
     'page04_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'свет' },
     
-    // Page 5
+    // Page 5 - заклинания
     'page05_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'жизнь' },
     'page05_card02': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'металл' },
     'page05_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'огонь' },
     'page05_card04': { topType: 'spell', topContent: 'Обмен', bottomElement: 'вода' },
+    // Page 5 - Туман (дополнительные)
     'page05_card05': { topType: 'recipe', topContent: 'Туман', bottomElement: 'воздух' },
     'page05_card06': { topType: 'recipe', topContent: 'Туман', bottomElement: 'свет' },
+    // Page 5 - Ил (дополнительные)
     'page05_card07': { topType: 'recipe', topContent: 'Ил', bottomElement: 'тьма' },
     'page05_card08': { topType: 'recipe', topContent: 'Ил', bottomElement: 'жизнь' },
+    // Page 5 - Искра (дополнительные)
     'page05_card09': { topType: 'recipe', topContent: 'Искра', bottomElement: 'воздух' },
     
-    // Page 6
+    // Page 6 - Искра (дополнительные)
     'page06_card01': { topType: 'recipe', topContent: 'Искра', bottomElement: 'свет' },
     'page06_card02': { topType: 'recipe', topContent: 'Искра', bottomElement: 'тьма' },
+    // Page 6 - Рассвет (дополнительные)
     'page06_card03': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'огонь' },
     'page06_card04': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'вода' },
     'page06_card05': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'земля' },
     'page06_card06': { topType: 'recipe', topContent: 'Рассвет', bottomElement: 'металл' },
+    // Page 6 - Тенежизнь (дополнительные)
     'page06_card07': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'огонь' },
     'page06_card08': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'вода' },
     'page06_card09': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'земля' },
     
-    // Page 7
+    // Page 7 - Тенежизнь (дополнительные)
     'page07_card01': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'воздух' },
     'page07_card02': { topType: 'recipe', topContent: 'Тенежизнь', bottomElement: 'свет' },
+    // Page 7 - Буря (дополнительные)
     'page07_card03': { topType: 'recipe', topContent: 'Буря', bottomElement: 'огонь' },
     'page07_card04': { topType: 'recipe', topContent: 'Буря', bottomElement: 'земля' },
     'page07_card05': { topType: 'recipe', topContent: 'Буря', bottomElement: 'тьма' },
     'page07_card06': { topType: 'recipe', topContent: 'Буря', bottomElement: 'жизнь' },
     'page07_card07': { topType: 'recipe', topContent: 'Буря', bottomElement: 'свет' },
     'page07_card08': { topType: 'recipe', topContent: 'Буря', bottomElement: 'металл' },
+    // Page 7 - Сильный эликсир (дополнительные)
     'page07_card09': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'воздух' },
     
-    // Page 8
+    // Page 8 - Сильный эликсир (дополнительные)
     'page08_card01': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'свет' },
     'page08_card02': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'тьма' },
     'page08_card03': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'жизнь' },
     'page08_card04': { topType: 'recipe', topContent: 'Сильный эликсир', bottomElement: 'металл' },
+    // Page 8 - Чародейская связь (дополнительные)
     'page08_card05': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'огонь' },
     'page08_card06': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'вода' },
     'page08_card07': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'земля' },
     'page08_card08': { topType: 'recipe', topContent: 'Чародейская связь', bottomElement: 'воздух' },
+    // Page 8 - заклинания
     'page08_card09': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'тьма' },
     
-    // Page 9
+    // Page 9 - заклинания
     'page09_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'свет' },
     'page09_card02': { topType: 'spell', topContent: 'Обмен', bottomElement: 'жизнь' },
     'page09_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'металл' },
