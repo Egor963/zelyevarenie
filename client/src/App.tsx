@@ -564,14 +564,20 @@ export default function App() {
 
           <section className="panel">
             <h2 style={{ marginTop: 0 }}>Шкаф элементов</h2>
-            {(craftHandIndex !== null || spellTakeIdx !== null || spellBreakIdx !== null || spellSwap?.tableId === null || (spellTransform?.builtInstanceId !== null && spellTransform?.builtInstanceId !== null)) && canAct && (
-              <p className="hint">
-                {craftHandIndex !== null && "Выберите карты стола для рецепта (клик включает/снимает)."}
-                {spellTakeIdx !== null && "Кликните элемент, чтобы забрать его в руку."}
-                {spellBreakIdx !== null && "Кликните свой собранный рецепт, чтобы разобрать его."}
-                {spellSwap && spellSwap.tableId === null && "Кликните карту стола для обмена."}
-                {spellTransform?.builtInstanceId && "Кликните элемент из шкафа для трансформации."}
-              </p>
+            {spellTransform?.builtInstanceId && canAct && (
+              <p className="hint">Кликните элемент из шкафа для трансформации.</p>
+            )}
+            {craftHandIndex !== null && canAct && (
+              <p className="hint">Выберите карты стола для рецепта (клик включает/снимает).</p>
+            )}
+            {spellTakeIdx !== null && canAct && (
+              <p className="hint">Кликните элемент, чтобы забрать его в руку.</p>
+            )}
+            {spellBreakIdx !== null && canAct && (
+              <p className="hint">Кликните свой собранный рецепт, чтобы разобрать его.</p>
+            )}
+            {spellSwap && spellSwap.tableId === null && canAct && (
+              <p className="hint">Кликните карту стола для обмена.</p>
             )}
             <div className="table-grid">
               {snap.table.map((c) => {
