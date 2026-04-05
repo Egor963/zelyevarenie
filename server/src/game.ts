@@ -371,20 +371,20 @@ function nextTurn(game: GameState) {
   console.log(log);
   
   // Записываем в файл логов
-  require('fs').appendFileSync('server.log', log + '\n');
+  fs.appendFileSync('server.log', log + '\n');
   
   game.currentPlayerIndex = (game.currentPlayerIndex + 1) % game.players.length;
   
   const log2 = `🎯 NEXT TURN AFTER INDEX CHANGE: currentPlayerIndex=${game.currentPlayerIndex}`;
   console.log(log2);
-  require('fs').appendFileSync('server.log', log2 + '\n');
+  fs.appendFileSync('server.log', log2 + '\n');
   
   beginTurn(game);
   checkEnd(game);
   
   const log3 = `🎯 NEXT TURN END: currentPlayerIndex=${game.currentPlayerIndex}`;
   console.log(log3);
-  require('fs').appendFileSync('server.log', log3 + '\n');
+  fs.appendFileSync('server.log', log3 + '\n');
 }
 
 /** Если рука опустела до основного действия — передаём ход (добор только в начале следующего хода). */
