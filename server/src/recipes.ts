@@ -373,7 +373,10 @@ export const RECIPES: RecipeDef[] = [
     needs: { "любой талисман": 2 },
     points: 10,
     needsBuilt: [
-      { recipeDefId: "knowledge_talisman", count: 1 }
+      { recipeDefId: "knowledge_talisman", count: 1 },
+      { recipeDefId: "palantir_talisman", count: 1 },
+      { recipeDefId: "teleport_talisman", count: 1 },
+      { recipeDefId: "beasts_master_talisman", count: 1 }
     ]
   },
   {
