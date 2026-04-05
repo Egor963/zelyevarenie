@@ -286,7 +286,9 @@ export default function App() {
     myTurn, 
     canAct, 
     phase: snap?.phase, 
-    mustPlayMainAction: snap?.mustPlayMainAction 
+    mustPlayMainAction: snap?.mustPlayMainAction,
+    spellBreakIdx,
+    spellTakeIdx
   });
 
   const craftDef =
@@ -551,6 +553,7 @@ export default function App() {
                       setSpellTakeIdx(i);
                     }}
                     onSpellBreak={() => {
+                      console.log('🎯 SPELL BREAK CLICKED:', { index: i });
                       clearModes();
                       setSpellBreakIdx(i);
                     }}
