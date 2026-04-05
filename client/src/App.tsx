@@ -154,54 +154,53 @@ export default function App() {
     }
   }, [playerName]);
 
-  // Сохраняем состояние игры в localStorage
+  // Сохраняем состояние игры в URL параметрах
   useEffect(() => {
-    if (roomId && socketRef.current?.id && snap?.players) {
+    if (roomId && snap?.players) {
       const currentPlayer = snap.players.find(p => p.id === socketRef.current?.id);
-      const gameState = {
-        roomId: roomId,
-        playerId: socketRef.current.id,
-        playerName: currentPlayer?.name || playerName
-      };
-      localStorage.setItem('gameState', JSON.stringify(gameState));
-      console.log('💾 GAME STATE SAVED:', gameState);
+      const params = new URLSearchParams(window.location.search);
+      params.set('roomId', roomId);
+      params.set('playerName', currentPlayer?.name || playerName);
+      
+      // Обновляем URL без перезагрузки
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+      window.history.replaceState({}, '', newUrl);
+      
+      console.log('💾 GAME STATE SAVED TO URL:', { roomId, playerName: currentPlayer?.name });
     }
   }, [roomId, snap?.players, playerName]);
 
-  // Восстанавливаем состояние игры при загрузке
+  // Восстанавливаем состояние игры из URL при загрузке
   useEffect(() => {
-    console.log('🔄 PAGE LOADED - checking saved state...');
-    const savedState = localStorage.getItem('gameState');
-    console.log('🔄 SAVED STATE:', savedState);
-    console.log('🔄 CURRENT ROOM ID:', roomId);
+    const params = new URLSearchParams(window.location.search);
+    const savedRoomId = params.get('roomId');
+    const savedPlayerName = params.get('playerName');
     
-    if (savedState) {
-      try {
-        const gameState = JSON.parse(savedState);
-        console.log('🔄 RESTORING GAME STATE:', gameState);
-        console.log('🔄 SOCKET STATUS:', socketRef.current?.connected);
-        
-        // Подключаемся к сохраненной комнате сразу при загрузке
-        if (socketRef.current) {
+    if (savedRoomId && savedPlayerName && !roomId) {
+      console.log('🔄 RESTORING GAME STATE FROM URL:', { roomId: savedRoomId, playerName: savedPlayerName });
+      
+      // Ждем подключения сокета и подключаемся к комнате
+      const connectToRoom = () => {
+        if (socketRef.current?.connected) {
+          console.log('🔄 SOCKET CONNECTED - joining room...');
           socketRef.current.emit("joinRoom", {
-            roomId: gameState.roomId,
-            playerName: gameState.playerName
+            roomId: savedRoomId,
+            playerName: savedPlayerName
           });
         } else {
           console.log('🔄 SOCKET NOT READY - will retry...');
           setTimeout(() => {
             if (socketRef.current) {
               socketRef.current.emit("joinRoom", {
-                roomId: gameState.roomId,
-                playerName: gameState.playerName
+                roomId: savedRoomId,
+                playerName: savedPlayerName
               });
             }
-          }, 1000);
+          }, 500);
         }
-      } catch (error) {
-        console.error('🔄 FAILED TO RESTORE GAME STATE:', error);
-        localStorage.removeItem('gameState');
-      }
+      };
+      
+      connectToRoom();
     } else {
       console.log('🔄 NO SAVED STATE - showing lobby');
     }
