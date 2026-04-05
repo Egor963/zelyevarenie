@@ -97,6 +97,8 @@ export default function App() {
   const [spellTakeIdx, setSpellTakeIdx] = useState<number | null>(null);
   const [spellBreakIdx, setSpellBreakIdx] = useState<number | null>(null);
   const [spellSwap, setSpellSwap] = useState<{ spellIdx: number; tableId: string | null } | null>(null);
+  const [breakingRecipeId, setBreakingRecipeId] = useState<string | null>(null);
+  const [chosenCardId, setChosenCardId] = useState<string | null>(null);
 
   const clearModes = useCallback(() => {
     setCraftHandIndex(null);
@@ -105,6 +107,8 @@ export default function App() {
     setSpellTakeIdx(null);
     setSpellBreakIdx(null);
     setSpellSwap(null);
+    setBreakingRecipeId(null);
+    setChosenCardId(null);
   }, []);
 
   useEffect(() => {
@@ -496,14 +500,9 @@ export default function App() {
                       type="button"
                       className="primary"
                       onClick={() => {
-                        socketRef.current?.emit(
-                          "castSpellBreakBuilt",
-                          { spellHandIndex: spellBreakIdx, builtInstanceId: b.instanceId },
-                          (r: { ok: boolean; error?: string }) => {
-                            if (!r.ok) setError(r.error ?? "Ошибка");
-                            else setSpellBreakIdx(null);
-                          }
-                        );
+                        console.log('🎯 START BREAKING RECIPE:', { recipeId: b.instanceId });
+                        setBreakingRecipeId(b.instanceId);
+                        setChosenCardId(null);
                       }}
                     >
                       Разобрать

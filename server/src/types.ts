@@ -136,6 +136,7 @@ export interface PublicBuiltRecipe {
   name: string;
   points: number;
   card: GameCard;
+  ingredients: GameCard[];
 }
 
 export interface PublicGameSnapshot {

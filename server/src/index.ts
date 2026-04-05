@@ -36,6 +36,7 @@ function publicSnapshot(game: GameState, forPlayerId: string | null): PublicGame
       name: b.name,
       points: b.points,
       card: b.card,
+      ingredients: b.ingredients,
     };
   });
 
