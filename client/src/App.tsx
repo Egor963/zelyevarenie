@@ -257,11 +257,41 @@ export default function App() {
 
   const place = (handIndex: number) => {
     clearModes();
-    console.log('Placing card at index:', handIndex);
     socketRef.current?.emit("placeOnTable", { handIndex }, (r: { ok: boolean; error?: string }) => {
       if (!r.ok) setError(r.error ?? "Ошибка");
-      else console.log('Card placed successfully');
     });
+  };
+
+  const onStartCraft = (handIndex: number) => {
+    clearModes();
+    setCraftHandIndex(handIndex);
+  };
+
+  const onSpellTake = (handIndex: number) => {
+    clearModes();
+    setSpellTakeIdx(handIndex);
+  };
+
+  const onSpellBreak = (handIndex: number) => {
+    clearModes();
+    setSpellBreakIdx(handIndex);
+  };
+
+  const onSpellSwapStart = (handIndex: number) => {
+    clearModes();
+    setSpellSwap({ spellIdx: handIndex, tableId: null });
+  };
+
+  const onSpellSwapPickHand = (handIndex: number) => {
+    if (!spellSwap?.tableId) return;
+    socketRef.current?.emit(
+      "castSpellSwap",
+      { spellHandIndex: spellSwap.spellIdx, tableCardId: spellSwap.tableId, otherHandIndex: handIndex },
+      (r: { ok: boolean; error?: string }) => {
+        if (!r.ok) setError(r.error ?? "Ошибка");
+        else setSpellSwap(null);
+      }
+    );
   };
 
   const submitCraft = () => {
@@ -719,37 +749,17 @@ export default function App() {
                     card={c}
                     index={i}
                     catalog={snap.recipeCatalog}
-                    canAct={canAct && !busyCraft}
+                    canAct={canAct && craftHandIndex === null}
                     craftHandIndex={craftHandIndex}
                     spellSwap={spellSwap}
                     spellTransform={spellTransform}
-                    onPlace={place}
-                    onStartCraft={onStartCraft}
-                    onSpellTake={onSpellTake}
-                    onSpellBreak={onSpellBreak}
-                    onSpellSwapStart={onSpellSwapStart}
-                    onSpellSwapPickHand={onSpellSwapPickHand}
+                    onPlace={() => place(i)}
+                    onStartCraft={() => onStartCraft(i)}
+                    onSpellTake={() => onSpellTake(i)}
+                    onSpellBreak={() => onSpellBreak(i)}
+                    onSpellSwapStart={() => onSpellSwapStart(i)}
+                    onSpellSwapPickHand={() => onSpellSwapPickHand(i)}
                     onSpellTransformStart={() => setSpellTransform({ spellIdx: i, builtInstanceId: null })}
-                    onSpellBreak={() => {
-                      console.log('🎯 SPELL BREAK CLICKED:', { index: i });
-                      clearModes();
-                      setSpellBreakIdx(i);
-                    }}
-                    onSpellSwapStart={() => {
-                      clearModes();
-                      setSpellSwap({ spellIdx: i, tableId: null });
-                    }}
-                    onSpellSwapPickHand={() => {
-                      if (!spellSwap?.tableId) return;
-                      socketRef.current?.emit(
-                        "castSpellSwap",
-                        { spellHandIndex: spellSwap.spellIdx, tableCardId: spellSwap.tableId, otherHandIndex: i },
-                        (r: { ok: boolean; error?: string }) => {
-                          if (!r.ok) setError(r.error ?? "Ошибка");
-                          else setSpellSwap(null);
-                        }
-                      );
-                    }}
                   />
                 ))}
               </div>
