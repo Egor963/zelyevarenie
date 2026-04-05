@@ -11,8 +11,13 @@ export interface CardData {
   points?: number;
 }
 
-// Временный маппинг - будет заполнен когда ты пришлешь данные
-export const CARDS: CardData[] = [];
+// Загружаем карточки из обработанного Word файла
+import * as fs from 'fs';
+import type { CardData } from './types';
+
+const clientCards: CardData[] = JSON.parse(fs.readFileSync('../../client-cards.json', 'utf8'));
+
+export const CARDS = clientCards;
 
 /**
  * Получить карточку по ID

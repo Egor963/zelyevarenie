@@ -1,6 +1,5 @@
-import { randomUUID } from "node:crypto";
+import { randomUUID } from "crypto";
 import type { 
-  ElementId, 
   GameCard, 
   CardFace, 
   SpellKind,
@@ -9,9 +8,42 @@ import type {
   BuiltRecipe
 } from "./types.js";
 import { getRecipeDef, RECIPES } from "./recipes.js";
+import * as fs from "fs";
+import type { ElementId } from "./types.js";
 
 const ELEMENTS: ElementId[] = [
   "волны эфира",
+  "камень крови",
+  "корень мандрагоры",
+  "родниковая вода",
+  "белладонна",
+  "крыло летучей мыши",
+  "глаз змеи",
+  "огненный свет",
+  "кристалл воздуха",
+  "астральная энергия",
+  "энергия мысли",
+  "мушрумы",
+  "порошок судьбы",
+  "порошок контроля",
+  "порошок истины",
+  "порошок бестелесности",
+  "эманация власти",
+  "зуб дракона",
+  "раствор оберег",
+  "раствор вечности",
+  "эликсир забвения",
+  "эликсир мудрости",
+  "эликсир верности",
+  "эликсир невидимости",
+  "эликсир силы",
+  "эликсир огня",
+  "эликсир вечной молодости",
+  "эликсир повелителя растений",
+  "эликсир полета",
+  "телепатическое снадобье",
+  "любовное зелье",
+  "цветок папоротника"
 ];
 
 const START_HAND = 8; // 8 карточек в руке как в настольной игре
@@ -43,8 +75,9 @@ export function makeDeck(): GameCard[] {
     '71', '72', '73', '74', '75', '76'
   ];
 
-  // Временный маппинг - будет заполнен когда ты пришлешь данные
-  const cardMappings: Record<string, { topType: 'recipe' | 'spell'; topContent: string; bottomElement: string; points?: number }> = {};
+  // Загружаем маппинги из обработанного Word файла
+  const serverMappings = JSON.parse(fs.readFileSync('../server-mappings.json', 'utf8'));
+  const cardMappings: Record<string, { topType: 'recipe' | 'spell'; topContent: string; bottomElement: string; points?: number }> = serverMappings;
 
   // Создаем карточки с реальными ID
   for (const cardId of cardIds) {

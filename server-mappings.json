@@ -1,0 +1,458 @@
+{
+  "1": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "2": {
+    "topType": "recipe",
+    "topContent": "Настой прорицания",
+    "bottomElement": "камень крови",
+    "points": 0
+  },
+  "3": {
+    "topType": "recipe",
+    "topContent": "Эликсир полета",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "4": {
+    "topType": "recipe",
+    "topContent": "Порошок судьбы",
+    "bottomElement": "белладонна",
+    "points": 0
+  },
+  "5": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "6": {
+    "topType": "recipe",
+    "topContent": "Великий эликсир вечной любви",
+    "bottomElement": "огненный свет",
+    "points": 0
+  },
+  "7": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "8": {
+    "topType": "recipe",
+    "topContent": "Авокадо кадавр",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "9": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "10": {
+    "topType": "recipe",
+    "topContent": "Великий талисман магии",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "11": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "12": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "13": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "14": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "15": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "16": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "17": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "18": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "19": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "20": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "21": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "22": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "23": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "24": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "25": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "26": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "27": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "28": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "29": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "30": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "31": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "32": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "33": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "34": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "35": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "36": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "37": {
+    "topType": "recipe",
+    "topContent": "Заклятие трансформы",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "38": {
+    "topType": "recipe",
+    "topContent": "Заклятие познания",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "39": {
+    "topType": "recipe",
+    "topContent": "Заклятие познания",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "40": {
+    "topType": "recipe",
+    "topContent": "Заклятие",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "41": {
+    "topType": "recipe",
+    "topContent": "Заклятие",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "42": {
+    "topType": "recipe",
+    "topContent": "Заклятие трансформы",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "43": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "44": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "45": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "46": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "47": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "48": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "49": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "50": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "51": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "52": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "53": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "54": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "55": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "56": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "57": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "58": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "59": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "60": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "61": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "62": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "63": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "64": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "65": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "66": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "67": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "68": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "69": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "70": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "71": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "72": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "73": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "74": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "75": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  },
+  "76": {
+    "topType": "recipe",
+    "topContent": "",
+    "bottomElement": "волны эфира",
+    "points": 0
+  }
+}
