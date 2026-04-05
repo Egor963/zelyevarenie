@@ -134,6 +134,18 @@ export default function App() {
     };
   }, []);
 
+  // Выход из игры и очистка сохраненного состояния
+  const leaveGame = () => {
+    console.log('🚪 LEAVING GAME');
+    localStorage.removeItem('gameState');
+    setRoomId(null);
+    socketRef.current?.disconnect();
+    // Переподключаемся к серверу
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
+
   const persistName = useCallback(() => {
     try {
       localStorage.setItem("zelye_name", playerName.trim());
@@ -465,6 +477,29 @@ export default function App() {
 
       {showGame && snap && (
         <>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            marginBottom: '1rem',
+            padding: '0.5rem',
+            backgroundColor: 'var(--panel-bg)',
+            borderRadius: '8px'
+          }}>
+            <h2 style={{ margin: 0 }}>Комната: {roomId}</h2>
+            <button onClick={leaveGame} style={{ 
+              backgroundColor: '#dc3545', 
+              color: 'white', 
+              border: 'none', 
+              padding: '8px 16px', 
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '14px'
+            }}>
+              Выйти в лобби
+            </button>
+          </div>
+          
           <section className="panel">
             <h2 style={{ marginTop: 0 }}>Очки</h2>
             <ScoreTrack players={snap.players} max={snap.scoreTrackMax} />
