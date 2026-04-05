@@ -192,7 +192,8 @@ export default function App() {
           }, (response: any) => {
             console.log('🔄 JOIN ROOM RESPONSE:', response);
             if (response?.ok) {
-              console.log('🔄 JOIN ROOM SUCCESSFUL');
+              console.log('🔄 JOIN ROOM SUCCESSFUL - setting roomId');
+              setRoomId(savedRoomId); // ВАЖНО: устанавливаем roomId!
             } else {
               console.log('🔄 JOIN ROOM FAILED:', response?.error);
             }
