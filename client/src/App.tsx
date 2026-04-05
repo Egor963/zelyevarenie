@@ -188,9 +188,9 @@ export default function App() {
       // Считаем доступные элементы на столе
       tableElements.forEach(card => {
         console.log('🎯 TABLE CARD:', card);
-        if (card.face.kind === 'element') {
-          const elementCard = card.face as { kind: 'element'; element: string };
-          availableElements[elementCard.element] = (availableElements[elementCard.element] || 0) + 1;
+        // Элементы на столе имеют bottomElement, даже если face.kind === 'recipe'
+        if (card.bottomElement) {
+          availableElements[card.bottomElement] = (availableElements[card.bottomElement] || 0) + 1;
         }
       });
       
@@ -216,12 +216,9 @@ export default function App() {
       neededElements.forEach(([element, count]) => {
         let collected = 0;
         tableElements.forEach(card => {
-          if (card.face.kind === 'element') {
-            const elementCard = card.face as { kind: 'element'; element: string };
-            if (elementCard.element === element && collected < count) {
-              autoSelectedTableIds.push(card.id);
-              collected++;
-            }
+          if (card.bottomElement === element && collected < count) {
+            autoSelectedTableIds.push(card.id);
+            collected++;
           }
         });
       });
