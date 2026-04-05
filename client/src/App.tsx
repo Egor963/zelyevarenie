@@ -177,14 +177,46 @@ export default function App() {
   };
 
   const submitCraft = () => {
-    console.log('🎯 SUBMIT CRAFT START:', { craftHandIndex, craftDef });
+    console.log('🎯 SUBMIT CRAFT START:', { craftHandIndex, craftDef, craftBuiltIds });
     
     if (craftHandIndex === null) return;
     
-    // Автоматическая проверка и сбор нужных элементов со стола
     if (craftDef) {
       console.log('🎯 CRAFT DEF FOUND:', craftDef);
       
+      // Для рецептов с needsBuilt не нужно собирать элементы со стола
+      if (craftDef.needsBuilt && craftDef.needsBuilt.length > 0) {
+        console.log('🎯 CRAFT NEEDS BUILT RECIPES:', craftDef.needsBuilt);
+        console.log('🎯 SELECTED BUILT IDS:', craftBuiltIds);
+        
+        // Проверяем что выбрано правильное количество собранных рецептов
+        const totalNeeded = craftDef.needsBuilt.reduce((sum, nb) => sum + nb.count, 0);
+        if (craftBuiltIds.length !== totalNeeded) {
+          setError(`Нужно выбрать ${totalNeeded} собранных рецептов, выбрано ${craftBuiltIds.length}`);
+          return;
+        }
+        
+        console.log('🎯 SENDING COMPLEX CRAFT:', { 
+          handIndex: craftHandIndex, 
+          tableCardIds: [], // Пусто - элементы со стола не нужны
+          builtInstanceIds: craftBuiltIds 
+        });
+        
+        socketRef.current?.emit(
+          "craftRecipe",
+          { handIndex: craftHandIndex, tableCardIds: [], builtInstanceIds: craftBuiltIds },
+          (r: { ok: boolean; error?: string }) => {
+            if (!r.ok) setError(r.error ?? "Ошибка");
+            else {
+              console.log('🎯 COMPLEX CRAFT SUCCESS');
+              clearModes();
+            }
+          }
+        );
+        return;
+      }
+      
+      // Для обычных рецептов (элементы со стола)
       const neededElements = Object.entries(craftDef.needs);
       const tableElements = snap?.table || [];
       const availableElements: Record<string, number> = {};
@@ -204,13 +236,13 @@ export default function App() {
       // Проверяем достаточно ли элементов
       const missingElements: string[] = [];
       neededElements.forEach(([element, count]) => {
-        if ((availableElements[element] || 0) < count) {
-          missingElements.push(element);
+        const available = availableElements[element] || 0;
+        if (available < count) {
+          missingElements.push(`${element} (${available}/${count})`);
         }
       });
       
       if (missingElements.length > 0) {
-        console.log('🎯 MISSING ELEMENTS:', missingElements);
         setError(`Недостаточно элементов на столе: ${missingElements.join(', ')}`);
         return;
       }
@@ -228,22 +260,19 @@ export default function App() {
       });
       
       console.log('🎯 AUTO SELECTED IDS:', autoSelectedTableIds);
-      console.log('🎯 EMITTING CRAFT REQUEST:', { handIndex: craftHandIndex, tableCardIds: autoSelectedTableIds, builtInstanceIds: craftBuiltIds });
-      
+      console.log('🎯 SENDING SIMPLE CRAFT:', { handIndex: craftHandIndex, tableCardIds: autoSelectedTableIds, builtInstanceIds: craftBuiltIds });
       socketRef.current?.emit(
         "craftRecipe",
         { handIndex: craftHandIndex, tableCardIds: autoSelectedTableIds, builtInstanceIds: craftBuiltIds },
         (r: { ok: boolean; error?: string }) => {
-          console.log('🎯 CRAFT RESPONSE:', r);
           if (!r.ok) setError(r.error ?? "Ошибка");
           else {
-            console.log('Craft successful');
+            console.log('🎯 SIMPLE CRAFT SUCCESS');
             clearModes();
           }
         }
       );
     } else {
-      console.log('🎯 NO CRAFT DEF FOUND!');
       setError('Рецепт не найден');
     }
   };
