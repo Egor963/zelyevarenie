@@ -228,13 +228,21 @@ io.on("connection", (socket) => {
   socket.on(
     "castSpellBreakBuilt",
     (
-      payload: { spellHandIndex: number; builtInstanceId: string },
+      payload: { spellHandIndex: number; builtInstanceId: string; chosenCardId?: string },
       ack?: (r: { ok: boolean; error?: string }) => void
     ) => {
+      console.log('🎯 CLIENT BREAK BUILT REQUEST:', { playerId, payload });
+      
       if (!joinedRoomId || !playerId) return ack?.({ ok: false, error: "Не в комнате" });
       const room = rooms.get(joinedRoomId);
       if (!room) return ack?.({ ok: false, error: "Комната пропала" });
-      const err = castSpellBreakBuilt(room.game, playerId, payload?.spellHandIndex ?? -1, payload?.builtInstanceId ?? "");
+      const err = castSpellBreakBuilt(
+        room.game, 
+        playerId, 
+        payload?.spellHandIndex ?? -1, 
+        payload?.builtInstanceId ?? "",
+        payload?.chosenCardId
+      );
       if (err) return ack?.({ ok: false, error: err });
       broadcastRoom(joinedRoomId, io);
       ack?.({ ok: true });

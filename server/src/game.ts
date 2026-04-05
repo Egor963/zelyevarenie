@@ -574,8 +574,11 @@ export function castSpellBreakBuilt(
   game: GameState,
   playerId: string,
   spellHandIndex: number,
-  builtInstanceId: string
+  builtInstanceId: string,
+  chosenCardId?: string
 ): string | null {
+  console.log('🎯 BREAK BUILT START:', { playerId, builtInstanceId, chosenCardId });
+  
   if (game.phase !== "playing") return "Игра не идёт";
   const p = currentPlayer(game);
   if (p.id !== playerId) return "Не ваш ход";
@@ -586,13 +589,47 @@ export function castSpellBreakBuilt(
   if (!bi) return "Нет такого рецепта";
   if (bi.ownerId !== playerId) return "Можно разобрать только свой рецепт";
 
+  console.log('🎯 BREAK BUILT RECIPE:', { name: bi.name, ingredients: bi.ingredients });
+
   p.hand.splice(spellHandIndex, 1);
   game.discard.push(sc);
   game.builtRecipes = game.builtRecipes.filter((b) => b.instanceId !== builtInstanceId);
-  for (const ing of bi.ingredients) game.table.push(ing);
+
+  // Если выбрана конкретная карточка - забираем ее себе и даем очки
+  if (chosenCardId) {
+    const chosenCard = bi.ingredients.find((ing) => ing.id === chosenCardId);
+    if (chosenCard) {
+      console.log('🎯 BREAK BUILT CHOSEN CARD:', chosenCard);
+      
+      // Добавляем очки за выбранную карточку (как будто собрали простой рецепт)
+      const cardPoints = getCardPoints(chosenCard);
+      p.score += cardPoints;
+      
+      console.log('🎯 BREAK BUILT POINTS ADDED:', { cardPoints, newScore: p.score });
+      
+      // Остальные карты возвращаем на стол
+      const otherCards = bi.ingredients.filter((ing) => ing.id !== chosenCardId);
+      for (const card of otherCards) game.table.push(card);
+      
+      console.log('🎯 BREAK BUILT RETURNED TO TABLE:', otherCards.length);
+    } else {
+      // Если карта не найдена - возвращаем все
+      for (const ing of bi.ingredients) game.table.push(ing);
+    }
+  } else {
+    // Если карта не выбрана - возвращаем все
+    for (const ing of bi.ingredients) game.table.push(ing);
+  }
 
   afterSpell(game);
+  console.log('🎯 BREAK BUILT SUCCESS');
   return null;
+}
+
+function getCardPoints(card: GameCard): number {
+  // Простые элементы (по bottomElement) дают 1 очко
+  // В рецептах ингредиенты хранятся как GameCard с bottomElement
+  return 1;
 }
 
 export function castSpellSwap(
