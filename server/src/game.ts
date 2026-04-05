@@ -77,82 +77,82 @@ export function makeDeck(): GameCard[] {
 
   // Базовые маппинги карточек - ТОЛЬКО заклинания как spell, все остальные как recipe
   const cardMappings: Record<string, { topType: 'recipe' | 'spell'; topContent: string; bottomElement: string; points?: number }> = {
-    "1": { topType: "recipe", topContent: "Любовное зелье", bottomElement: "кристалл воздуха", points: 2 },
-    "2": { topType: "recipe", topContent: "Зелье вечного сна", bottomElement: "огненный свет", points: 2 },
-    "3": { topType: "recipe", topContent: "Эликсир невидимости", bottomElement: "астральная энергия", points: 2 },
-    "4": { topType: "recipe", topContent: "Эликсир силы", bottomElement: "энергия мысли", points: 2 },
-    "5": { topType: "recipe", topContent: "Исидас мортум", bottomElement: "глаз змеи", points: 2 },
-    "6": { topType: "recipe", topContent: "Эликсир огня", bottomElement: "волны эфира", points: 2 },
-    "7": { topType: "recipe", topContent: "Настой прорицания", bottomElement: "камень крови", points: 2 },
-    "8": { topType: "recipe", topContent: "Телепатическое снадобье", bottomElement: "волны эфира", points: 3 },
-    "9": { topType: "recipe", topContent: "Порошок судьбы", bottomElement: "белладонна", points: 2 },
-    "10": { topType: "recipe", topContent: "Порошок контроля", bottomElement: "крыло летучей мыши", points: 2 },
-    "11": { topType: "recipe", topContent: "Порошок истины", bottomElement: "огненный свет", points: 2 },
-    "12": { topType: "recipe", topContent: "Порошок бестелесности", bottomElement: "астральная энергия", points: 2 },
-    "13": { topType: "recipe", topContent: "Эманация власти", bottomElement: "зуб дракона", points: 2 },
-    "14": { topType: "recipe", topContent: "Раствор оберег", bottomElement: "родниковая вода", points: 2 },
-    "15": { topType: "recipe", topContent: "Раствор вечности", bottomElement: "корень мандрагоры", points: 2 },
-    "16": { topType: "recipe", topContent: "Эликсир забвения", bottomElement: "камень крови", points: 2 },
-    "17": { topType: "recipe", topContent: "Эликсир мудрости", bottomElement: "мушрумы", points: 2 },
-    "18": { topType: "recipe", topContent: "Эликсир верности", bottomElement: "белладонна", points: 2 },
-    "19": { topType: "recipe", topContent: "Эликсир невидимости", bottomElement: "крыло летучей мыши", points: 2 },
-    "20": { topType: "recipe", topContent: "Эликсир силы", bottomElement: "глаз змеи", points: 2 },
-    "21": { topType: "recipe", topContent: "Эликсир огня", bottomElement: "волны эфира", points: 2 },
-    "22": { topType: "recipe", topContent: "Эликсир вечной молодости", bottomElement: "корень мандрагоры", points: 2 },
-    "23": { topType: "recipe", topContent: "Эликсир повелителя растений", bottomElement: "родниковая вода", points: 2 },
-    "24": { topType: "recipe", topContent: "Эликсир полета", bottomElement: "кристалл воздуха", points: 2 },
-    "25": { topType: "recipe", topContent: "Телепатическое снадобье", bottomElement: "волны эфира", points: 3 },
-    "26": { topType: "recipe", topContent: "Любовное зелье", bottomElement: "камень крови", points: 2 },
-    "27": { topType: "recipe", topContent: "Зелье вечного сна", bottomElement: "белладонна", points: 2 },
-    "28": { topType: "recipe", topContent: "Эликсир невидимости", bottomElement: "астральная энергия", points: 2 },
-    "29": { topType: "recipe", topContent: "Эликсир силы", bottomElement: "камень крови", points: 2 },
-    "30": { topType: "recipe", topContent: "Исидас мортум", bottomElement: "энергия мысли", points: 2 },
-    "31": { topType: "recipe", topContent: "Эликсир огня", bottomElement: "огненный свет", points: 2 },
-    "32": { topType: "recipe", topContent: "Раствор вечности", bottomElement: "мушрумы", points: 2 },
-    "33": { topType: "recipe", topContent: "Эликсир вечной молодости", bottomElement: "перо феникса", points: 2 },
-    "34": { topType: "recipe", topContent: "Эликсир верности", bottomElement: "зуб дракона", points: 2 },
-    "35": { topType: "recipe", topContent: "Эликсир знания", bottomElement: "родниковая вода", points: 2 },
-    "36": { topType: "recipe", topContent: "Эликсир тайного зрения", bottomElement: "крыло летучей мыши", points: 2 },
-    "37": { topType: "spell", topContent: "Заклятие трансформы", bottomElement: "крыло летучей мыши", points: 0 },
-    "38": { topType: "spell", topContent: "Заклятие познания", bottomElement: "белладонна", points: 0 },
-    "39": { topType: "spell", topContent: "Заклятие познания", bottomElement: "мушрумы", points: 0 },
-    "40": { topType: "spell", topContent: "Заклятие разрушения", bottomElement: "цветок папоротника", points: 0 },
-    "41": { topType: "spell", topContent: "Заклятие разрушения", bottomElement: "глаз змеи", points: 0 },
-    "42": { topType: "spell", topContent: "Заклятие трансформы", bottomElement: "корень мандрагоры", points: 0 },
-    "43": { topType: "recipe", topContent: "Раствор-оберег", bottomElement: "перо феникса", points: 2 },
-    "44": { topType: "recipe", topContent: "Эликсир мудрости", bottomElement: "астральная энергия", points: 3 },
-    "45": { topType: "recipe", topContent: "Эликсир забвения", bottomElement: "цветок папоротника", points: 2 },
-    "46": { topType: "recipe", topContent: "Зелье полиглотум", bottomElement: "белладонна", points: 2 },
-    "47": { topType: "recipe", topContent: "Эманация власти", bottomElement: "волны эфира", points: 2 },
-    "48": { topType: "recipe", topContent: "Настой прорицания", bottomElement: "камень крови", points: 2 },
-    "49": { topType: "recipe", topContent: "Эликсир повелителя растений", bottomElement: "энергия мысли", points: 3 },
-    "50": { topType: "recipe", topContent: "Телепатическое снадобье", bottomElement: "астральная энергия", points: 3 },
-    "51": { topType: "recipe", topContent: "Порошок контроля", bottomElement: "цветок папоротника", points: 4 },
-    "52": { topType: "recipe", topContent: "Порошок истины", bottomElement: "мушрумы", points: 4 },
-    "53": { topType: "recipe", topContent: "Эликсир полета", bottomElement: "энергия мысли", points: 3 },
-    "54": { topType: "recipe", topContent: "Великий эликсир предзнаменования", bottomElement: "родниковая вода", points: 6 },
-    "55": { topType: "recipe", topContent: "Порошок бестелесности", bottomElement: "корень мандрагоры", points: 4 },
-    "56": { topType: "recipe", topContent: "Порошок судьбы", bottomElement: "белладонна", points: 4 },
-    "57": { topType: "recipe", topContent: "Великий эликсир возрождения", bottomElement: "крыло летучей мыши", points: 6 },
-    "58": { topType: "recipe", topContent: "Великий эликсир прозрения", bottomElement: "кристалл воздуха", points: 6 },
-    "59": { topType: "recipe", topContent: "Великий эликсир защиты", bottomElement: "глаз змеи", points: 6 },
-    "60": { topType: "recipe", topContent: "Великий эликсир исчезновения", bottomElement: "зуб дракона", points: 6 },
-    "61": { topType: "recipe", topContent: "Великий эликсир безвременья", bottomElement: "камень крови", points: 6 },
-    "62": { topType: "recipe", topContent: "Великий эликсир могущества", bottomElement: "перо феникса", points: 6 },
-    "63": { topType: "recipe", topContent: "Великий эликсир вечной любви", bottomElement: "огненный свет", points: 6 },
-    "64": { topType: "recipe", topContent: "Талисман скрытого знания", bottomElement: "огненный свет", points: 8 },
-    "65": { topType: "recipe", topContent: "Талисман палантриум", bottomElement: "кристалл воздуха", points: 8 },
-    "66": { topType: "recipe", topContent: "Единорог", bottomElement: "белладонна", points: 8 },
-    "67": { topType: "recipe", topContent: "Талисман телепортации", bottomElement: "камень крови", points: 8 },
-    "68": { topType: "recipe", topContent: "Талисман повелителя зверей", bottomElement: "родниковая вода", points: 8 },
-    "69": { topType: "recipe", topContent: "Грифон", bottomElement: "мушрумы", points: 8 },
-    "70": { topType: "recipe", topContent: "Незримый страж", bottomElement: "крыло летучей мыши", points: 8 },
-    "71": { topType: "recipe", topContent: "Дракон", bottomElement: "глаз змеи", points: 8 },
-    "72": { topType: "recipe", topContent: "Огненная саламандра", bottomElement: "перо феникса", points: 8 },
-    "73": { topType: "recipe", topContent: "Баньши", bottomElement: "зуб дракона", points: 8 },
-    "74": { topType: "recipe", topContent: "Василиск", bottomElement: "корень мандрагоры", points: 8 },
-    "75": { topType: "recipe", topContent: "Верховный эликсир", bottomElement: "", points: 10 },
-    "76": { topType: "recipe", topContent: "Великий талисман магии", bottomElement: "", points: 10 }
+    "1": { topType: "recipe", topContent: "любовное зелье", bottomElement: "кристалл воздуха", points: 2 },
+    "2": { topType: "recipe", topContent: "зелье вечного сна", bottomElement: "огненный свет", points: 2 },
+    "3": { topType: "recipe", topContent: "эликсир невидимости", bottomElement: "астральная энергия", points: 2 },
+    "4": { topType: "recipe", topContent: "эликсир силы", bottomElement: "энергия мысли", points: 2 },
+    "5": { topType: "recipe", topContent: "исидас мортум", bottomElement: "глаз змеи", points: 2 },
+    "6": { topType: "recipe", topContent: "эликсир огня", bottomElement: "квинтэссенция воли", points: 2 },
+    "7": { topType: "recipe", topContent: "раствор вечности", bottomElement: "корень мандрагоры", points: 2 },
+    "8": { topType: "recipe", topContent: "эликсир вечной молодости", bottomElement: "зуб дракона", points: 2 },
+    "9": { topType: "recipe", topContent: "эликсир верности", bottomElement: "мушрумы", points: 2 },
+    "10": { topType: "recipe", topContent: "любовное зелье", bottomElement: "кристалл воздуха", points: 2 },
+    "11": { topType: "recipe", topContent: "зелье вечного сна", bottomElement: "огненный свет", points: 2 },
+    "12": { topType: "recipe", topContent: "эликсир невидимости", bottomElement: "астральная энергия", points: 2 },
+    "13": { topType: "recipe", topContent: "эликсир силы", bottomElement: "энергия мысли", points: 2 },
+    "14": { topType: "recipe", topContent: "исидас мортум", bottomElement: "глаз змеи", points: 2 },
+    "15": { topType: "recipe", topContent: "эликсир огня", bottomElement: "квинтэссенция воли", points: 2 },
+    "16": { topType: "recipe", topContent: "раствор вечности", bottomElement: "корень мандрагоры", points: 2 },
+    "17": { topType: "recipe", topContent: "эликсир вечной молодости", bottomElement: "зуб дракона", points: 2 },
+    "18": { topType: "recipe", topContent: "эликсир верности", bottomElement: "мушрумы", points: 2 },
+    "19": { topType: "recipe", topContent: "эликсир знания", bottomElement: "родниковая вода", points: 2 },
+    "20": { topType: "recipe", topContent: "эликсир тайного зрения", bottomElement: "крыло летучей мыши", points: 2 },
+    "21": { topType: "recipe", topContent: "раствор-оберег", bottomElement: "перо феникса", points: 2 },
+    "22": { topType: "recipe", topContent: "эликсир мудрости", bottomElement: "астральная энергия", points: 3 },
+    "23": { topType: "recipe", topContent: "эликсир забвения", bottomElement: "цветок папоротника", points: 2 },
+    "24": { topType: "recipe", topContent: "зелье полиглотум", bottomElement: "белладонна", points: 2 },
+    "25": { topType: "recipe", topContent: "эманация власти", bottomElement: "волны эфира", points: 2 },
+    "26": { topType: "recipe", topContent: "настой прорицания", bottomElement: "камень крови", points: 2 },
+    "27": { topType: "recipe", topContent: "эликсир повелителя растений", bottomElement: "энергия мысли", points: 3 },
+    "28": { topType: "recipe", topContent: "эликсир знания", bottomElement: "родниковая вода", points: 2 },
+    "29": { topType: "recipe", topContent: "эликсир тайного зрения", bottomElement: "крыло летучей мыши", points: 2 },
+    "30": { topType: "recipe", topContent: "раствор-оберег", bottomElement: "перо феникса", points: 2 },
+    "31": { topType: "recipe", topContent: "эликсир мудрости", bottomElement: "квинтэссенция воли", points: 3 },
+    "32": { topType: "recipe", topContent: "эликсир забвения", bottomElement: "цветок папоротника", points: 2 },
+    "33": { topType: "recipe", topContent: "зелье полиглотум", bottomElement: "белладонна", points: 2 },
+    "34": { topType: "recipe", topContent: "эманация власти", bottomElement: "волны эфира", points: 2 },
+    "35": { topType: "recipe", topContent: "настой прорицания", bottomElement: "камень крови", points: 2 },
+    "36": { topType: "recipe", topContent: "эликсир повелителя растений", bottomElement: "волны эфира", points: 3 },
+    "37": { topType: "spell", topContent: "заклятие трансформы", bottomElement: "крыло летучей мыши", points: 0 },
+    "38": { topType: "spell", topContent: "заклятие познания", bottomElement: "белладонна", points: 0 },
+    "39": { topType: "spell", topContent: "заклятие познания", bottomElement: "мушрумы", points: 0 },
+    "40": { topType: "spell", topContent: "заклятие разрушения", bottomElement: "цветок папоротника", points: 0 },
+    "41": { topType: "spell", topContent: "заклятие разрушения", bottomElement: "глаз змеи", points: 0 },
+    "42": { topType: "spell", topContent: "заклятие трансформы", bottomElement: "корень мандрагоры", points: 0 },
+    "43": { topType: "recipe", topContent: "эликсир мудрости", bottomElement: "квинтэссенция воли", points: 3 },
+    "44": { topType: "recipe", topContent: "эликсир повелителя растений", bottomElement: "волны эфира", points: 3 },
+    "45": { topType: "recipe", topContent: "телепатическое снадобье", bottomElement: "астральная энергия", points: 3 },
+    "46": { topType: "recipe", topContent: "порошок контроля", bottomElement: "цветок папоротника", points: 4 },
+    "47": { topType: "recipe", topContent: "порошок истины", bottomElement: "мушрумы", points: 4 },
+    "48": { topType: "recipe", topContent: "эликсир полета", bottomElement: "энергия мысли", points: 3 },
+    "49": { topType: "recipe", topContent: "великий эликсир предзнаменования", bottomElement: "родниковая вода", points: 6 },
+    "50": { topType: "recipe", topContent: "порошок бестелесности", bottomElement: "корень мандрагоры", points: 4 },
+    "51": { topType: "recipe", topContent: "порошок судьбы", bottomElement: "белладонна", points: 4 },
+    "52": { topType: "recipe", topContent: "великий эликсир возрождения", bottomElement: "крыло летучей мыши", points: 6 },
+    "53": { topType: "recipe", topContent: "великий эликсир прозрения", bottomElement: "кристалл воздуха", points: 6 },
+    "54": { topType: "recipe", topContent: "великий эликсир защиты", bottomElement: "глаз змеи", points: 6 },
+    "55": { topType: "recipe", topContent: "великий эликсир исчезновения", bottomElement: "зуб дракона", points: 6 },
+    "56": { topType: "recipe", topContent: "великий эликсир безвременья", bottomElement: "камень крови", points: 6 },
+    "57": { topType: "recipe", topContent: "великий эликсир могущества", bottomElement: "перо феникса", points: 6 },
+    "58": { topType: "recipe", topContent: "талисман скрытого знания", bottomElement: "огненный свет", points: 8 },
+    "59": { topType: "recipe", topContent: "талисман палантриум", bottomElement: "кристалл воздуха", points: 8 },
+    "60": { topType: "recipe", topContent: "великий эликсир вечной любви", bottomElement: "огненный свет", points: 6 },
+    "61": { topType: "recipe", topContent: "единорог", bottomElement: "белладонна", points: 8 },
+    "62": { topType: "recipe", topContent: "талисман телепортации", bottomElement: "камень крови", points: 8 },
+    "63": { topType: "recipe", topContent: "талисман повелителя зверей", bottomElement: "родниковая вода", points: 8 },
+    "64": { topType: "recipe", topContent: "грифон", bottomElement: "мушрумы", points: 8 },
+    "65": { topType: "recipe", topContent: "незримый страж", bottomElement: "крыло летучей мыши", points: 8 },
+    "66": { topType: "recipe", topContent: "дракон", bottomElement: "глаз змеи", points: 8 },
+    "67": { topType: "recipe", topContent: "огненная саламандра", bottomElement: "перо феникса", points: 8 },
+    "68": { topType: "recipe", topContent: "баньши", bottomElement: "зуб дракона", points: 8 },
+    "69": { topType: "recipe", topContent: "василиск", bottomElement: "корень мандрагоры", points: 8 },
+    "70": { topType: "recipe", topContent: "верховный эликсир", bottomElement: "", points: 10 },
+    "71": { topType: "recipe", topContent: "великий талисман магии", bottomElement: "", points: 10 },
+    "72": { topType: "recipe", topContent: "авокадо кадавр", bottomElement: "цветок папоротника", points: 8 },
+    "73": { topType: "recipe", topContent: "эликсир полета", bottomElement: "квинтэссенция воли", points: 3 },
+    "74": { topType: "recipe", topContent: "телепатическое снадобье", bottomElement: "волны эфира", points: 3 },
+    "75": { topType: "recipe", topContent: "телепатическое снадобье", bottomElement: "волны эфира", points: 3 },
+    "76": { topType: "recipe", topContent: "эликсир полета", bottomElement: "квинтэссенция воли", points: 3 }
   };
 
   // Создаем карточки с реальными ID
@@ -169,51 +169,51 @@ export function makeDeck(): GameCard[] {
       let recipeId: string;
       
       switch (mapping.topContent) {
-        case 'Любовное зелье': recipeId = 'love_potion'; break;
-        case 'Зелье вечного сна': recipeId = 'sleep_potion'; break;
-        case 'Эликсир невидимости': recipeId = 'invisibility_elixir'; break;
-        case 'Эликсир силы': recipeId = 'strength_elixir'; break;
-        case 'Исидас мортум': recipeId = 'isidas_mortum'; break;
-        case 'Эликсир огня': recipeId = 'fire_elixir'; break;
-        case 'Раствор вечности': recipeId = 'eternity_solution'; break;
-        case 'Эликсир вечной молодости': recipeId = 'eternal_youth_elixir'; break;
-        case 'Эликсир верности': recipeId = 'loyalty_elixir'; break;
-        case 'Эликсир знания': recipeId = 'knowledge_elixir'; break;
-        case 'Эликсир тайного зрения': recipeId = 'secret_vision_elixir'; break;
-        case 'Раствор-оберег': recipeId = 'protection_solution'; break;
-        case 'Эликсир мудрости': recipeId = 'wisdom_elixir'; break;
-        case 'Эликсир забвения': recipeId = 'oblivion_elixir'; break;
-        case 'Зелье полиглотум': recipeId = 'polyglotum_potion'; break;
-        case 'Эманация власти': recipeId = 'power_emanation'; break;
-        case 'Настой прорицания': recipeId = 'divination_tincture'; break;
-        case 'Эликсир повелителя растений': recipeId = 'plants_master_elixir'; break;
-        case 'Телепатическое снадобье': recipeId = 'telepathic_potion'; break;
-        case 'Порошок контроля': recipeId = 'control_powder'; break;
-        case 'Порошок истины': recipeId = 'truth_powder'; break;
-        case 'Порошок бестелесности': recipeId = 'incorporeal_powder'; break;
-        case 'Порошок судьбы': recipeId = 'fate_powder'; break;
-        case 'Великий эликсир предзнаменования': recipeId = 'great_omen_elixir'; break;
-        case 'Великий эликсир возрождения': recipeId = 'great_resurrection_elixir'; break;
-        case 'Великий эликсир прозрения': recipeId = 'great_clairvoyance_elixir'; break;
-        case 'Великий эликсир защиты': recipeId = 'great_protection_elixir'; break;
-        case 'Великий эликсир исчезновения': recipeId = 'great_disappearance_elixir'; break;
-        case 'Великий эликсир безвременья': recipeId = 'great_timeless_elixir'; break;
-        case 'Великий эликсир могущества': recipeId = 'great_power_elixir'; break;
-        case 'Великий эликсир вечной любви': recipeId = 'great_love_elixir'; break;
-        case 'Талисман скрытого знания': recipeId = 'knowledge_talisman'; break;
-        case 'Талисман палантриум': recipeId = 'palantir_talisman'; break;
-        case 'Единорог': recipeId = 'unicorn'; break;
-        case 'Талисман телепортации': recipeId = 'teleport_talisman'; break;
-        case 'Талисман повелителя зверей': recipeId = 'beasts_master_talisman'; break;
-        case 'Грифон': recipeId = 'griffin'; break;
-        case 'Незримый страж': recipeId = 'invisible_guardian'; break;
-        case 'Дракон': recipeId = 'dragon'; break;
-        case 'Огненная саламандра': recipeId = 'fire_salamander'; break;
-        case 'Баньши': recipeId = 'banshee'; break;
-        case 'Василиск': recipeId = 'basilisk'; break;
-        case 'Верховный эликсир': recipeId = 'supreme_elixir'; break;
-        case 'Великий талисман магии': recipeId = 'great_magic_talisman'; break;
-        case 'Авокадо кадавр': recipeId = 'avocado_cadaver'; break;
+        case 'любовное зелье': recipeId = 'love_potion'; break;
+        case 'зелье вечного сна': recipeId = 'sleep_potion'; break;
+        case 'эликсир невидимости': recipeId = 'invisibility_elixir'; break;
+        case 'эликсир силы': recipeId = 'strength_elixir'; break;
+        case 'исидас мортум': recipeId = 'isidas_mortum'; break;
+        case 'эликсир огня': recipeId = 'fire_elixir'; break;
+        case 'раствор вечности': recipeId = 'eternity_solution'; break;
+        case 'эликсир вечной молодости': recipeId = 'eternal_youth_elixir'; break;
+        case 'эликсир верности': recipeId = 'loyalty_elixir'; break;
+        case 'эликсир знания': recipeId = 'knowledge_elixir'; break;
+        case 'эликсир тайного зрения': recipeId = 'secret_vision_elixir'; break;
+        case 'раствор-оберег': recipeId = 'protection_solution'; break;
+        case 'эликсир мудрости': recipeId = 'wisdom_elixir'; break;
+        case 'эликсир забвения': recipeId = 'oblivion_elixir'; break;
+        case 'зелье полиглотум': recipeId = 'polyglotum_potion'; break;
+        case 'эманация власти': recipeId = 'power_emanation'; break;
+        case 'настой прорицания': recipeId = 'divination_tincture'; break;
+        case 'эликсир повелителя растений': recipeId = 'plants_master_elixir'; break;
+        case 'телепатическое снадобье': recipeId = 'telepathic_potion'; break;
+        case 'порошок контроля': recipeId = 'control_powder'; break;
+        case 'порошок истины': recipeId = 'truth_powder'; break;
+        case 'порошок бестелесности': recipeId = 'incorporeal_powder'; break;
+        case 'порошок судьбы': recipeId = 'fate_powder'; break;
+        case 'великий эликсир предзнаменования': recipeId = 'great_omen_elixir'; break;
+        case 'великий эликсир возрождения': recipeId = 'great_resurrection_elixir'; break;
+        case 'великий эликсир прозрения': recipeId = 'great_clairvoyance_elixir'; break;
+        case 'великий эликсир защиты': recipeId = 'great_protection_elixir'; break;
+        case 'великий эликсир исчезновения': recipeId = 'great_disappearance_elixir'; break;
+        case 'великий эликсир безвременья': recipeId = 'great_timeless_elixir'; break;
+        case 'великий эликсир могущества': recipeId = 'great_power_elixir'; break;
+        case 'великий эликсир вечной любви': recipeId = 'great_love_elixir'; break;
+        case 'талисман скрытого знания': recipeId = 'knowledge_talisman'; break;
+        case 'талисман палантриум': recipeId = 'palantir_talisman'; break;
+        case 'единорог': recipeId = 'unicorn'; break;
+        case 'талисман телепортации': recipeId = 'teleport_talisman'; break;
+        case 'талисман повелителя зверей': recipeId = 'beasts_master_talisman'; break;
+        case 'грифон': recipeId = 'griffin'; break;
+        case 'незримый страж': recipeId = 'invisible_guardian'; break;
+        case 'дракон': recipeId = 'dragon'; break;
+        case 'огненная саламандра': recipeId = 'fire_salamander'; break;
+        case 'баньши': recipeId = 'banshee'; break;
+        case 'василиск': recipeId = 'basilisk'; break;
+        case 'верховный эликсир': recipeId = 'supreme_elixir'; break;
+        case 'великий талисман магии': recipeId = 'great_magic_talisman'; break;
+        case 'авокадо кадавр': recipeId = 'avocado_cadaver'; break;
         default: recipeId = mapping.topContent.toLowerCase().replace(/\s+/g, '_'); break;
       }
       
