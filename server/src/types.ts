@@ -61,7 +61,7 @@ export type ElementId =
   | "цветок папоротника";
 
 /** Три базовых заклинания в духе «Практикума». */
-export type SpellKind = "take_table" | "break_built" | "swap_elements";
+export type SpellKind = "take_table" | "break_built" | "swap_elements" | "transform_built";
 
 export type CardFace =
   | { kind: "recipe"; defId: string }

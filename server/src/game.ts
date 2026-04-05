@@ -232,6 +232,9 @@ export function makeDeck(): GameCard[] {
         case 'Обмен':
           spell = 'swap_elements';
           break;
+        case 'заклятие трансформы':
+          spell = 'transform_built';
+          break;
         default:
           spell = 'take_table';
       }
@@ -693,5 +696,71 @@ export function castSpellSwap(
   game.discard.push(sc);
 
   afterSpell(game);
+  return null;
+}
+
+export function castSpellTransformBuilt(
+  game: GameState,
+  playerId: string,
+  spellHandIndex: number,
+  builtInstanceId: string,
+  tableCardId: string
+): string | null {
+  if (game.phase !== "playing") return "Игра не идёт";
+  const p = currentPlayer(game);
+  if (p.id !== playerId) return "Не ваш ход";
+  const sc = p.hand[spellHandIndex];
+  if (!sc || sc.face.kind !== "spell" || sc.face.spell !== "transform_built") return "Нужна карта «Заклятие трансформы»";
+  
+  // Находим свой собранный рецепт
+  const builtRecipe = game.builtRecipes.find(br => br.instanceId === builtInstanceId && br.ownerId === playerId);
+  if (!builtRecipe) return "Можно трансформировать только свои собранные рецепты";
+  
+  // Находим карту на столе
+  const tableIdx = game.table.findIndex((c) => c.id === tableCardId);
+  if (tableIdx < 0) return "На столе нет этой карты";
+  const tableCard = game.table[tableIdx]!;
+  
+  console.log('🎯 TRANSFORM BUILT:', { 
+    builtRecipe: builtRecipe.recipeDefId, 
+    tableCard: tableCard.bottomElement,
+    player: playerId 
+  });
+  
+  // Удаляем заклятие из руки
+  p.hand.splice(spellHandIndex, 1);
+  game.discard.push(sc); // Заклятие уходит в сброс
+  
+  // Удаляем собранный рецепт из собранных
+  game.builtRecipes = game.builtRecipes.filter(br => br.instanceId !== builtInstanceId);
+  
+  // Разбираем рецепт и кладем все карты в шкаф
+  // Карта самого рецепта
+  game.table.push(builtRecipe.card);
+  // Ингредиенты рецепта
+  for (const ingredient of builtRecipe.ingredients) {
+    game.table.push(ingredient);
+  }
+  
+  // Карта со стола становится собранным рецептом (не дает баллов!)
+  const newBuiltRecipe: BuiltRecipe = {
+    instanceId: `built_${Date.now()}_${playerId}`,
+    recipeDefId: "transformed_card", // Специальный ID для трансформированных карт
+    ownerId: playerId,
+    card: tableCard, // Карта со стола становится картой рецепта
+    points: 0, // НЕ дает баллов!
+    name: "Трансформированная карта", // Имя для отображения
+    ingredients: [] // Пустые ингредиенты для трансформированных карт
+  };
+  
+  game.builtRecipes.push(newBuiltRecipe);
+  
+  console.log('🎯 TRANSFORM COMPLETE:', { 
+    newBuilt: newBuiltRecipe,
+    tableNowHas: game.table.length 
+  });
+  
+  // После трансформы игрок делает дополнительный ход
+  afterSpell(game, false); // НЕ передаем ход сразу
   return null;
 }

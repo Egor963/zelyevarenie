@@ -32,6 +32,8 @@ function spellTitle(kind: SpellKind): string {
       return "Разобрать свой рецепт";
     case "swap_elements":
       return "Обмен с рукой";
+    case "transform_built":
+      return "Трансформировать рецепт";
     default:
       return kind;
   }
@@ -1040,6 +1042,11 @@ function HandCardBlock({
         )}
         {card.face.kind === "spell" && card.face.spell === "swap_elements" && (
           <button type="button" disabled={!canAct || busyCraft} onClick={onSpellSwapStart}>
+            Играть
+          </button>
+        )}
+        {card.face.kind === "spell" && card.face.spell === "transform_built" && (
+          <button type="button" disabled={!canAct || busyCraft} onClick={() => {}}>
             Играть
           </button>
         )}

@@ -8,7 +8,7 @@ export type ElementId =
   | "жизнь"
   | "металл";
 
-export type SpellKind = "take_table" | "break_built" | "swap_elements";
+export type SpellKind = "take_table" | "break_built" | "swap_elements" | "transform_built";
 
 export type CardFace =
   | { kind: "recipe"; defId: string }

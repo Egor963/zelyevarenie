@@ -10,6 +10,7 @@ import {
   castSpellBreakBuilt,
   castSpellSwap,
   castSpellTakeTable,
+  castSpellTransformBuilt,
   craftRecipe,
   createEmptyGame,
   placeOnTable,
@@ -276,6 +277,28 @@ io.on("connection", (socket) => {
         payload?.spellHandIndex ?? -1,
         payload?.tableCardId ?? "",
         payload?.otherHandIndex ?? -1
+      );
+      if (err) return ack?.({ ok: false, error: err });
+      broadcastRoom(joinedRoomId, io);
+      ack?.({ ok: true });
+    }
+  );
+
+  socket.on(
+    "castSpellTransformBuilt",
+    (
+      payload: { spellHandIndex: number; builtInstanceId: string; tableCardId: string },
+      ack?: (r: { ok: boolean; error?: string }) => void
+    ) => {
+      if (!joinedRoomId || !playerId) return ack?.({ ok: false, error: "Не в комнате" });
+      const room = rooms.get(joinedRoomId);
+      if (!room) return ack?.({ ok: false, error: "Комната пропала" });
+      const err = castSpellTransformBuilt(
+        room.game, 
+        playerId, 
+        payload?.spellHandIndex ?? -1, 
+        payload?.builtInstanceId ?? "",
+        payload?.tableCardId ?? ""
       );
       if (err) return ack?.({ ok: false, error: err });
       broadcastRoom(joinedRoomId, io);
