@@ -500,8 +500,11 @@ export function craftRecipe(
   console.log('🎯 NEEDS BUILT:', needsBuilt);
   
   let elementalPick: GameCard[] = [];
-  // Проверяем элементы со стола только если они нужны
-  if (Object.keys(def.needs).length > 0) {
+  // Если рецепт требует собранные рецепты - игнорируем элементы со стола
+  if (needsBuilt.length > 0) {
+    console.log('🎯 RECIPE USES BUILT RECIPES ONLY - IGNORING TABLE ELEMENTS');
+  } else {
+    // Проверяем элементы со стола только если нет needsBuilt
     const pick = validateTableSelection(game.table, tableCardIds, def.needs);
     console.log('🎯 ELEMENTAL PICK:', pick);
     
