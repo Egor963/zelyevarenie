@@ -50,16 +50,16 @@ function parseCardData(text) {
   console.log('\n🔍 Анализ строк:');
   
   let currentCard = null;
-  let lineNumber = 0;
+  let i = 0;
   
-  for (let i = 0; i < lines.length; i++) {
+  while (i < lines.length) {
     const line = lines[i].trim();
-    lineNumber++;
     
     // Пропускаем пустые строки и заголовки
     if (!line || line.includes('Номер карточки') || line.includes('Количество очков') || 
         line.includes('Название карточки') || line.includes('Элементы из которых состоит') || 
         line.includes('Элемент снизу')) {
+      i++;
       continue;
     }
     
@@ -82,6 +82,7 @@ function parseCardData(text) {
       };
       
       console.log(`🎴 Найдена карточка №${cardNumber}`);
+      i++;
       continue;
     }
     
@@ -92,6 +93,7 @@ function parseCardData(text) {
       if (!isNaN(points) && points >= 1 && points <= 10) {
         currentCard.points = points;
         console.log(`   📊 Очки: ${points}`);
+        i++;
         continue;
       }
       
@@ -100,6 +102,7 @@ function parseCardData(text) {
           line !== currentCard.name && currentCard.name === '') {
         currentCard.name = line;
         console.log(`   🏷️ Название: ${line}`);
+        i++;
         continue;
       }
       
@@ -121,9 +124,12 @@ function parseCardData(text) {
           currentCard.bottomElement = line;
           console.log(`   🔽 Элемент снизу: ${line}`);
         }
+        i++;
         continue;
       }
     }
+    
+    i++;
   }
   
   // Сохраняем последнюю карточку
