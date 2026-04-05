@@ -465,10 +465,22 @@ export default function App() {
               return (
                 <div key={b.instanceId} className="built-row">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {/* Показываем карточку рецепта */}
-                    <div style={{ width: '60px', height: '80px', border: '1px solid #ccc', borderRadius: '4px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: '10px', padding: '4px', backgroundColor: 'white' }}>
-                      <div style={{ fontWeight: 'bold', textAlign: 'center', fontSize: '9px' }}>{b.name}</div>
-                      <div style={{ fontSize: '8px', marginTop: 'auto' }}>{b.points} очк.</div>
+                    {/* Показываем полноценную карточку рецепта */}
+                    <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}>
+                      <HandCardBlock
+                        card={b.card}
+                        index={-1}
+                        catalog={snap.recipeCatalog}
+                        canAct={false}
+                        craftHandIndex={null}
+                        spellSwap={null}
+                        onPlace={() => {}}
+                        onStartCraft={() => {}}
+                        onSpellTake={() => {}}
+                        onSpellBreak={() => {}}
+                        onSpellSwapStart={() => {}}
+                        onSpellSwapPickHand={() => {}}
+                      />
                     </div>
                     <div>
                       <strong>{b.name}</strong>
