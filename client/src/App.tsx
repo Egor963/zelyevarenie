@@ -205,10 +205,17 @@ export default function App() {
           builtInstanceIds: craftBuiltIds 
         });
         
-        socketRef.current?.emit(
+        if (!socketRef.current) {
+          setError('Нет соединения с сервером');
+          return;
+        }
+        
+        console.log('🎯 EMITTING CRAFT REQUEST...');
+        socketRef.current.emit(
           "craftRecipe",
           { handIndex: craftHandIndex, tableCardIds: [], builtInstanceIds: craftBuiltIds },
           (r: { ok: boolean; error?: string }) => {
+            console.log('🎯 COMPLEX CRAFT RESPONSE:', r);
             if (!r.ok) setError(r.error ?? "Ошибка");
             else {
               console.log('🎯 COMPLEX CRAFT SUCCESS');
