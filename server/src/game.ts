@@ -367,9 +367,16 @@ function checkEnd(game: GameState) {
 }
 
 function nextTurn(game: GameState) {
+  console.log('🎯 NEXT TURN START:', { currentPlayerIndex: game.currentPlayerIndex, players: game.players.map(p => ({ id: p.id, name: p.name })) });
+  
   game.currentPlayerIndex = (game.currentPlayerIndex + 1) % game.players.length;
+  
+  console.log('🎯 NEXT TURN AFTER INDEX CHANGE:', { currentPlayerIndex: game.currentPlayerIndex });
+  
   beginTurn(game);
   checkEnd(game);
+  
+  console.log('🎯 NEXT TURN END:', { currentPlayerIndex: game.currentPlayerIndex });
 }
 
 /** Если рука опустела до основного действия — передаём ход (добор только в начале следующего хода). */
