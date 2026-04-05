@@ -760,7 +760,7 @@ export function castSpellTransformBuilt(
     tableNowHas: game.table.length 
   });
   
-  // После трансформы игрок делает дополнительный ход
-  afterSpell(game, false); // НЕ передаем ход сразу
+  // После трансформы игрок делает дополнительный ход как в познании
+  afterSpell(game, true); // Дополнительный ход как у заклятия познания
   return null;
 }
