@@ -170,21 +170,40 @@ export default function App() {
 
   // Восстанавливаем состояние игры при загрузке
   useEffect(() => {
+    console.log('🔄 PAGE LOADED - checking saved state...');
     const savedState = localStorage.getItem('gameState');
+    console.log('🔄 SAVED STATE:', savedState);
+    console.log('🔄 CURRENT ROOM ID:', roomId);
+    
     if (savedState) {
       try {
         const gameState = JSON.parse(savedState);
         console.log('🔄 RESTORING GAME STATE:', gameState);
+        console.log('🔄 SOCKET STATUS:', socketRef.current?.connected);
         
         // Подключаемся к сохраненной комнате сразу при загрузке
-        socketRef.current?.emit("joinRoom", {
-          roomId: gameState.roomId,
-          playerName: gameState.playerName
-        });
+        if (socketRef.current) {
+          socketRef.current.emit("joinRoom", {
+            roomId: gameState.roomId,
+            playerName: gameState.playerName
+          });
+        } else {
+          console.log('🔄 SOCKET NOT READY - will retry...');
+          setTimeout(() => {
+            if (socketRef.current) {
+              socketRef.current.emit("joinRoom", {
+                roomId: gameState.roomId,
+                playerName: gameState.playerName
+              });
+            }
+          }, 1000);
+        }
       } catch (error) {
         console.error('🔄 FAILED TO RESTORE GAME STATE:', error);
         localStorage.removeItem('gameState');
       }
+    } else {
+      console.log('🔄 NO SAVED STATE - showing lobby');
     }
   }, []); // Пустой массив - выполняется только один раз при загрузке
 
