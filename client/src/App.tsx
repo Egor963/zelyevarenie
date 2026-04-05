@@ -1091,7 +1091,7 @@ function HandCardBlock({
           </button>
         )}
         {card.face.kind === "spell" && card.face.spell === "transform_built" && (
-          <button type="button" disabled={!canAct || busyCraft} onClick={() => setSpellTransform({ spellIdx: i, builtInstanceId: null })}>
+          <button type="button" disabled={!canAct || busyCraft} onClick={onSpellTransformStart}>
             Играть
           </button>
         )}
