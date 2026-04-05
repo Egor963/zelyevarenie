@@ -182,9 +182,12 @@ io.on("connection", (socket) => {
       payload: { handIndex: number; tableCardIds: string[]; builtInstanceIds: string[] },
       ack?: (r: { ok: boolean; error?: string }) => void
     ) => {
+      console.log('🎯 CLIENT CRAFT REQUEST:', { playerId, payload });
+      
       if (!joinedRoomId || !playerId) return ack?.({ ok: false, error: "Не в комнате" });
       const room = rooms.get(joinedRoomId);
       if (!room) return ack?.({ ok: false, error: "Комната пропала" });
+      
       const err = craftRecipe(
         room.game,
         playerId,
@@ -192,8 +195,15 @@ io.on("connection", (socket) => {
         payload?.tableCardIds ?? [],
         payload?.builtInstanceIds ?? []
       );
+      
+      console.log('🎯 CRAFT RESULT:', { error: err, gameBuiltRecipes: room.game.builtRecipes.length });
+      
       if (err) return ack?.({ ok: false, error: err });
+      
+      console.log('🎯 BROADCASTING ROOM UPDATE...');
       broadcastRoom(joinedRoomId, io);
+      console.log('🎯 ROOM BROADCASTED');
+      
       ack?.({ ok: true });
     }
   );
