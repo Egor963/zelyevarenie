@@ -685,6 +685,7 @@ export default function App() {
                     className="primary"
                     disabled={!chosenCardId}
                     onClick={() => {
+                      alert('Кнопка нажата! chosenCardId: ' + chosenCardId);
                       console.log('🎯 CONFIRM BREAK CLICKED:', { chosenCardId, spellBreakIdx, breakingRecipeId });
                       
                       if (!chosenCardId || !spellBreakIdx) {
