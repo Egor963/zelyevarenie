@@ -136,6 +136,45 @@ export default function App() {
 
   const persistName = useCallback(() => {
     try {
+      // Сохраняем состояние игры в localStorage
+      useEffect(() => {
+        if (snap?.roomId && snap?.playerId) {
+          const gameState = {
+            roomId: snap.roomId,
+            playerId: snap.playerId,
+            playerName: snap.playerName,
+          };
+          localStorage.setItem("gameState", JSON.stringify(gameState));
+        }
+      }, [snap?.roomId, snap?.playerId, snap?.playerName]);
+
+      // Восстанавливаем состояние игры при загрузке
+      useEffect(() => {
+        const savedState = localStorage.getItem("gameState");
+        if (savedState) {
+          try {
+            const gameState = JSON.parse(savedState);
+            console.log(" RESTORING GAME STATE:", gameState);
+
+            // Подключаемся к сохраненной комнате
+            socketRef.current?.emit(
+              "joinRoom",
+              {
+                roomId: gameState.roomId,
+                playerName: gameState.playerName,
+              },
+              (r: { ok: boolean; error?: string }) => {
+                if (!r.ok) setError(r.error ?? "Ошибка");
+                else setRoomId(gameState.roomId);
+              }
+            );
+          } catch (error) {
+            console.error(" FAILED TO RESTORE GAME STATE:", error);
+            localStorage.removeItem("gameState");
+          }
+        }
+      }, []);
+
       localStorage.setItem("zelye_name", playerName.trim());
     } catch {
       /* ignore */

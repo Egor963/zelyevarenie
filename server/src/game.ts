@@ -531,8 +531,15 @@ export function craftRecipe(
   game.builtRecipes = game.builtRecipes.filter((b) => !removeBuiltIds.has(b.instanceId));
 
   if (isComplex) {
-    for (const c of elementalPick) game.table.push(c);
-    for (const b of usedBuilt) for (const ing of b.ingredients) game.table.push(ing);
+    console.log('🎯 COMPLEX RECIPE: returning ingredients to table');
+    // Возвращаем ингредиенты использованных собранных рецептов на стол
+    for (const b of usedBuilt) {
+      console.log('🎯 RETURNING INGREDIENTS FROM:', b.name);
+      for (const ing of b.ingredients) {
+        console.log('🎯 RETURNING INGREDIENT:', ing.id, ing.bottomElement);
+        game.table.push(ing);
+      }
+    }
   }
 
   p.hand.splice(handIndex, 1);
