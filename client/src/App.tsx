@@ -174,18 +174,64 @@ export default function App() {
 
   const submitCraft = () => {
     if (craftHandIndex === null) return;
-    console.log('Submitting craft:', { handIndex: craftHandIndex, tableCardIds: craftTableIds, builtInstanceIds: craftBuiltIds });
-    socketRef.current?.emit(
-      "craftRecipe",
-      { handIndex: craftHandIndex, tableCardIds: craftTableIds, builtInstanceIds: craftBuiltIds },
-      (r: { ok: boolean; error?: string }) => {
-        if (!r.ok) setError(r.error ?? "Ошибка");
-        else {
-          console.log('Craft successful');
-          clearModes();
+    
+    // Автоматическая проверка и сбор нужных элементов со стола
+    if (craftDef) {
+      const neededElements = Object.entries(craftDef.needs);
+      const tableElements = snap?.table || [];
+      const availableElements: Record<string, number> = {};
+      
+      // Считаем доступные элементы на столе
+      tableElements.forEach(card => {
+        if (card.face.kind === 'element') {
+          const elementCard = card.face as { kind: 'element'; element: string };
+          availableElements[elementCard.element] = (availableElements[elementCard.element] || 0) + 1;
         }
+      });
+      
+      // Проверяем достаточно ли элементов
+      const missingElements: string[] = [];
+      neededElements.forEach(([element, count]) => {
+        if ((availableElements[element] || 0) < count) {
+          missingElements.push(element);
+        }
+      });
+      
+      if (missingElements.length > 0) {
+        setError(`Недостаточно элементов на столе: ${missingElements.join(', ')}`);
+        return;
       }
-    );
+      
+      // Автоматически собираем нужные элементы
+      const autoSelectedTableIds: string[] = [];
+      neededElements.forEach(([element, count]) => {
+        let collected = 0;
+        tableElements.forEach(card => {
+          if (card.face.kind === 'element') {
+            const elementCard = card.face as { kind: 'element'; element: string };
+            if (elementCard.element === element && collected < count) {
+              autoSelectedTableIds.push(card.id);
+              collected++;
+            }
+          }
+        });
+      });
+      
+      console.log('Auto-crafting:', { handIndex: craftHandIndex, tableCardIds: autoSelectedTableIds, builtInstanceIds: craftBuiltIds });
+      socketRef.current?.emit(
+        "craftRecipe",
+        { handIndex: craftHandIndex, tableCardIds: autoSelectedTableIds, builtInstanceIds: craftBuiltIds },
+        (r: { ok: boolean; error?: string }) => {
+          if (!r.ok) setError(r.error ?? "Ошибка");
+          else {
+            console.log('Craft successful');
+            clearModes();
+          }
+        }
+      );
+    } else {
+      setError('Рецепт не найден');
+    }
   };
 
   const onTableClick = (cardId: string) => {
