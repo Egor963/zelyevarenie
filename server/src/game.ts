@@ -31,133 +31,20 @@ function makeCard(face: GameCard["face"], bottomElement: ElementId): GameCard {
 export function makeDeck(): GameCard[] {
   const d: GameCard[] = [];
   
-  // Реальные ID карточек из папки /client/public/cards/
+  // Реальные ID карточек из папки /client/public/cards// Список всех ID карточек (переименованы в числовой формат)
   const cardIds = [
-    'page01_card01', 'page01_card02', 'page01_card03', 'page01_card04', 'page01_card05', 'page01_card06', 'page01_card07', 'page01_card08', 'page01_card09',
-    'page02_card01', 'page02_card02', 'page02_card03', 'page02_card04', 'page02_card05', 'page02_card06', 'page02_card07', 'page02_card08', 'page02_card09',
-    'page03_card01', 'page03_card02', 'page03_card03', 'page03_card04', 'page03_card05', 'page03_card06', 'page03_card07', 'page03_card08', 'page03_card09',
-    'page04_card01', 'page04_card02', 'page04_card03', 'page04_card04', 'page04_card05', 'page04_card06', 'page04_card07', 'page04_card08', 'page04_card09',
-    'page05_card01', 'page05_card02', 'page05_card03', 'page05_card04', 'page05_card05', 'page05_card06', 'page05_card07', 'page05_card08', 'page05_card09',
-    'page06_card01', 'page06_card02', 'page06_card03', 'page06_card04', 'page06_card05', 'page06_card06', 'page06_card07', 'page06_card08', 'page06_card09',
-    'page07_card01', 'page07_card02', 'page07_card03', 'page07_card04', 'page07_card05', 'page07_card06', 'page07_card07', 'page07_card08', 'page07_card09',
-    'page08_card01', 'page08_card02', 'page08_card03', 'page08_card04', 'page08_card05', 'page08_card06', 'page08_card07', 'page08_card08', 'page08_card09',
-    'page09_card01', 'page09_card02', 'page09_card03', 'page09_card04'
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+    '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+    '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
+    '31', '32', '33', '34', '35', '36', '37', '38', '39', '40',
+    '41', '42', '43', '44', '45', '46', '47', '48', '49', '50',
+    '51', '52', '53', '54', '55', '56', '57', '58', '59', '60',
+    '61', '62', '63', '64', '65', '66', '67', '68', '69', '70',
+    '71', '72', '73', '74', '75', '76'
   ];
 
-  // Маппинг карточек на реальные данные с карточек
-  const cardMappings: Record<string, { topType: 'recipe' | 'spell'; topContent: string; bottomElement: string; points?: number }> = {
-    // Page 1 - Повелитель растений
-    'page01_card01': { topType: 'recipe', topContent: 'повелитель растений', bottomElement: 'волны эфира', points: 3 },
-    'page01_card02': { topType: 'recipe', topContent: 'повелитель растений', bottomElement: 'волны эфира', points: 3 },
-    // Page 1 - Белладонна
-    'page01_card03': { topType: 'recipe', topContent: 'белладонна', bottomElement: 'волны эфира', points: 3 },
-    'page01_card04': { topType: 'recipe', topContent: 'белладонна', bottomElement: 'волны эфира', points: 3 },
-    // Page 1 - Повелитель огня
-    'page01_card05': { topType: 'recipe', topContent: 'повелитель огня', bottomElement: 'волны эфира', points: 4 },
-    'page01_card06': { topType: 'recipe', topContent: 'повелитель огня', bottomElement: 'волны эфира', points: 4 },
-    // Page 1 - Повелитель света
-    'page01_card07': { topType: 'recipe', topContent: 'повелитель света', bottomElement: 'волны эфира', points: 4 },
-    'page01_card08': { topType: 'recipe', topContent: 'повелитель света', bottomElement: 'волны эфира', points: 4 },
-    'page01_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'волны эфира' },
-    
-    // Page 2 - заклинания
-    'page02_card01': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'волны эфира' },
-    'page02_card02': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'волны эфира' },
-    'page02_card03': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'волны эфира' },
-    'page02_card04': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'волны эфира' },
-    'page02_card05': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'волны эфира' },
-    'page02_card06': { topType: 'spell', topContent: 'Обмен', bottomElement: 'волны эфира' },
-    'page02_card07': { topType: 'spell', topContent: 'Обмен', bottomElement: 'волны эфира' },
-    'page02_card08': { topType: 'spell', topContent: 'Обмен', bottomElement: 'волны эфира' },
-    // Page 2 - Повелитель тьмы
-    'page02_card09': { topType: 'recipe', topContent: 'повелитель тьмы', bottomElement: 'волны эфира', points: 5 },
-    
-    // Page 3 - Повелитель тьмы
-    'page03_card01': { topType: 'recipe', topContent: 'повелитель тьмы', bottomElement: 'волны эфира', points: 5 },
-    // Page 3 - Повелитель стихий
-    'page03_card02': { topType: 'recipe', topContent: 'повелитель стихий', bottomElement: 'волны эфира', points: 6 },
-    'page03_card03': { topType: 'recipe', topContent: 'повелитель стихий', bottomElement: 'волны эфира', points: 6 },
-    'page03_card04': { topType: 'recipe', topContent: 'повелитель стихий', bottomElement: 'волны эфира', points: 6 },
-    // Page 3 - Квинтэссенция воли
-    'page03_card05': { topType: 'recipe', topContent: 'квинтэссенция воли', bottomElement: 'волны эфира', points: 8 },
-    'page03_card06': { topType: 'recipe', topContent: 'квинтэссенция воли', bottomElement: 'волны эфира', points: 8 },
-    'page03_card07': { topType: 'recipe', topContent: 'квинтэссенция воли', bottomElement: 'волны эфира', points: 8 },
-    'page03_card08': { topType: 'recipe', topContent: 'квинтэссенция воли', bottomElement: 'волны эфира', points: 8 },
-    // Page 3 - Повелитель времени
-    'page03_card09': { topType: 'recipe', topContent: 'повелитель времени', bottomElement: 'волны эфира', points: 6 },
-    
-    // Page 4 - Повелитель времени
-    'page04_card01': { topType: 'recipe', topContent: 'повелитель времени', bottomElement: 'волны эфира' },
-    'page04_card02': { topType: 'recipe', topContent: 'повелитель времени', bottomElement: 'волны эфира' },
-    // Page 4 - Повелитель разума
-    'page04_card03': { topType: 'recipe', topContent: 'повелитель разума', bottomElement: 'волны эфира', points: 10 },
-    'page04_card04': { topType: 'recipe', topContent: 'повелитель разума', bottomElement: 'волны эфира', points: 10 },
-    'page04_card05': { topType: 'recipe', topContent: 'повелитель разума', bottomElement: 'волны эфира', points: 10 },
-    'page04_card06': { topType: 'recipe', topContent: 'повелитель разума', bottomElement: 'волны эфира', points: 10 },
-    // Page 4 - заклинания
-    'page04_card07': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'волны эфира' },
-    'page04_card08': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'волны эфира' },
-    'page04_card09': { topType: 'spell', topContent: 'Взять со стола', bottomElement: 'волны эфира' },
-    
-    // Page 5 - заклинания
-    'page05_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'волны эфира' },
-    'page05_card02': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'волны эфира' },
-    'page05_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'волны эфира' },
-    'page05_card04': { topType: 'spell', topContent: 'Обмен', bottomElement: 'волны эфира' },
-    // Page 5 - Повелитель растений (дополнительные)
-    'page05_card05': { topType: 'recipe', topContent: 'повелитель растений', bottomElement: 'волны эфира' },
-    'page05_card06': { topType: 'recipe', topContent: 'повелитель растений', bottomElement: 'волны эфира' },
-    // Page 5 - Белладонна (дополнительные)
-    'page05_card07': { topType: 'recipe', topContent: 'белладонна', bottomElement: 'волны эфира' },
-    'page05_card08': { topType: 'recipe', topContent: 'белладонна', bottomElement: 'волны эфира' },
-    // Page 5 - Повелитель огня (дополнительные)
-    'page05_card09': { topType: 'recipe', topContent: 'повелитель огня', bottomElement: 'волны эфира' },
-    
-    // Page 6 - Повелитель огня (дополнительные)
-    'page06_card01': { topType: 'recipe', topContent: 'повелитель огня', bottomElement: 'волны эфира' },
-    'page06_card02': { topType: 'recipe', topContent: 'повелитель огня', bottomElement: 'волны эфира' },
-    // Page 6 - Повелитель света (дополнительные)
-    'page06_card03': { topType: 'recipe', topContent: 'повелитель света', bottomElement: 'волны эфира' },
-    'page06_card04': { topType: 'recipe', topContent: 'повелитель света', bottomElement: 'волны эфира' },
-    'page06_card05': { topType: 'recipe', topContent: 'повелитель света', bottomElement: 'волны эфира' },
-    'page06_card06': { topType: 'recipe', topContent: 'повелитель света', bottomElement: 'волны эфира' },
-    // Page 6 - Повелитель тьмы (дополнительные)
-    'page06_card07': { topType: 'recipe', topContent: 'повелитель тьмы', bottomElement: 'волны эфира' },
-    'page06_card08': { topType: 'recipe', topContent: 'повелитель тьмы', bottomElement: 'волны эфира' },
-    'page06_card09': { topType: 'recipe', topContent: 'повелитель тьмы', bottomElement: 'волны эфира' },
-    
-    // Page 7 - Повелитель тьмы (дополнительные)
-    'page07_card01': { topType: 'recipe', topContent: 'повелитель тьмы', bottomElement: 'волны эфира' },
-    'page07_card02': { topType: 'recipe', topContent: 'повелитель тьмы', bottomElement: 'волны эфира' },
-    // Page 7 - Повелитель стихий (дополнительные)
-    'page07_card03': { topType: 'recipe', topContent: 'повелитель стихий', bottomElement: 'волны эфира' },
-    'page07_card04': { topType: 'recipe', topContent: 'повелитель стихий', bottomElement: 'волны эфира' },
-    'page07_card05': { topType: 'recipe', topContent: 'повелитель стихий', bottomElement: 'волны эфира' },
-    'page07_card06': { topType: 'recipe', topContent: 'повелитель стихий', bottomElement: 'волны эфира' },
-    'page07_card07': { topType: 'recipe', topContent: 'повелитель стихий', bottomElement: 'волны эфира' },
-    'page07_card08': { topType: 'recipe', topContent: 'повелитель стихий', bottomElement: 'волны эфира' },
-    // Page 7 - Повелитель времени (дополнительные)
-    'page07_card09': { topType: 'recipe', topContent: 'повелитель времени', bottomElement: 'волны эфира' },
-    
-    // Page 8 - Повелитель времени (дополнительные)
-    'page08_card01': { topType: 'recipe', topContent: 'повелитель времени', bottomElement: 'волны эфира' },
-    'page08_card02': { topType: 'recipe', topContent: 'повелитель времени', bottomElement: 'волны эфира' },
-    'page08_card03': { topType: 'recipe', topContent: 'повелитель времени', bottomElement: 'волны эфира' },
-    'page08_card04': { topType: 'recipe', topContent: 'повелитель времени', bottomElement: 'волны эфира' },
-    // Page 8 - Повелитель разума (дополнительные)
-    'page08_card05': { topType: 'recipe', topContent: 'повелитель разума', bottomElement: 'волны эфира' },
-    'page08_card06': { topType: 'recipe', topContent: 'повелитель разума', bottomElement: 'волны эфира' },
-    'page08_card07': { topType: 'recipe', topContent: 'повелитель разума', bottomElement: 'волны эфира' },
-    'page08_card08': { topType: 'recipe', topContent: 'повелитель разума', bottomElement: 'волны эфира' },
-    // Page 8 - заклинания
-    'page08_card09': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'волны эфира' },
-    
-    // Page 9 - заклинания
-    'page09_card01': { topType: 'spell', topContent: 'Разобрать рецепт', bottomElement: 'волны эфира' },
-    'page09_card02': { topType: 'spell', topContent: 'Обмен', bottomElement: 'волны эфира' },
-    'page09_card03': { topType: 'spell', topContent: 'Обмен', bottomElement: 'волны эфира' },
-    'page09_card04': { topType: 'spell', topContent: 'Обмен', bottomElement: 'волны эфира' }
-  };
+  // Временный маппинг - будет заполнен когда ты пришлешь данные
+  const cardMappings: Record<string, { topType: 'recipe' | 'spell'; topContent: string; bottomElement: string; points?: number }> = {};
 
   // Создаем карточки с реальными ID
   for (const cardId of cardIds) {
