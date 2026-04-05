@@ -176,19 +176,16 @@ export default function App() {
     const savedRoomId = params.get('roomId');
     const savedPlayerName = params.get('playerName');
     
-    if (savedRoomId && savedPlayerName && !roomId) {
-      console.log('🔄 RESTORING GAME STATE FROM URL:', { roomId: savedRoomId, playerName: savedPlayerName });
+    if (savedRoomId && savedPlayerName) {
+      console.log('🔄 FOUND SAVED STATE:', { roomId: savedRoomId, playerName: savedPlayerName });
       
-      // Ждем подключения сокета и подключаемся к комнате
-      const connectToRoom = () => {
-        console.log('🔄 CHECKING SOCKET STATUS:', { 
-          connected: socketRef.current?.connected, 
-          exists: !!socketRef.current,
-          id: socketRef.current?.id 
-        });
-        
-        if (socketRef.current) {
-          console.log('🔄 SOCKET EXISTS - joining room...');
+      // Сохраняем состояние для восстановления после подключения сокета
+      const savedJoinAttempt = { roomId: savedRoomId, playerName: savedPlayerName };
+      
+      // Попробуем подключиться сразу, если сокет готов
+      const tryJoin = () => {
+        if (socketRef.current?.connected) {
+          console.log('🔄 SOCKET READY - joining room...');
           socketRef.current.emit("joinRoom", {
             roomId: savedRoomId,
             playerName: savedPlayerName
@@ -201,12 +198,28 @@ export default function App() {
             }
           });
         } else {
-          console.log('🔄 SOCKET NOT READY - retrying...');
-          setTimeout(connectToRoom, 500);
+          console.log('🔄 SOCKET NOT READY - will retry after connection...');
         }
       };
       
-      connectToRoom();
+      // Подписываемся на событие подключения сокета
+      const onConnect = () => {
+        console.log('🔄 SOCKET CONNECTED - attempting to join room...');
+        tryJoin();
+      };
+      
+      if (socketRef.current?.connected) {
+        // Если сокет уже подключен, пробуем сразу
+        tryJoin();
+      } else {
+        // Если еще не подключен, ждем события connect
+        socketRef.current?.on('connect', onConnect);
+      }
+      
+      // Очистка при размонтировании
+      return () => {
+        socketRef.current?.off('connect', onConnect);
+      };
     } else {
       console.log('🔄 NO SAVED STATE - showing lobby');
     }
