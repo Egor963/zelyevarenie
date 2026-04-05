@@ -187,6 +187,7 @@ export default function App() {
       
       // Считаем доступные элементы на столе
       tableElements.forEach(card => {
+        console.log('🎯 TABLE CARD:', card);
         if (card.face.kind === 'element') {
           const elementCard = card.face as { kind: 'element'; element: string };
           availableElements[elementCard.element] = (availableElements[elementCard.element] || 0) + 1;
