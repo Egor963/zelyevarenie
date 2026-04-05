@@ -279,6 +279,15 @@ export default function App() {
   const isHost = !!snap && myId === snap.hostId;
   const myTurn = !!snap && snap.phase === "playing" && snap.currentPlayerId === myId;
   const canAct = !!snap && myTurn && snap.mustPlayMainAction;
+  
+  console.log('🎯 TURN STATE:', { 
+    myId, 
+    currentPlayerId: snap?.currentPlayerId, 
+    myTurn, 
+    canAct, 
+    phase: snap?.phase, 
+    mustPlayMainAction: snap?.mustPlayMainAction 
+  });
 
   const craftDef =
     craftHandIndex !== null && snap?.yourHand
@@ -455,9 +464,18 @@ export default function App() {
               const breakMode = spellBreakIdx !== null && canAct && mine;
               return (
                 <div key={b.instanceId} className="built-row">
-                  <strong>{b.name}</strong>
-                  <span>{b.points} очк.</span>
-                  <span style={{ color: "var(--muted)" }}>{b.ownerName}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {/* Показываем карточку рецепта */}
+                    <div style={{ width: '60px', height: '80px', border: '1px solid #ccc', borderRadius: '4px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: '10px', padding: '4px', backgroundColor: 'white' }}>
+                      <div style={{ fontWeight: 'bold', textAlign: 'center', fontSize: '9px' }}>{b.name}</div>
+                      <div style={{ fontSize: '8px', marginTop: 'auto' }}>{b.points} очк.</div>
+                    </div>
+                    <div>
+                      <strong>{b.name}</strong>
+                      <span> {b.points} очк.</span>
+                      <span style={{ color: "var(--muted)" }}> ({b.ownerName})</span>
+                    </div>
+                  </div>
                   {breakMode && (
                     <button
                       type="button"
