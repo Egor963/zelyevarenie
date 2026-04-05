@@ -190,23 +190,25 @@ io.on("connection", (socket) => {
       const room = rooms.get(joinedRoomId);
       if (!room) return ack?.({ ok: false, error: "Комната пропала" });
       
-      const err = craftRecipe(
-        room.game,
-        playerId,
-        payload?.handIndex ?? -1,
-        payload?.tableCardIds ?? [],
-        payload?.builtInstanceIds ?? []
-      );
-      
-      console.log('🎯 CRAFT RESULT:', { error: err, gameBuiltRecipes: room.game.builtRecipes.length });
-      
-      if (err) return ack?.({ ok: false, error: err });
-      
-      console.log('🎯 BROADCASTING ROOM UPDATE...');
-      broadcastRoom(joinedRoomId, io);
-      console.log('🎯 ROOM BROADCASTED');
-      
-      ack?.({ ok: true });
+      try {
+        const err = craftRecipe(
+          room.game,
+          playerId,
+          payload?.handIndex ?? -1,
+          payload?.tableCardIds ?? [],
+          payload?.builtInstanceIds ?? []
+        );
+        
+        console.log('🎯 CRAFT RESULT:', { error: err, gameBuiltRecipes: room.game.builtRecipes.length });
+        
+        if (err) return ack?.({ ok: false, error: err });
+        
+        broadcastRoom(joinedRoomId, io);
+        ack?.({ ok: true });
+      } catch (error) {
+        console.error('🎯 CRAFT ERROR:', error);
+        ack?.({ ok: false, error: "Внутренняя ошибка сервера" });
+      }
     }
   );
 
