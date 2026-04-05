@@ -132,7 +132,7 @@ io.on("connection", (socket) => {
     "joinRoom",
     (
       payload: { roomId: string; playerName: string },
-      ack?: (r: { ok: boolean; error?: string }) => void
+      ack?: (r: { ok: boolean; error?: string; roomId?: string }) => void
     ) => {
       console.log('🎯 JOIN ROOM REQUEST:', { playerId: socket.id, payload });
       
@@ -160,7 +160,7 @@ io.on("connection", (socket) => {
       socket.join(code);
       broadcastRoom(code, io);
       console.log('🎯 JOIN ROOM SUCCESS - broadcasting and sending ack');
-      ack?.({ ok: true });
+      ack?.({ ok: true, roomId: code }); // ВАЖНО: возвращаем roomId
     }
   );
 
