@@ -605,7 +605,84 @@ export default function App() {
               </div>
             )}
 
-            {(spellTakeIdx !== null || spellBreakIdx !== null || spellSwap) && (
+            {breakingRecipeId && (
+              <div className="panel" style={{ marginTop: '1rem', padding: '1rem', backgroundColor: 'var(--panel-bg)', border: '1px solid var(--border)' }}>
+                <h3 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Выберите карточку, чтобы оставить себе:</h3>
+                <div className="table-grid">
+                  {(() => {
+                    const recipe = snap.builtRecipes.find(b => b.instanceId === breakingRecipeId);
+                    if (!recipe) return null;
+                    return recipe.ingredients.map((ing) => {
+                      const isSelected = chosenCardId === ing.id;
+                      return (
+                        <button
+                          key={ing.id}
+                          type="button"
+                          className={`table-card-btn ${isSelected ? "selected" : ""}`}
+                          onClick={() => {
+                            console.log('🎯 CHOSEN CARD:', { cardId: ing.id, element: ing.bottomElement });
+                            setChosenCardId(ing.id);
+                          }}
+                          style={{ 
+                            border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border)',
+                            transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <ElementBadge el={ing.bottomElement} />
+                        </button>
+                      );
+                    });
+                  })()}
+                </div>
+                <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+                  <button
+                    type="button"
+                    className="primary"
+                    disabled={!chosenCardId}
+                    onClick={() => {
+                      if (!chosenCardId || !spellBreakIdx) return;
+                      
+                      console.log('🎯 CONFIRM BREAK:', { 
+                        spellHandIndex: spellBreakIdx, 
+                        builtInstanceId: breakingRecipeId, 
+                        chosenCardId 
+                      });
+                      
+                      socketRef.current?.emit(
+                        "castSpellBreakBuilt",
+                        { 
+                          spellHandIndex: spellBreakIdx, 
+                          builtInstanceId: breakingRecipeId,
+                          chosenCardId 
+                        },
+                        (r: { ok: boolean; error?: string }) => {
+                          if (!r.ok) setError(r.error ?? "Ошибка");
+                          else {
+                            console.log('🎯 BREAK SUCCESS');
+                            clearModes();
+                          }
+                        }
+                      );
+                    }}
+                  >
+                    Подтвердить выбор
+                  </button>
+                  <button
+                    type="button"
+                    className="ghost"
+                    onClick={() => {
+                      console.log('🎯 CANCEL BREAK');
+                      setBreakingRecipeId(null);
+                      setChosenCardId(null);
+                    }}
+                  >
+                    Отмена
+                  </button>
+                </div>
+              </div>
+            )}
+              {(spellTakeIdx !== null || spellBreakIdx !== null || spellSwap) && (
               <div className="row" style={{ marginTop: "0.75rem" }}>
                 <button type="button" className="ghost" onClick={clearModes}>
                   Отменить заклинание
