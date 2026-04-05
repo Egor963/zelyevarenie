@@ -662,12 +662,14 @@ export default function App() {
                         canAct={false}
                         craftHandIndex={null}
                         spellSwap={null}
+                        spellTransform={null}
                         onPlace={() => {}}
                         onStartCraft={() => {}}
                         onSpellTake={() => {}}
                         onSpellBreak={() => {}}
                         onSpellSwapStart={() => {}}
                         onSpellSwapPickHand={() => {}}
+                        onSpellTransformStart={() => {}}
                       />
                     </div>
                     <div>
@@ -717,21 +719,17 @@ export default function App() {
                     card={c}
                     index={i}
                     catalog={snap.recipeCatalog}
-                    canAct={canAct}
+                    canAct={canAct && !busyCraft}
                     craftHandIndex={craftHandIndex}
                     spellSwap={spellSwap}
-                    onPlace={() => place(i)}
-                    onStartCraft={() => {
-                      clearModes();
-                      if (c.face.kind !== "recipe") return;
-                      setCraftHandIndex(i);
-                      setCraftTableIds([]);
-                      setCraftBuiltIds([]);
-                    }}
-                    onSpellTake={() => {
-                      clearModes();
-                      setSpellTakeIdx(i);
-                    }}
+                    spellTransform={spellTransform}
+                    onPlace={place}
+                    onStartCraft={onStartCraft}
+                    onSpellTake={onSpellTake}
+                    onSpellBreak={onSpellBreak}
+                    onSpellSwapStart={onSpellSwapStart}
+                    onSpellSwapPickHand={onSpellSwapPickHand}
+                    onSpellTransformStart={() => setSpellTransform({ spellIdx: i, builtInstanceId: null })}
                     onSpellBreak={() => {
                       console.log('🎯 SPELL BREAK CLICKED:', { index: i });
                       clearModes();
@@ -980,12 +978,14 @@ function HandCardBlock({
   canAct,
   craftHandIndex,
   spellSwap,
+  spellTransform,
   onPlace,
   onStartCraft,
   onSpellTake,
   onSpellBreak,
   onSpellSwapStart,
   onSpellSwapPickHand,
+  onSpellTransformStart,
 }: {
   card: GameCard;
   index: number;
@@ -993,12 +993,14 @@ function HandCardBlock({
   canAct: boolean;
   craftHandIndex: number | null;
   spellSwap: { spellIdx: number; tableId: string | null } | null;
+  spellTransform: { spellIdx: number; builtInstanceId: string | null } | null;
   onPlace: () => void;
   onStartCraft: () => void;
   onSpellTake: () => void;
   onSpellBreak: () => void;
   onSpellSwapStart: () => void;
   onSpellSwapPickHand: () => void;
+  onSpellTransformStart: () => void;
 }) {
   const busyCraft = craftHandIndex !== null;
   const showSwapHand = spellSwap?.tableId && spellSwap.spellIdx !== index;
