@@ -499,10 +499,15 @@ export function craftRecipe(
   const needsBuilt = def.needsBuilt ?? [];
   console.log('🎯 NEEDS BUILT:', needsBuilt);
   
-  const elementalPick = validateTableSelection(game.table, tableCardIds, def.needs);
-  console.log('🎯 ELEMENTAL PICK:', elementalPick);
-  
-  if (!elementalPick) return "Неверный набор карт со стола";
+  let elementalPick: GameCard[] = [];
+  // Проверяем элементы со стола только если они нужны
+  if (Object.keys(def.needs).length > 0) {
+    const pick = validateTableSelection(game.table, tableCardIds, def.needs);
+    console.log('🎯 ELEMENTAL PICK:', pick);
+    
+    if (!pick) return "Неверный набор карт со стола";
+    elementalPick = pick;
+  }
 
   let usedBuilt: BuiltRecipe[] = [];
   if (needsBuilt.length) {
