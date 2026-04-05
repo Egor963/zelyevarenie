@@ -602,7 +602,19 @@ export function castSpellBreakBuilt(
     if (chosenCard) {
       console.log('🎯 BREAK BUILT CHOSEN CARD:', chosenCard);
       
-      // НЕ добавляем очки - просто забираем карточку себе
+      // Создаем новый "рецепт" из одной карточки
+      const newBuiltRecipe: BuiltRecipe = {
+        instanceId: `built-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        ownerId: playerId,
+        card: chosenCard,
+        recipeDefId: `single_card_${chosenCard.bottomElement}`,
+        points: 0, // Без очков
+        name: `Карточка: ${chosenCard.bottomElement}`,
+        ingredients: [chosenCard] // Сохраняем как ингредиент
+      };
+      
+      game.builtRecipes.push(newBuiltRecipe);
+      console.log('🎯 BREAK BUILT NEW RECIPE ADDED:', newBuiltRecipe);
       
       // Остальные карты возвращаем на стол
       const otherCards = bi.ingredients.filter((ing) => ing.id !== chosenCardId);

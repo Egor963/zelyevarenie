@@ -614,6 +614,7 @@ export default function App() {
                     if (!recipe) return null;
                     return recipe.ingredients.map((ing) => {
                       const isSelected = chosenCardId === ing.id;
+                      const cardData = getCardById(ing.id);
                       return (
                         <button
                           key={ing.id}
@@ -626,10 +627,22 @@ export default function App() {
                           style={{ 
                             border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border)',
                             transform: isSelected ? 'scale(1.05)' : 'scale(1)',
-                            transition: 'all 0.2s ease'
+                            transition: 'all 0.2s ease',
+                            padding: '0.5rem'
                           }}
                         >
-                          <ElementBadge el={ing.bottomElement} />
+                          {cardData ? (
+                            <div style={{ fontSize: '0.8rem' }}>
+                              <div style={{ fontWeight: 'bold', marginBottom: '0.25rem' }}>
+                                {cardData.topContent}
+                              </div>
+                              <div style={{ color: 'var(--muted)', fontSize: '0.7rem' }}>
+                                <ElementBadge el={ing.bottomElement} />
+                              </div>
+                            </div>
+                          ) : (
+                            <ElementBadge el={ing.bottomElement} />
+                          )}
                         </button>
                       );
                     });
