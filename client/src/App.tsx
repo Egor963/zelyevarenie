@@ -9,7 +9,7 @@ import type {
   RecipeDef,
   SpellKind,
 } from "./types";
-import { getCardById } from "./data/cards";
+import { getCardById, CARDS } from "./data/cards";
 
 function socketUrl() {
   const fixed = import.meta.env.VITE_SOCKET_URL;
