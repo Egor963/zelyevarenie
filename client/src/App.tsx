@@ -171,12 +171,12 @@ export default function App() {
   // Восстанавливаем состояние игры при загрузке
   useEffect(() => {
     const savedState = localStorage.getItem('gameState');
-    if (savedState && !roomId) {
+    if (savedState) {
       try {
         const gameState = JSON.parse(savedState);
         console.log('🔄 RESTORING GAME STATE:', gameState);
         
-        // Подключаемся к сохраненной комнате
+        // Подключаемся к сохраненной комнате сразу при загрузке
         socketRef.current?.emit("joinRoom", {
           roomId: gameState.roomId,
           playerName: gameState.playerName
@@ -186,7 +186,7 @@ export default function App() {
         localStorage.removeItem('gameState');
       }
     }
-  }, [roomId]);
+  }, []); // Пустой массив - выполняется только один раз при загрузке
 
   const createRoom = () => {
     persistName();
