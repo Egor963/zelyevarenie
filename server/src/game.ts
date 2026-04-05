@@ -165,13 +165,42 @@ export function makeDeck(): GameCard[] {
 
     let face: CardFace;
     if (mapping.topType === 'recipe') {
-      // Находим соответствующий рецепт
-      const recipe = RECIPES.find(r => r.name === mapping.topContent);
-      if (recipe) {
-        face = { kind: 'recipe', defId: recipe.id };
-      } else {
-        face = { kind: 'recipe', defId: mapping.topContent.toLowerCase().replace(/\s+/g, '_') };
+      // Прямое сопоставление названий карточек с рецептами
+      let recipeId: string;
+      
+      switch (mapping.topContent) {
+        case 'Любовное зелье': recipeId = 'love_potion'; break;
+        case 'Зелье вечного сна': recipeId = 'sleep_potion'; break;
+        case 'Эликсир невидимости': recipeId = 'invisibility_elixir'; break;
+        case 'Эликсир силы': recipeId = 'strength_elixir'; break;
+        case 'Исидас мортум': recipeId = 'isidas_mortum'; break;
+        case 'Эликсир огня': recipeId = 'fire_elixir'; break;
+        case 'Настой прорицания': recipeId = 'divination_tincture'; break;
+        case 'Порошок судьбы': recipeId = 'fate_powder'; break;
+        case 'Порошок контроля': recipeId = 'control_powder'; break;
+        case 'Порошок истины': recipeId = 'truth_powder'; break;
+        case 'Порошок бестелесности': recipeId = 'incorporeal_powder'; break;
+        case 'Эманация власти': recipeId = 'power_emanation'; break;
+        case 'Раствор оберег': recipeId = 'protection_solution'; break;
+        case 'Раствор вечности': recipeId = 'eternity_solution'; break;
+        case 'Эликсир забвения': recipeId = 'oblivion_elixir'; break;
+        case 'Эликсир мудрости': recipeId = 'wisdom_elixir'; break;
+        case 'Эликсир верности': recipeId = 'loyalty_elixir'; break;
+        case 'Эликсир вечной молодости': recipeId = 'eternal_youth_elixir'; break;
+        case 'Эликсир повелителя растений': recipeId = 'plants_master_elixir'; break;
+        case 'Эликсир полета': recipeId = 'flight_elixir'; break;
+        case 'Телепатическое снадобье': recipeId = 'telepathic_potion'; break;
+        case 'Великий эликсир могущества': recipeId = 'great_power_elixir'; break;
+        case 'Великий эликсир безвременья': recipeId = 'great_timeless_elixir'; break;
+        case 'Великий эликсир вечной любви': recipeId = 'great_love_elixir'; break;
+        case 'Талисман скрытого знания': recipeId = 'knowledge_talisman'; break;
+        case 'Талисман палантриум': recipeId = 'palantir_talisman'; break;
+        case 'Талисман телепортации': recipeId = 'teleport_talisman'; break;
+        case 'Талисман повелителя зверей': recipeId = 'beasts_master_talisman'; break;
+        default: recipeId = mapping.topContent.toLowerCase().replace(/\s+/g, '_'); break;
       }
+      
+      face = { kind: 'recipe', defId: recipeId };
     } else {
       // Заклинания
       let spell: SpellKind;
