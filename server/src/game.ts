@@ -595,17 +595,13 @@ export function castSpellBreakBuilt(
   game.discard.push(sc);
   game.builtRecipes = game.builtRecipes.filter((b) => b.instanceId !== builtInstanceId);
 
-  // Если выбрана конкретная карточка - забираем ее себе и даем очки
+  // Если выбрана конкретная карточка - забираем ее себе (без очков)
   if (chosenCardId) {
     const chosenCard = bi.ingredients.find((ing) => ing.id === chosenCardId);
     if (chosenCard) {
       console.log('🎯 BREAK BUILT CHOSEN CARD:', chosenCard);
       
-      // Добавляем очки за выбранную карточку (как будто собрали простой рецепт)
-      const cardPoints = getCardPoints(chosenCard);
-      p.score += cardPoints;
-      
-      console.log('🎯 BREAK BUILT POINTS ADDED:', { cardPoints, newScore: p.score });
+      // НЕ добавляем очки - просто забираем карточку себе
       
       // Остальные карты возвращаем на стол
       const otherCards = bi.ingredients.filter((ing) => ing.id !== chosenCardId);
@@ -624,12 +620,6 @@ export function castSpellBreakBuilt(
   afterSpell(game);
   console.log('🎯 BREAK BUILT SUCCESS');
   return null;
-}
-
-function getCardPoints(card: GameCard): number {
-  // Простые элементы (по bottomElement) дают 1 очко
-  // В рецептах ингредиенты хранятся как GameCard с bottomElement
-  return 1;
 }
 
 export function castSpellSwap(
