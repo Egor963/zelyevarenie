@@ -173,10 +173,14 @@ export default function App() {
   };
 
   const submitCraft = () => {
+    console.log('🎯 SUBMIT CRAFT START:', { craftHandIndex, craftDef });
+    
     if (craftHandIndex === null) return;
     
     // Автоматическая проверка и сбор нужных элементов со стола
     if (craftDef) {
+      console.log('🎯 CRAFT DEF FOUND:', craftDef);
+      
       const neededElements = Object.entries(craftDef.needs);
       const tableElements = snap?.table || [];
       const availableElements: Record<string, number> = {};
@@ -189,6 +193,9 @@ export default function App() {
         }
       });
       
+      console.log('🎯 AVAILABLE ELEMENTS:', availableElements);
+      console.log('🎯 NEEDED ELEMENTS:', neededElements);
+      
       // Проверяем достаточно ли элементов
       const missingElements: string[] = [];
       neededElements.forEach(([element, count]) => {
@@ -198,6 +205,7 @@ export default function App() {
       });
       
       if (missingElements.length > 0) {
+        console.log('🎯 MISSING ELEMENTS:', missingElements);
         setError(`Недостаточно элементов на столе: ${missingElements.join(', ')}`);
         return;
       }
@@ -217,11 +225,14 @@ export default function App() {
         });
       });
       
-      console.log('Auto-crafting:', { handIndex: craftHandIndex, tableCardIds: autoSelectedTableIds, builtInstanceIds: craftBuiltIds });
+      console.log('🎯 AUTO SELECTED IDS:', autoSelectedTableIds);
+      console.log('🎯 EMITTING CRAFT REQUEST:', { handIndex: craftHandIndex, tableCardIds: autoSelectedTableIds, builtInstanceIds: craftBuiltIds });
+      
       socketRef.current?.emit(
         "craftRecipe",
         { handIndex: craftHandIndex, tableCardIds: autoSelectedTableIds, builtInstanceIds: craftBuiltIds },
         (r: { ok: boolean; error?: string }) => {
+          console.log('🎯 CRAFT RESPONSE:', r);
           if (!r.ok) setError(r.error ?? "Ошибка");
           else {
             console.log('Craft successful');
@@ -230,6 +241,7 @@ export default function App() {
         }
       );
     } else {
+      console.log('🎯 NO CRAFT DEF FOUND!');
       setError('Рецепт не найден');
     }
   };
