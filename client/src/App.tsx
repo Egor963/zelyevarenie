@@ -181,22 +181,28 @@ export default function App() {
       
       // Ждем подключения сокета и подключаемся к комнате
       const connectToRoom = () => {
-        if (socketRef.current?.connected) {
-          console.log('🔄 SOCKET CONNECTED - joining room...');
+        console.log('🔄 CHECKING SOCKET STATUS:', { 
+          connected: socketRef.current?.connected, 
+          exists: !!socketRef.current,
+          id: socketRef.current?.id 
+        });
+        
+        if (socketRef.current) {
+          console.log('🔄 SOCKET EXISTS - joining room...');
           socketRef.current.emit("joinRoom", {
             roomId: savedRoomId,
             playerName: savedPlayerName
+          }, (response: any) => {
+            console.log('🔄 JOIN ROOM RESPONSE:', response);
+            if (response?.ok) {
+              console.log('🔄 JOIN ROOM SUCCESSFUL');
+            } else {
+              console.log('🔄 JOIN ROOM FAILED:', response?.error);
+            }
           });
         } else {
-          console.log('🔄 SOCKET NOT READY - will retry...');
-          setTimeout(() => {
-            if (socketRef.current) {
-              socketRef.current.emit("joinRoom", {
-                roomId: savedRoomId,
-                playerName: savedPlayerName
-              });
-            }
-          }, 500);
+          console.log('🔄 SOCKET NOT READY - retrying...');
+          setTimeout(connectToRoom, 500);
         }
       };
       
