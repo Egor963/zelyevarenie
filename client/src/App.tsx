@@ -99,6 +99,7 @@ export default function App() {
   const [spellTakeIdx, setSpellTakeIdx] = useState<number | null>(null);
   const [spellBreakIdx, setSpellBreakIdx] = useState<number | null>(null);
   const [spellSwap, setSpellSwap] = useState<{ spellIdx: number; tableId: string | null } | null>(null);
+  const [spellTransform, setSpellTransform] = useState<{ spellIdx: number; builtInstanceId: string | null } | null>(null);
   const [breakingRecipeId, setBreakingRecipeId] = useState<string | null>(null);
   const [chosenCardId, setChosenCardId] = useState<string | null>(null);
 
@@ -109,6 +110,7 @@ export default function App() {
     setSpellTakeIdx(null);
     setSpellBreakIdx(null);
     setSpellSwap(null);
+    setSpellTransform(null);
     setBreakingRecipeId(null);
     setChosenCardId(null);
   }, []);
@@ -392,6 +394,17 @@ export default function App() {
     if (spellSwap && spellSwap.tableId === null) {
       setSpellSwap({ ...spellSwap, tableId: cardId });
     }
+    if (spellTransform?.builtInstanceId) {
+      // Автоматически выполняем трансформацию
+      socketRef.current?.emit(
+        "castSpellTransformBuilt",
+        { spellHandIndex: spellTransform.spellIdx, builtInstanceId: spellTransform.builtInstanceId, tableCardId: cardId },
+        (r: { ok: boolean; error?: string }) => {
+          if (!r.ok) setError(r.error ?? "Ошибка");
+          else setSpellTransform(null);
+        }
+      );
+    }
   };
 
   const toggleBuiltForCraft = (b: PublicBuiltRecipe) => {
@@ -551,18 +564,19 @@ export default function App() {
 
           <section className="panel">
             <h2 style={{ marginTop: 0 }}>Шкаф элементов</h2>
-            {(craftHandIndex !== null || spellTakeIdx !== null || spellBreakIdx !== null || spellSwap?.tableId === null) && canAct && (
+            {(craftHandIndex !== null || spellTakeIdx !== null || spellBreakIdx !== null || spellSwap?.tableId === null || (spellTransform?.builtInstanceId !== null && spellTransform?.builtInstanceId !== null)) && canAct && (
               <p className="hint">
                 {craftHandIndex !== null && "Выберите карты стола для рецепта (клик включает/снимает)."}
                 {spellTakeIdx !== null && "Кликните элемент, чтобы забрать его в руку."}
                 {spellBreakIdx !== null && "Кликните свой собранный рецепт, чтобы разобрать его."}
                 {spellSwap && spellSwap.tableId === null && "Кликните карту стола для обмена."}
+                {spellTransform?.builtInstanceId && "Кликните элемент из шкафа для трансформации."}
               </p>
             )}
             <div className="table-grid">
               {snap.table.map((c) => {
                 const sel = craftTableIds.includes(c.id);
-                const click = canAct && (craftHandIndex !== null || spellTakeIdx !== null || (spellSwap && !spellSwap.tableId));
+                const click = canAct && (craftHandIndex !== null || spellTakeIdx !== null || (spellSwap && !spellSwap.tableId) || (spellTransform?.builtInstanceId));
                 const cardData = getCardById(c.id);
                 
                 return (
@@ -613,12 +627,25 @@ export default function App() {
             {spellBreakIdx !== null && canAct && (
               <p className="hint">Кликните свой рецепт, чтобы разобрать (ингредиенты вернутся на стол).</p>
             )}
+            {spellTransform !== null && canAct && (
+              <p className="hint">Кликните свой рецепт, чтобы трансформировать его.</p>
+            )}
             {snap.builtRecipes.length === 0 && <span style={{ color: "var(--muted)" }}>пока нет</span>}
             {snap.builtRecipes.map((b) => {
               const mine = b.ownerId === myId;
               const breakMode = spellBreakIdx !== null && canAct && mine;
+              const transformMode = spellTransform !== null && canAct && mine;
               return (
-                <div key={b.instanceId} className="built-row">
+                <div 
+                  key={b.instanceId} 
+                  className="built-row"
+                  style={{ cursor: transformMode ? 'pointer' : 'default', border: transformMode ? '2px solid var(--accent)' : 'none' }}
+                  onClick={() => {
+                    if (transformMode && spellTransform) {
+                      setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
+                    }
+                  }}
+                >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     {/* Показываем полноценную карточку рецепта */}
                     <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}>
@@ -1046,7 +1073,7 @@ function HandCardBlock({
           </button>
         )}
         {card.face.kind === "spell" && card.face.spell === "transform_built" && (
-          <button type="button" disabled={!canAct || busyCraft} onClick={() => {}}>
+          <button type="button" disabled={!canAct || busyCraft} onClick={() => setSpellTransform({ spellIdx: index, builtInstanceId: null })}>
             Играть
           </button>
         )}
