@@ -397,10 +397,11 @@ export default function App() {
 
           <section className="panel">
             <h2 style={{ marginTop: 0 }}>Шкаф элементов</h2>
-            {(craftHandIndex !== null || spellTakeIdx !== null || spellSwap?.tableId === null) && canAct && (
+            {(craftHandIndex !== null || spellTakeIdx !== null || spellBreakIdx !== null || spellSwap?.tableId === null) && canAct && (
               <p className="hint">
                 {craftHandIndex !== null && "Выберите карты стола для рецепта (клик включает/снимает)."}
                 {spellTakeIdx !== null && "Кликните элемент, чтобы забрать его в руку."}
+                {spellBreakIdx !== null && "Кликните свой собранный рецепт, чтобы разобрать его."}
                 {spellSwap && spellSwap.tableId === null && "Кликните карту стола для обмена."}
               </p>
             )}
