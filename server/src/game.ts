@@ -392,7 +392,8 @@ function nextTurn(game: GameState) {
 function afterSpell(game: GameState) {
   checkEnd(game);
   if (game.phase !== "playing") return;
-  if (currentPlayer(game).hand.length === 0) nextTurn(game);
+  // После заклятия всегда передаем ход, даже если в руке есть карты
+  nextTurn(game);
 }
 
 function applyHalfPointsToOwners(game: GameState, recipePoints: number, usedBuilt: BuiltRecipe[], actorId: string) {
