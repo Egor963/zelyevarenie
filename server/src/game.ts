@@ -389,10 +389,15 @@ function nextTurn(game: GameState) {
 }
 
 /** Если рука опустела до основного действия — передаём ход (добор только в начале следующего хода). */
-function afterSpell(game: GameState) {
+function afterSpell(game: GameState, isKnowledgeSpell: boolean = false) {
   checkEnd(game);
   if (game.phase !== "playing") return;
-  // После заклятия всегда передаем ход, даже если в руке есть карты
+  // После заклятия познания НЕ передаем ход сразу - игрок должен сделать ход
+  if (isKnowledgeSpell) {
+    console.log('🎯 KNOWLEDGE SPELL USED - player gets extra turn');
+    return; // НЕ передаем ход
+  }
+  // После других заклятий всегда передаем ход, даже если в руке есть карты
   nextTurn(game);
 }
 
@@ -583,7 +588,11 @@ export function castSpellTakeTable(
   game.discard.push(sc);
   p.hand.push(fromTable!);
 
-  afterSpell(game);
+  // Проверяем это заклятие познания по элементу на карте
+  const isKnowledgeSpell = sc.bottomElement === 'белладонна' || sc.bottomElement === 'мушрумы';
+  console.log('🎯 SPELL TYPE:', { element: sc.bottomElement, isKnowledgeSpell });
+
+  afterSpell(game, isKnowledgeSpell);
   return null;
 }
 
