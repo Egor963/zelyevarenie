@@ -226,6 +226,7 @@ export function makeDeck(): GameCard[] {
           spell = 'take_table';
           break;
         case 'Разобрать рецепт':
+        case 'заклятие разрушения':
           spell = 'break_built';
           break;
         case 'Обмен':
