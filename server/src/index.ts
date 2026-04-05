@@ -134,16 +134,24 @@ io.on("connection", (socket) => {
       payload: { roomId: string; playerName: string },
       ack?: (r: { ok: boolean; error?: string }) => void
     ) => {
+      console.log('🎯 JOIN ROOM REQUEST:', { playerId: socket.id, payload });
+      
       const code = (payload?.roomId ?? "").trim().toUpperCase();
       const name = (payload?.playerName ?? "").trim() || "Игрок";
       const room = rooms.get(code);
+      console.log('🎯 ROOM LOOKUP:', { code, roomExists: !!room, totalRooms: rooms.size });
+      
       if (!room) {
+        console.log('🎯 ROOM NOT FOUND - sending error');
         ack?.({ ok: false, error: "Комната не найдена" });
         return;
       }
       playerId = socket.id;
       const err = addPlayer(room.game, playerId, name);
+      console.log('🎯 ADD PLAYER RESULT:', { error: err, gamePlayers: room.game.players.length });
+      
       if (err) {
+        console.log('🎯 ADD PLAYER FAILED - sending error');
         ack?.({ ok: false, error: err });
         return;
       }
@@ -151,6 +159,7 @@ io.on("connection", (socket) => {
       joinedRoomId = code;
       socket.join(code);
       broadcastRoom(code, io);
+      console.log('🎯 JOIN ROOM SUCCESS - broadcasting and sending ack');
       ack?.({ ok: true });
     }
   );
