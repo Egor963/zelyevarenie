@@ -585,12 +585,19 @@ export function castSpellTakeTable(
 
   const [fromTable] = game.table.splice(idx, 1);
   p.hand.splice(spellHandIndex, 1);
-  game.discard.push(sc);
-  p.hand.push(fromTable!);
-
+  
   // Проверяем это заклятие познания по элементу на карте
   const isKnowledgeSpell = sc.bottomElement === 'белладонна' || sc.bottomElement === 'мушрумы';
   console.log('🎯 SPELL TYPE:', { element: sc.bottomElement, isKnowledgeSpell });
+  
+  // Для заклятия познания карта уходит в шкаф, для других - в сброс
+  if (isKnowledgeSpell) {
+    game.table.push(sc); // Заклятие познания уходит в шкаф
+  } else {
+    game.discard.push(sc); // Другие заклятия уходят в сброс
+  }
+  
+  p.hand.push(fromTable!);
 
   afterSpell(game, isKnowledgeSpell);
   return null;
