@@ -192,7 +192,10 @@ export default function App() {
         // Проверяем что выбрано правильное количество собранных рецептов
         const totalNeeded = craftDef.needsBuilt.reduce((sum, nb) => sum + nb.count, 0);
         if (craftBuiltIds.length !== totalNeeded) {
-          setError(`Нужно выбрать ${totalNeeded} собранных рецептов, выбрано ${craftBuiltIds.length}`);
+          const neededList = craftDef.needsBuilt.map(nb => 
+            `${nb.count}× "${recipeByCatalog(snap.recipeCatalog, nb.recipeDefId)?.name || nb.recipeDefId}"`
+          ).join(', ');
+          setError(`Нужно выбрать: ${neededList}. Выбрано: ${craftBuiltIds.length} из ${totalNeeded}`);
           return;
         }
         
