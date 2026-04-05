@@ -594,7 +594,7 @@ export default function App() {
 
           <section className="panel">
             <h2 style={{ marginTop: 0 }}>Шкаф элементов</h2>
-            {spellTransform?.builtInstanceId && canAct && (
+            {spellTransform && canAct && (
               <p className="hint">Кликните элемент из шкафа для трансформации.</p>
             )}
             {craftHandIndex !== null && canAct && (
@@ -612,7 +612,7 @@ export default function App() {
             <div className="table-grid">
               {snap.table.map((c) => {
                 const sel = craftTableIds.includes(c.id);
-                const click = canAct && (craftHandIndex !== null || spellTakeIdx !== null || (spellSwap && !spellSwap.tableId) || (spellTransform?.builtInstanceId));
+                const click = canAct && (craftHandIndex !== null || spellTakeIdx !== null || (spellSwap && !spellSwap.tableId) || spellTransform);
                 const cardData = getCardById(c.id);
                 
                 return (
