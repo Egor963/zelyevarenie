@@ -614,7 +614,6 @@ export default function App() {
                     if (!recipe) return null;
                     return recipe.ingredients.map((ing) => {
                       const isSelected = chosenCardId === ing.id;
-                      const cardData = getCardById(ing.id);
                       return (
                         <button
                           key={ing.id}
@@ -628,21 +627,53 @@ export default function App() {
                             border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border)',
                             transform: isSelected ? 'scale(1.05)' : 'scale(1)',
                             transition: 'all 0.2s ease',
-                            padding: '0.5rem'
+                            padding: '0.25rem',
+                            minHeight: '120px'
                           }}
                         >
-                          {cardData ? (
-                            <div style={{ fontSize: '0.8rem' }}>
-                              <div style={{ fontWeight: 'bold', marginBottom: '0.25rem' }}>
-                                {cardData.topContent}
-                              </div>
-                              <div style={{ color: 'var(--muted)', fontSize: '0.7rem' }}>
+                          {/* Показываем изображение карточки как в HandCardBlock */}
+                          {(() => {
+                            const cardData = getCardById(ing.id);
+                            if (cardData) {
+                              return (
+                                <div style={{ width: '100%', height: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                  <img 
+                                    src={cardData.image} 
+                                    alt={`${cardData.topContent} - ${cardData.bottomElement}`}
+                                    style={{ 
+                                      width: '100%', 
+                                      height: '70px', 
+                                      objectFit: 'contain',
+                                      borderRadius: '4px',
+                                      marginBottom: '4px'
+                                    }}
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).style.display = 'none';
+                                    }}
+                                  />
+                                  <div style={{ fontSize: '0.7rem', textAlign: 'center', lineHeight: '1.2' }}>
+                                    <div style={{ fontWeight: 'bold', color: 'var(--text)' }}>
+                                      {cardData.topContent.length > 15 ? cardData.topContent.substring(0, 15) + '...' : cardData.topContent}
+                                    </div>
+                                    <ElementBadge el={ing.bottomElement} />
+                                  </div>
+                                </div>
+                              );
+                            }
+                            // Запасной вариант если нет данных
+                            return (
+                              <div style={{ 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                alignItems: 'center', 
+                                justifyContent: 'center',
+                                height: '100%',
+                                padding: '0.5rem'
+                              }}>
                                 <ElementBadge el={ing.bottomElement} />
                               </div>
-                            </div>
-                          ) : (
-                            <ElementBadge el={ing.bottomElement} />
-                          )}
+                            );
+                          })()}
                         </button>
                       );
                     });
@@ -654,24 +685,29 @@ export default function App() {
                     className="primary"
                     disabled={!chosenCardId}
                     onClick={() => {
-                      if (!chosenCardId || !spellBreakIdx) return;
+                      console.log('🎯 CONFIRM BREAK CLICKED:', { chosenCardId, spellBreakIdx, breakingRecipeId });
                       
-                      console.log('🎯 CONFIRM BREAK:', { 
+                      if (!chosenCardId || !spellBreakIdx) {
+                        console.log('🎯 CONFIRM BREAK - MISSING DATA:', { chosenCardId, spellBreakIdx });
+                        return;
+                      }
+                      
+                      const payload = { 
                         spellHandIndex: spellBreakIdx, 
-                        builtInstanceId: breakingRecipeId, 
+                        builtInstanceId: breakingRecipeId,
                         chosenCardId 
-                      });
+                      };
+                      
+                      console.log('🎯 CONFIRM BREAK PAYLOAD:', payload);
                       
                       socketRef.current?.emit(
                         "castSpellBreakBuilt",
-                        { 
-                          spellHandIndex: spellBreakIdx, 
-                          builtInstanceId: breakingRecipeId,
-                          chosenCardId 
-                        },
+                        payload,
                         (r: { ok: boolean; error?: string }) => {
-                          if (!r.ok) setError(r.error ?? "Ошибка");
-                          else {
+                          console.log('🎯 CONFIRM BREAK RESPONSE:', r);
+                          if (!r.ok) {
+                            setError(r.error ?? "Ошибка");
+                          } else {
                             console.log('🎯 BREAK SUCCESS');
                             clearModes();
                           }
