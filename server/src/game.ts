@@ -462,24 +462,36 @@ export function craftRecipe(
   tableCardIds: string[],
   builtInstanceIds: string[]
 ): string | null {
+  console.log('🎯 CRAFT RECIPE START:', { playerId, handIndex, tableCardIds, builtInstanceIds });
+  
   if (game.phase !== "playing") return "Игра не идёт";
   const p = currentPlayer(game);
   if (p.id !== playerId) return "Не ваш ход";
   if (handIndex < 0 || handIndex >= p.hand.length) return "Нет такой карты";
 
   const handCard = p.hand[handIndex]!;
+  console.log('🎯 HAND CARD:', handCard);
+  
   if (handCard.face.kind !== "recipe") return "Это не карта рецепта";
 
   const def = getRecipeDef(handCard.face.defId);
+  console.log('🎯 RECIPE DEF:', def);
+  
   if (!def) return "Неизвестный рецепт";
 
   const needsBuilt = def.needsBuilt ?? [];
+  console.log('🎯 NEEDS BUILT:', needsBuilt);
+  
   const elementalPick = validateTableSelection(game.table, tableCardIds, def.needs);
+  console.log('🎯 ELEMENTAL PICK:', elementalPick);
+  
   if (!elementalPick) return "Неверный набор карт со стола";
 
   let usedBuilt: BuiltRecipe[] = [];
   if (needsBuilt.length) {
     const v = validateBuiltSelection(game.builtRecipes, builtInstanceIds, needsBuilt);
+    console.log('🎯 USED BUILT:', v);
+    
     if (!v) return "Неверный набор собранных рецептов";
     usedBuilt = v;
   } else if (builtInstanceIds.length) {
@@ -516,6 +528,7 @@ export function craftRecipe(
   applyHalfPointsToOwners(game, def.points, usedBuilt, p.id);
 
   finishMainAction(game);
+  console.log('🎯 CRAFT RECIPE SUCCESS!');
   return null;
 }
 
