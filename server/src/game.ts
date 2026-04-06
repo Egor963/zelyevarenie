@@ -526,6 +526,11 @@ export function craftRecipe(
   if (handCard.face.kind !== "recipe") return "Это не карта рецепта";
 
   // Для верховного эликсира перебираем все варианты
+  console.log('🎯 CHECKING RECIPE:', { 
+    cardId: handCard.id, 
+    defId: handCard.face.defId
+  });
+  
   if (handCard.face.defId === "supreme_elixir") {
     console.log('🎯 SUPREME ELIXIR - checking all variants');
     
