@@ -314,29 +314,6 @@ export function startGame(game: GameState, requesterId: string): string | null {
     p.hand = [];
     p.score = 0;
     for (let i = 0; i < START_HAND; i++) p.hand.push(deck.pop()!);
-    
-    // ВРЕМЕННО ДЛЯ ТЕСТИРОВАНИЯ: добавляем тестовые карты
-    if (p.id === game.players[0].id) { // Только первому игроку
-      console.log('🎯 TESTING: добавляем тестовые карты игроку 1');
-      
-      // Верховный эликсир (карта 70)
-      const supremeElixir = deck.find(c => c.id === '70');
-      if (supremeElixir) p.hand.push(supremeElixir);
-      
-      // Два заклятия трансформы (карты 37, 42)
-      const transform1 = deck.find(c => c.id === '37');
-      const transform2 = deck.find(c => c.id === '42');
-      if (transform1) p.hand.push(transform1);
-      if (transform2) p.hand.push(transform2);
-      
-      // Два великих эликсира (например, 61 и 66)
-      const great1 = deck.find(c => c.id === '61');
-      const great2 = deck.find(c => c.id === '66');
-      if (great1) p.hand.push(great1);
-      if (great2) p.hand.push(great2);
-      
-      console.log('🎯 TESTING: добавлены карты:', p.hand.slice(-5).map(c => c.id));
-    }
   }
 
   game.deck = deck;
