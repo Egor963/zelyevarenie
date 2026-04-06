@@ -497,36 +497,6 @@ function validateBuiltSelection(
   const selected = selectedIds.map((id) => built.find((b) => b.instanceId === id));
   if (selected.some((x) => !x)) return null;
   
-  // Специальная логика для "любой" - если в needsBuilt много элементов с count=1, то это "любой из списка"
-  const allowedRecipeIds = needsBuilt.map(n => n.recipeDefId);
-  const isAnyOf = allowedRecipeIds.length > 1 && needsBuilt.every(n => n.count === 1);
-  
-  if (isAnyOf) {
-    // Для "любой из списка" проверяем что количество выбранных соответствует требованию
-    // и все выбранные рецепты входят в разрешенный список
-    const requiredCount = 2; // Берем из needs["любой великий эликсир"] или по умолчанию 2
-    
-    console.log('🎯 ANY OF LOGIC:', { 
-      selectedCount: selected.length, 
-      requiredCount, 
-      allowedRecipeIds: allowedRecipeIds.length,
-      selectedRecipes: selected.map(r => r!.recipeDefId)
-    });
-    
-    if (selected.length !== requiredCount) {
-      console.log('❌ WRONG COUNT: need', requiredCount, 'got', selected.length);
-      return null;
-    }
-    for (const recipe of selected) {
-      if (!allowedRecipeIds.includes(recipe!.recipeDefId)) {
-        console.log('❌ RECIPE NOT ALLOWED:', recipe!.recipeDefId);
-        return null;
-      }
-    }
-    console.log('✅ ANY OF VALIDATION PASSED');
-    return selected as BuiltRecipe[];
-  }
-  
   // Стандартная логика для точного совпадения
   const needFlat = needsBuilt.flatMap((n) => Array.from({ length: n.count }, () => n.recipeDefId)).sort();
   const got = selected.map((b) => b!.recipeDefId).sort();
