@@ -315,18 +315,6 @@ export function startGame(game: GameState, requesterId: string): string | null {
     p.score = 0;
     for (let i = 0; i < START_HAND; i++) p.hand.push(deck.pop()!);
   }
-  
-  // Добавляем карту 70 первому игроку
-  if (game.players.length > 0) {
-    game.players[0].hand.push({
-      id: "70",
-      face: {
-        kind: "recipe",
-        defId: "supreme_elixir"
-      },
-      bottomElement: "астральная энергия"
-    });
-  }
 
   game.deck = deck;
   game.discard = [];
