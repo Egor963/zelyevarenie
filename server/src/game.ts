@@ -513,7 +513,13 @@ export function craftRecipe(
   tableCardIds: string[],
   builtInstanceIds: string[]
 ): string | null {
-  console.log('🎯 CRAFT RECIPE START:', { playerId, handIndex, tableCardIds, builtInstanceIds });
+  console.log('🎯 CRAFT RECIPE START:', { 
+    playerId, 
+    handIndex, 
+    tableCardIds, 
+    builtInstanceIds,
+    builtInstanceIdsCount: builtInstanceIds.length
+  });
   
   if (game.phase !== "playing") return "Игра не идёт";
   const p = currentPlayer(game);
@@ -533,6 +539,11 @@ export function craftRecipe(
   
   if (handCard.face.defId === "supreme_elixir") {
     console.log('🎯 SUPREME ELIXIR - checking all variants');
+    
+    if (builtInstanceIds.length === 0) {
+      console.log('❌ NO BUILT RECIPES SELECTED - need to select 2 great elixirs');
+      return "Нужно выбрать 2 великих эликсира из собранных рецептов";
+    }
     
     // Находим все рецепты с именем "верховный эликсир"
     const supremeRecipes = RECIPES.filter(r => r.name === "верховный эликсир");
