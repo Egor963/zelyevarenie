@@ -531,8 +531,11 @@ export function craftRecipe(
       const needsBuilt = recipe.needsBuilt ?? [];
       if (!needsBuilt.length) continue;
       
+      console.log('🎯 TRYING RECIPE:', recipe.id, 'needsBuilt:', needsBuilt);
+      
       // Проверяем собранные рецепты
       const v = validateBuiltSelection(game.builtRecipes, builtInstanceIds, needsBuilt);
+      console.log('🎯 USED BUILT:', v ? 'SUCCESS' : 'FAILED');
       
       if (v) {
         console.log('✅ SUPREME ELIXIR RECIPE FOUND:', recipe.id);
@@ -541,6 +544,7 @@ export function craftRecipe(
       }
     }
     
+    console.log('❌ NO SUPREME ELIXIR RECIPE MATCHED - falling back to standard logic');
     return "Неверный набор собранных рецептов для верховного эликсира";
   }
 
