@@ -351,6 +351,17 @@ export const RECIPES: RecipeDef[] = [
   },
   
   // Ультимативные (10 очков)
+  // Верховный эликсир - для поиска клиента
+  {
+    id: "supreme_elixir",
+    name: "верховный эликсир",
+    needs: {},
+    points: 10,
+    needsBuilt: [
+      { recipeDefId: "great_omen_elixir", count: 1 },
+      { recipeDefId: "great_resurrection_elixir", count: 1 }
+    ]
+  },
   // Верховный эликсир - все комбинации из 2 великих эликсиров
   { id: "supreme_elixir_1", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
     { recipeDefId: "great_omen_elixir", count: 1 },
@@ -489,10 +500,5 @@ export const RECIPES: RecipeDef[] = [
 ];
 
 export function getRecipeDef(id: string): RecipeDef | undefined {
-  // Для верховного эликсира возвращаем первый рецепт с нужным именем
-  if (id === "supreme_elixir") {
-    return RECIPES.find((r) => r.name === "верховный эликсир" && r.needsBuilt && r.needsBuilt.length > 0);
-  }
-  
   return RECIPES.find((r) => r.id === id);
 }
