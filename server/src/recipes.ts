@@ -357,11 +357,14 @@ export const RECIPES: RecipeDef[] = [
   },
   
   // Ультимативные (10 очков)
-  // Верховный эликсир - для клиента
+  // Верховный эликсир - полноценный рецепт
   {
     id: "supreme_elixir",
     name: "верховный эликсир",
     needs: {},
+    needsBuilt: [
+      { recipeDefId: "any_great_elixir", count: 2 }
+    ],
     points: 10
   },
   // Великий талисман магии - для клиента
