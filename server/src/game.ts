@@ -477,6 +477,25 @@ function validateBuiltSelection(
   const selected = selectedIds.map((id) => built.find((b) => b.instanceId === id));
   if (selected.some((x) => !x)) return null;
   
+  // Специальная логика для any_great_elixir
+  if (needsBuilt.some(n => n.recipeDefId === "any_great_elixir")) {
+    const needCount = needsBuilt.find(n => n.recipeDefId === "any_great_elixir")?.count ?? 0;
+    
+    // Проверяем что все выбранные рецепты - великие эликсиры (6 оригинальных очков)
+    // И исключаем сам верховный эликсир из выбора
+    const allGreatElixirs = selected.filter(r => 
+      r!.originalPoints === 6 && r!.recipeDefId !== "supreme_elixir"
+    );
+    
+    if (allGreatElixirs.length !== needCount) {
+      console.log('❌ ANY_GREAT_ELIXIR: need', needCount, 'great elixirs, got', allGreatElixirs.length);
+      return null;
+    }
+    
+    console.log('✅ ANY_GREAT_ELIXIR: validated', allGreatElixirs.length, 'great elixirs');
+    return allGreatElixirs as BuiltRecipe[];
+  }
+  
   // Стандартная логика для точного совпадения
   const needFlat = needsBuilt.flatMap((n) => Array.from({ length: n.count }, () => n.recipeDefId)).sort();
   const got = selected.map((b) => b!.recipeDefId).sort();
@@ -591,6 +610,7 @@ function completeRecipeCraft(
     card: handCard,
     recipeDefId: recipe.id,
     points: recipe.points,
+    originalPoints: recipe.points, // Обычные рецепты сохраняют свои очки
     name: recipe.name,
     ingredients: elementalPick,
   };
@@ -677,6 +697,7 @@ export function castSpellBreakBuilt(
         card: chosenCard,
         recipeDefId: `single_card_${chosenCard.bottomElement}`,
         points: 0, // Без очков
+        originalPoints: 0, // Без оригинальных очков
         name: `Карточка: ${chosenCard.bottomElement}`,
         ingredients: [chosenCard] // Сохраняем как ингредиент
       };
@@ -778,15 +799,22 @@ export function castSpellTransformBuilt(
   // Карта со стола становится собранным рецептом (не дает баллов!)
   // Определяем тип трансформированной карты
   let transformedRecipeId = "transformed_card";
+  let transformedPoints = 0; // По умолчанию 0 очков
+  
   if (tableCard.face.kind === "recipe") {
-    // Если это рецепт, используем его реальный ID
+    // Если это рецепт, используем его реальный ID и очки
     transformedRecipeId = tableCard.face.defId;
+    // Получаем очки из определения рецепта
+    const recipeDef = getRecipeDef(tableCard.face.defId);
+    transformedPoints = recipeDef?.points ?? 0;
   } else if (tableCard.face.kind === "spell") {
     // Если это заклятие, создаем специальный ID
     transformedRecipeId = "transformed_spell";
+    transformedPoints = 0;
   } else {
     // Для других типов карты используем универсальный ID
     transformedRecipeId = "transformed_card";
+    transformedPoints = 0;
   }
   
   const newBuiltRecipe: BuiltRecipe = {
@@ -794,7 +822,8 @@ export function castSpellTransformBuilt(
     recipeDefId: transformedRecipeId, // Используем реальный ID трансформированной карты
     ownerId: playerId,
     card: tableCard, // Карта со стола становится картой рецепта
-    points: 0, // НЕ дает баллов!
+    points: 0, // Трансформированные не дают очков игроку
+    originalPoints: transformedPoints, // Сохраняем оригинальные очки для системы крафта
     name: `Трансформированная: ${tableCard.face.kind === 'recipe' ? tableCard.face.defId : tableCard.face.kind}`, // Имя для отображения
     ingredients: [] // Пустые ингредиенты для трансформированных карт
   };

@@ -93,7 +93,8 @@ export interface BuiltRecipe {
   ownerId: string;
   card: GameCard;
   recipeDefId: string;
-  points: number;
+  points: number; // Очки которые дает игроку
+  originalPoints: number; // Оригинальные очки для системы крафта
   name: string;
   /** Ингредиенты со стола, ушедшие под этот рецепт (для разборки). */
   ingredients: GameCard[];
