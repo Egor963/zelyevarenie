@@ -351,130 +351,14 @@ export const RECIPES: RecipeDef[] = [
   },
   
   // Ультимативные (10 очков)
-  // Верховный эликсир - для поиска клиента
+  // Верховный эликсир - для клиента
   {
     id: "supreme_elixir",
     name: "верховный эликсир",
     needs: {},
-    points: 10,
-    needsBuilt: [
-      { recipeDefId: "great_omen_elixir", count: 1 },
-      { recipeDefId: "great_resurrection_elixir", count: 1 }
-    ]
+    points: 10
   },
-  // Верховный эликсир - все комбинации из 2 великих эликсиров
-  { id: "supreme_elixir_1", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_omen_elixir", count: 1 },
-    { recipeDefId: "great_resurrection_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_2", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_omen_elixir", count: 1 },
-    { recipeDefId: "great_clairvoyance_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_3", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_omen_elixir", count: 1 },
-    { recipeDefId: "great_protection_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_4", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_omen_elixir", count: 1 },
-    { recipeDefId: "great_disappearance_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_5", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_omen_elixir", count: 1 },
-    { recipeDefId: "great_timeless_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_6", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_omen_elixir", count: 1 },
-    { recipeDefId: "great_power_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_7", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_omen_elixir", count: 1 },
-    { recipeDefId: "great_love_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_8", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_resurrection_elixir", count: 1 },
-    { recipeDefId: "great_clairvoyance_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_9", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_resurrection_elixir", count: 1 },
-    { recipeDefId: "great_protection_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_10", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_resurrection_elixir", count: 1 },
-    { recipeDefId: "great_disappearance_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_11", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_resurrection_elixir", count: 1 },
-    { recipeDefId: "great_timeless_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_12", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_resurrection_elixir", count: 1 },
-    { recipeDefId: "great_power_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_13", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_resurrection_elixir", count: 1 },
-    { recipeDefId: "great_love_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_14", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_clairvoyance_elixir", count: 1 },
-    { recipeDefId: "great_protection_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_15", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_clairvoyance_elixir", count: 1 },
-    { recipeDefId: "great_disappearance_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_16", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_clairvoyance_elixir", count: 1 },
-    { recipeDefId: "great_timeless_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_17", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_clairvoyance_elixir", count: 1 },
-    { recipeDefId: "great_power_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_18", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_clairvoyance_elixir", count: 1 },
-    { recipeDefId: "great_love_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_19", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_protection_elixir", count: 1 },
-    { recipeDefId: "great_disappearance_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_20", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_protection_elixir", count: 1 },
-    { recipeDefId: "great_timeless_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_21", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_protection_elixir", count: 1 },
-    { recipeDefId: "great_power_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_22", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_protection_elixir", count: 1 },
-    { recipeDefId: "great_love_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_23", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_disappearance_elixir", count: 1 },
-    { recipeDefId: "great_timeless_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_24", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_disappearance_elixir", count: 1 },
-    { recipeDefId: "great_power_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_25", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_disappearance_elixir", count: 1 },
-    { recipeDefId: "great_love_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_26", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_timeless_elixir", count: 1 },
-    { recipeDefId: "great_power_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_27", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_timeless_elixir", count: 1 },
-    { recipeDefId: "great_love_elixir", count: 1 }
-  ]},
-  { id: "supreme_elixir_28", name: "верховный эликсир", needs: {}, points: 10, needsBuilt: [
-    { recipeDefId: "great_power_elixir", count: 1 },
-    { recipeDefId: "great_love_elixir", count: 1 }
-  ]},
+  
   {
     id: "great_magic_talisman",
     name: "великий талисман магии",

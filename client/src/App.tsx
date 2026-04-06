@@ -504,7 +504,7 @@ export default function App() {
 
       {showLobby && (
         <section className="panel">
-          <h2 style={{ marginTop: 0 }}>Лобби</h2>
+          <h2 style={{ marginTop: 0 }}>Лобби 2-0</h2>
           {!socketConnected && (
             <p className="tagline" style={{ marginTop: 0 }}>
               Подключение к серверу… Если долго так — проверьте, что запущен сервер (порт 3001).

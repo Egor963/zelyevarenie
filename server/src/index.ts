@@ -45,15 +45,8 @@ function publicSnapshot(game: GameState, forPlayerId: string | null): PublicGame
   const cur = game.players[game.currentPlayerIndex];
 
   // Логирование для отладки
-  const supremeElixir = RECIPES.find(r => r.id === "supreme_elixir");
   console.log('🎯 SERVER SNAPSHOT:', {
-    totalRecipes: RECIPES.length,
-    supremeElixir: supremeElixir ? {
-      id: supremeElixir.id,
-      name: supremeElixir.name,
-      needsBuilt: supremeElixir.needsBuilt,
-      needsBuiltLength: supremeElixir.needsBuilt?.length
-    } : 'NOT FOUND'
+    totalRecipes: RECIPES.length
   });
 
   return {
@@ -206,13 +199,14 @@ io.on("connection", (socket) => {
       payload: { handIndex: number; tableCardIds: string[]; builtInstanceIds: string[] },
       ack?: (r: { ok: boolean; error?: string }) => void
     ) => {
-      console.log('🎯 CLIENT CRAFT REQUEST:', { playerId, payload });
+      console.log('🎯 CRAFT RECIPE REQUEST:', { payload, playerId });
       
       if (!joinedRoomId || !playerId) return ack?.({ ok: false, error: "Не в комнате" });
       const room = rooms.get(joinedRoomId);
       if (!room) return ack?.({ ok: false, error: "Комната пропала" });
       
       try {
+        console.log('🎯 CALLING CRAFT RECIPE FUNCTION...');
         const err = craftRecipe(
           room.game,
           playerId,

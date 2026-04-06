@@ -315,6 +315,18 @@ export function startGame(game: GameState, requesterId: string): string | null {
     p.score = 0;
     for (let i = 0; i < START_HAND; i++) p.hand.push(deck.pop()!);
   }
+  
+  // Добавляем карту 70 первому игроку
+  if (game.players.length > 0) {
+    game.players[0].hand.push({
+      id: "70",
+      face: {
+        kind: "recipe",
+        defId: "supreme_elixir"
+      },
+      bottomElement: "астральная энергия"
+    });
+  }
 
   game.deck = deck;
   game.discard = [];
@@ -507,46 +519,6 @@ export function craftRecipe(
   console.log('🎯 HAND CARD:', handCard);
   
   if (handCard.face.kind !== "recipe") return "Это не карта рецепта";
-
-  // Для верховного эликсира перебираем все варианты
-  console.log('🎯 CHECKING RECIPE:', { 
-    cardId: handCard.id, 
-    defId: handCard.face.defId,
-    topContent: handCard.face.kind === 'recipe' ? `card ${handCard.id}` : 'not recipe'
-  });
-  
-  if (handCard.face.defId === "supreme_elixir") {
-    console.log('🎯 SUPREME ELIXIR - checking all 28 variants');
-    
-    if (builtInstanceIds.length === 0) {
-      console.log('❌ NO BUILT RECIPES SELECTED - need to select 2 great elixirs');
-      return "Нужно выбрать 2 великих эликсира из собранных рецептов";
-    }
-    
-    // Находим все рецепты с именем "верховный эликсир"
-    const supremeRecipes = RECIPES.filter(r => r.name === "верховный эликсир");
-    console.log('🎯 FOUND SUPREME RECIPES:', supremeRecipes.length);
-    
-    for (const recipe of supremeRecipes) {
-      const needsBuilt = recipe.needsBuilt ?? [];
-      if (!needsBuilt.length) continue;
-      
-      console.log('🎯 TRYING RECIPE:', recipe.id, 'needsBuilt:', needsBuilt);
-      
-      // Проверяем собранные рецепты
-      const v = validateBuiltSelection(game.builtRecipes, builtInstanceIds, needsBuilt);
-      console.log('🎯 USED BUILT:', v ? 'SUCCESS' : 'FAILED');
-      
-      if (v) {
-        console.log('✅ SUPREME ELIXIR RECIPE FOUND:', recipe.id);
-        // Используем этот рецепт для создания
-        return completeRecipeCraft(game, playerId, handIndex, recipe, tableCardIds, builtInstanceIds, v, handCard, []);
-      }
-    }
-    
-    console.log('❌ NO SUPREME ELIXIR RECIPE MATCHED');
-    return "Неверный набор собранных рецептов для верховного эликсира";
-  }
 
   const def = getRecipeDef(handCard.face.defId);
   console.log('🎯 RECIPE DEF:', def);
