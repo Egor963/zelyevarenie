@@ -471,6 +471,17 @@ export default function App() {
         )
       : undefined;
 
+  // Логирование для отладки
+  const handCard = craftHandIndex !== null ? snap?.yourHand?.[craftHandIndex] : undefined;
+  console.log('🎯 CLIENT CRAFT DEF:', { 
+    craftHandIndex, 
+    defId: handCard?.face?.kind === 'recipe' ? (handCard.face as any).defId : 'not recipe',
+    craftDef,
+    needsBuilt: craftDef?.needsBuilt,
+    needsBuiltLength: craftDef?.needsBuilt?.length,
+    recipeCatalogSize: snap?.recipeCatalog?.length
+  });
+
   return (
     <div>
       <header style={{ marginBottom: "1.25rem" }}>

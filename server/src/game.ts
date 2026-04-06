@@ -544,7 +544,7 @@ export function craftRecipe(
       }
     }
     
-    console.log('❌ NO SUPREME ELIXIR RECIPE MATCHED - falling back to standard logic');
+    console.log('❌ NO SUPREME ELIXIR RECIPE MATCHED');
     return "Неверный набор собранных рецептов для верховного эликсира";
   }
 

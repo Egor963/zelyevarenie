@@ -44,6 +44,18 @@ function publicSnapshot(game: GameState, forPlayerId: string | null): PublicGame
   const curId = game.players[game.currentPlayerIndex]?.id ?? "";
   const cur = game.players[game.currentPlayerIndex];
 
+  // Логирование для отладки
+  const supremeElixir = RECIPES.find(r => r.id === "supreme_elixir");
+  console.log('🎯 SERVER SNAPSHOT:', {
+    totalRecipes: RECIPES.length,
+    supremeElixir: supremeElixir ? {
+      id: supremeElixir.id,
+      name: supremeElixir.name,
+      needsBuilt: supremeElixir.needsBuilt,
+      needsBuiltLength: supremeElixir.needsBuilt?.length
+    } : 'NOT FOUND'
+  });
+
   return {
     phase: game.phase,
     hostId: game.hostId,

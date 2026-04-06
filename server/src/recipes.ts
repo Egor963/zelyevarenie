@@ -489,9 +489,8 @@ export const RECIPES: RecipeDef[] = [
 ];
 
 export function getRecipeDef(id: string): RecipeDef | undefined {
-  // Для верховного эликсира возвращаем первый рецепт с needsBuilt
+  // Для верховного эликсира возвращаем первый рецепт с нужным именем
   if (id === "supreme_elixir") {
-    // Находим любой рецепт с именем "верховный эликсир" и непустым needsBuilt
     return RECIPES.find((r) => r.name === "верховный эликсир" && r.needsBuilt && r.needsBuilt.length > 0);
   }
   
