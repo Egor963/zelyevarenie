@@ -539,14 +539,14 @@ export function craftRecipe(
     console.log('🎯 FOUND SUPREME RECIPES:', supremeRecipes.length);
     
     for (const recipe of supremeRecipes) {
-      console.log('🎯 TRYING RECIPE:', recipe.id);
+      console.log('🎯 TRYING RECIPE:', recipe.id, 'needsBuilt:', recipe.needsBuilt);
       
       const needsBuilt = recipe.needsBuilt ?? [];
       if (!needsBuilt.length) continue;
       
       // Проверяем собранные рецепты
       const v = validateBuiltSelection(game.builtRecipes, builtInstanceIds, needsBuilt);
-      console.log('🎯 USED BUILT:', v);
+      console.log('🎯 USED BUILT:', v ? 'SUCCESS' : 'FAILED');
       
       if (v) {
         console.log('✅ SUPREME ELIXIR RECIPE FOUND:', recipe.id);
