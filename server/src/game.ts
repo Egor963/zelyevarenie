@@ -554,6 +554,11 @@ export function craftRecipe(
 
   let usedBuilt: BuiltRecipe[] = [];
   if (needsBuilt.length) {
+    console.log('🎯 CHECKING BUILT RECIPES:', { 
+      totalBuiltRecipes: game.builtRecipes.length,
+      builtInstanceIds,
+      needsBuilt 
+    });
     const v = validateBuiltSelection(game.builtRecipes, builtInstanceIds, needsBuilt);
     console.log('🎯 USED BUILT:', v);
     
