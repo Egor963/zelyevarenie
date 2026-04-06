@@ -511,7 +511,8 @@ export function craftRecipe(
   // Для верховного эликсира перебираем все варианты
   console.log('🎯 CHECKING RECIPE:', { 
     cardId: handCard.id, 
-    defId: handCard.face.defId
+    defId: handCard.face.defId,
+    topContent: handCard.face.kind === 'recipe' ? handCard.face.defId : 'not recipe'
   });
   
   if (handCard.face.defId === "supreme_elixir") {
