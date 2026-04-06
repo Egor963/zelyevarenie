@@ -483,10 +483,24 @@ function validateBuiltSelection(
     // и все выбранные рецепты входят в разрешенный список
     const requiredCount = 2; // Берем из needs["любой великий эликсир"] или по умолчанию 2
     
-    if (selected.length !== requiredCount) return null;
-    for (const recipe of selected) {
-      if (!allowedRecipeIds.includes(recipe!.recipeDefId)) return null;
+    console.log('🎯 ANY OF LOGIC:', { 
+      selectedCount: selected.length, 
+      requiredCount, 
+      allowedRecipeIds: allowedRecipeIds.length,
+      selectedRecipes: selected.map(r => r!.recipeDefId)
+    });
+    
+    if (selected.length !== requiredCount) {
+      console.log('❌ WRONG COUNT: need', requiredCount, 'got', selected.length);
+      return null;
     }
+    for (const recipe of selected) {
+      if (!allowedRecipeIds.includes(recipe!.recipeDefId)) {
+        console.log('❌ RECIPE NOT ALLOWED:', recipe!.recipeDefId);
+        return null;
+      }
+    }
+    console.log('✅ ANY OF VALIDATION PASSED');
     return selected as BuiltRecipe[];
   }
   
