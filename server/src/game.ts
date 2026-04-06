@@ -800,7 +800,7 @@ export function castSpellTransformBuilt(
   
   // Удаляем заклятие из руки
   p.hand.splice(spellHandIndex, 1);
-  game.discard.push(sc); // Заклятие уходит в сброс
+  game.table.push(sc); // Заклятие падает на стол
   
   // Удаляем собранный рецепт из собранных
   game.builtRecipes = game.builtRecipes.filter(br => br.instanceId !== builtInstanceId);
