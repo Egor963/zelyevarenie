@@ -512,7 +512,7 @@ export function craftRecipe(
   console.log('🎯 CHECKING RECIPE:', { 
     cardId: handCard.id, 
     defId: handCard.face.defId,
-    topContent: handCard.face.kind === 'recipe' ? handCard.face.defId : 'not recipe'
+    topContent: handCard.face.kind === 'recipe' ? `card ${handCard.id}` : 'not recipe'
   });
   
   if (handCard.face.defId === "supreme_elixir") {
