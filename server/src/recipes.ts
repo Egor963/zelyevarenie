@@ -489,5 +489,14 @@ export const RECIPES: RecipeDef[] = [
 ];
 
 export function getRecipeDef(id: string): RecipeDef | undefined {
-  return RECIPES.find((r) => r.id === id);
+  const recipe = RECIPES.find((r) => r.id === id);
+  if (recipe) return recipe;
+  
+  // Если рецепт не найден по ID, ищем по имени (для верховного эликсира)
+  if (id === "supreme_elixir") {
+    // Ищем любой рецепт с именем "верховный эликсир"
+    return RECIPES.find((r) => r.name === "верховный эликсир");
+  }
+  
+  return undefined;
 }

@@ -5,7 +5,8 @@ import type {
   SpellKind,
   GameState,
   PlayerState,
-  BuiltRecipe
+  BuiltRecipe,
+  RecipeDef
 } from "./types.js";
 import { getRecipeDef, RECIPES } from "./recipes.js";
 import * as fs from "fs";
@@ -524,6 +525,34 @@ export function craftRecipe(
   
   if (handCard.face.kind !== "recipe") return "Это не карта рецепта";
 
+  // Для верховного эликсира перебираем все варианты
+  if (handCard.face.defId === "supreme_elixir") {
+    console.log('🎯 SUPREME ELIXIR - checking all variants');
+    
+    // Находим все рецепты с именем "верховный эликсир"
+    const supremeRecipes = RECIPES.filter(r => r.name === "верховный эликсир");
+    console.log('🎯 FOUND SUPREME RECIPES:', supremeRecipes.length);
+    
+    for (const recipe of supremeRecipes) {
+      console.log('🎯 TRYING RECIPE:', recipe.id);
+      
+      const needsBuilt = recipe.needsBuilt ?? [];
+      if (!needsBuilt.length) continue;
+      
+      // Проверяем собранные рецепты
+      const v = validateBuiltSelection(game.builtRecipes, builtInstanceIds, needsBuilt);
+      console.log('🎯 USED BUILT:', v);
+      
+      if (v) {
+        console.log('✅ SUPREME ELIXIR RECIPE FOUND:', recipe.id);
+        // Используем этот рецепт для создания
+        return completeRecipeCraft(game, playerId, handIndex, recipe, tableCardIds, builtInstanceIds, v, handCard, []);
+      }
+    }
+    
+    return "Неверный набор собранных рецептов для верховного эликсира";
+  }
+
   const def = getRecipeDef(handCard.face.defId);
   console.log('🎯 RECIPE DEF:', def);
   
@@ -561,8 +590,22 @@ export function craftRecipe(
     return "Этот рецепт не требует собранных карт";
   }
 
-  const isComplex = needsBuilt.length > 0;
-  const removeTableIds = new Set(elementalPick.map((c) => c.id));
+  return completeRecipeCraft(game, playerId, handIndex, def, tableCardIds, builtInstanceIds, usedBuilt, handCard, elementalPick);
+}
+
+function completeRecipeCraft(
+  game: GameState,
+  playerId: string,
+  handIndex: number,
+  recipe: RecipeDef,
+  tableCardIds: string[],
+  builtInstanceIds: string[],
+  usedBuilt: BuiltRecipe[],
+  handCard: GameCard,
+  elementalPick: GameCard[]
+) {
+  const isComplex = usedBuilt.length > 0;
+  const removeTableIds = new Set(tableCardIds);
   game.table = game.table.filter((c) => !removeTableIds.has(c.id));
 
   const removeBuiltIds = new Set(usedBuilt.map((b) => b.instanceId));
@@ -573,6 +616,7 @@ export function craftRecipe(
     // Возвращаем ингредиенты использованных собранных рецептов на стол
     for (const b of usedBuilt) {
       console.log('🎯 RETURNING INGREDIENTS FROM:', b.name);
+      game.table.push(b.card);
       for (const ing of b.ingredients) {
         console.log('🎯 RETURNING INGREDIENT:', ing.id, ing.bottomElement);
         game.table.push(ing);
@@ -580,6 +624,7 @@ export function craftRecipe(
     }
   }
 
+  const p = currentPlayer(game);
   p.hand.splice(handIndex, 1);
 
   const instanceId = randomUUID();
@@ -587,15 +632,16 @@ export function craftRecipe(
     instanceId,
     ownerId: p.id,
     card: handCard,
-    recipeDefId: def.id,
-    points: def.points,
-    name: def.name,
-    ingredients: isComplex ? [] : [...elementalPick],
+    recipeDefId: recipe.id,
+    points: recipe.points,
+    name: recipe.name,
+    ingredients: elementalPick,
   };
+
   game.builtRecipes.push(newBuilt);
 
-  p.score += def.points;
-  applyHalfPointsToOwners(game, def.points, usedBuilt, p.id);
+  p.score += recipe.points;
+  applyHalfPointsToOwners(game, recipe.points, usedBuilt, p.id);
 
   finishMainAction(game);
   console.log('🎯 CRAFT RECIPE SUCCESS!');
