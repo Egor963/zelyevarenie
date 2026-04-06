@@ -183,6 +183,7 @@ export function makeDeck(): GameCard[] {
         case 'эликсир тайного зрения': recipeId = 'secret_vision_elixir'; break;
         case 'раствор-оберег': recipeId = 'protection_solution'; break;
         case 'эликсир мудрости': recipeId = 'wisdom_elixir'; break;
+        case 'эликсир полета': recipeId = 'flight_elixir'; break;
         case 'эликсир забвения': recipeId = 'oblivion_elixir'; break;
         case 'зелье полиглотум': recipeId = 'polyglotum_potion'; break;
         case 'эманация власти': recipeId = 'power_emanation'; break;
@@ -215,6 +216,7 @@ export function makeDeck(): GameCard[] {
         case 'верховный эликсир': recipeId = 'supreme_elixir'; break;
         case 'великий талисман магии': recipeId = 'great_magic_talisman'; break;
         case 'авокадо кадавр': recipeId = 'avocado_cadaver'; break;
+        case 'трансформированная карта': recipeId = 'transformed_card'; break;
         default: recipeId = mapping.topContent.toLowerCase().replace(/\s+/g, '_'); break;
       }
       
@@ -774,13 +776,26 @@ export function castSpellTransformBuilt(
   }
   
   // Карта со стола становится собранным рецептом (не дает баллов!)
+  // Определяем тип трансформированной карты
+  let transformedRecipeId = "transformed_card";
+  if (tableCard.face.kind === "recipe") {
+    // Если это рецепт, используем его реальный ID
+    transformedRecipeId = tableCard.face.defId;
+  } else if (tableCard.face.kind === "spell") {
+    // Если это заклятие, создаем специальный ID
+    transformedRecipeId = "transformed_spell";
+  } else {
+    // Для других типов карты используем универсальный ID
+    transformedRecipeId = "transformed_card";
+  }
+  
   const newBuiltRecipe: BuiltRecipe = {
     instanceId: `built_${Date.now()}_${playerId}`,
-    recipeDefId: "transformed_card", // Специальный ID для трансформированных карт
+    recipeDefId: transformedRecipeId, // Используем реальный ID трансформированной карты
     ownerId: playerId,
     card: tableCard, // Карта со стола становится картой рецепта
     points: 0, // НЕ дает баллов!
-    name: "Трансформированная карта", // Имя для отображения
+    name: `Трансформированная: ${tableCard.face.kind === 'recipe' ? tableCard.face.defId : tableCard.face.kind}`, // Имя для отображения
     ingredients: [] // Пустые ингредиенты для трансформированных карт
   };
   

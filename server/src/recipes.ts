@@ -82,6 +82,12 @@ export const RECIPES: RecipeDef[] = [
     points: 3,
   },
   {
+    id: "flight_elixir",
+    name: "эликсир полета",
+    needs: { "корень мандрагоры": 1, "кристалл воздуха": 1, "астральная энергия": 1 },
+    points: 3,
+  },
+  {
     id: "oblivion_elixir",
     name: "эликсир забвения",
     needs: { "белладонна": 1, "крыло летучей мыши": 1 },
@@ -364,6 +370,13 @@ export const RECIPES: RecipeDef[] = [
     name: "великий талисман магии",
     needs: {},
     points: 10
+  },
+  // Трансформированная карта - универсальный ингредиент
+  {
+    id: "transformed_card",
+    name: "трансформированная карта",
+    needs: {},
+    points: 0
   },
   {
     id: "avocado_cadaver",
