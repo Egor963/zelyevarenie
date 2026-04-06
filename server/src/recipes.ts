@@ -358,7 +358,13 @@ export const RECIPES: RecipeDef[] = [
     points: 10,
     needsBuilt: [
       { recipeDefId: "great_omen_elixir", count: 1 },
-      { recipeDefId: "great_resurrection_elixir", count: 1 }
+      { recipeDefId: "great_resurrection_elixir", count: 1 },
+      { recipeDefId: "great_clairvoyance_elixir", count: 1 },
+      { recipeDefId: "great_protection_elixir", count: 1 },
+      { recipeDefId: "great_disappearance_elixir", count: 1 },
+      { recipeDefId: "great_timeless_elixir", count: 1 },
+      { recipeDefId: "great_power_elixir", count: 1 },
+      { recipeDefId: "great_love_elixir", count: 1 }
     ]
   },
   {

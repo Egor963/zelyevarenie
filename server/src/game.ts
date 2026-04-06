@@ -479,7 +479,11 @@ function validateBuiltSelection(
   const isAnyOf = allowedRecipeIds.length > 1 && needsBuilt.every(n => n.count === 1);
   
   if (isAnyOf) {
-    // Проверяем что все выбранные рецепты входят в разрешенный список
+    // Для "любой из списка" проверяем что количество выбранных соответствует требованию
+    // и все выбранные рецепты входят в разрешенный список
+    const requiredCount = 2; // Берем из needs["любой великий эликсир"] или по умолчанию 2
+    
+    if (selected.length !== requiredCount) return null;
     for (const recipe of selected) {
       if (!allowedRecipeIds.includes(recipe!.recipeDefId)) return null;
     }
