@@ -355,13 +355,29 @@ export const RECIPES: RecipeDef[] = [
     id: "supreme_elixir",
     name: "верховный эликсир",
     needs: { "любой великий эликсир": 2 },
-    points: 10
+    points: 10,
+    needsBuilt: [
+      { recipeDefId: "great_omen_elixir", count: 1 },
+      { recipeDefId: "great_resurrection_elixir", count: 1 },
+      { recipeDefId: "great_clairvoyance_elixir", count: 1 },
+      { recipeDefId: "great_protection_elixir", count: 1 },
+      { recipeDefId: "great_disappearance_elixir", count: 1 },
+      { recipeDefId: "great_timeless_elixir", count: 1 },
+      { recipeDefId: "great_power_elixir", count: 1 },
+      { recipeDefId: "great_love_elixir", count: 1 }
+    ]
   },
   {
     id: "great_magic_talisman",
     name: "великий талисман магии",
     needs: { "любой талисман": 2 },
-    points: 10
+    points: 10,
+    needsBuilt: [
+      { recipeDefId: "knowledge_talisman", count: 1 },
+      { recipeDefId: "palantir_talisman", count: 1 },
+      { recipeDefId: "teleport_talisman", count: 1 },
+      { recipeDefId: "beasts_master_talisman", count: 1 }
+    ]
   },
   {
     id: "avocado_cadaver",

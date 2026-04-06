@@ -473,6 +473,20 @@ function validateBuiltSelection(
 ): BuiltRecipe[] | null {
   const selected = selectedIds.map((id) => built.find((b) => b.instanceId === id));
   if (selected.some((x) => !x)) return null;
+  
+  // Специальная логика для "любой" - если в needsBuilt много элементов с count=1, то это "любой из списка"
+  const allowedRecipeIds = needsBuilt.map(n => n.recipeDefId);
+  const isAnyOf = allowedRecipeIds.length > 1 && needsBuilt.every(n => n.count === 1);
+  
+  if (isAnyOf) {
+    // Проверяем что все выбранные рецепты входят в разрешенный список
+    for (const recipe of selected) {
+      if (!allowedRecipeIds.includes(recipe!.recipeDefId)) return null;
+    }
+    return selected as BuiltRecipe[];
+  }
+  
+  // Стандартная логика для точного совпадения
   const needFlat = needsBuilt.flatMap((n) => Array.from({ length: n.count }, () => n.recipeDefId)).sort();
   const got = selected.map((b) => b!.recipeDefId).sort();
   if (needFlat.length !== got.length) return null;
