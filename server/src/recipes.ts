@@ -354,7 +354,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "supreme_elixir",
     name: "верховный эликсир",
-    needs: { "любой великий эликсир": 2 },
+    needs: {},
     points: 10,
     needsBuilt: [
       { recipeDefId: "great_omen_elixir", count: 1 },
