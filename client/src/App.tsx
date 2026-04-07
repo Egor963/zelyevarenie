@@ -634,10 +634,9 @@ export default function App() {
                     disabled={!click}
                     onClick={() => onTableClick(c.id)}
                     style={{ 
-                      padding: '4px',
+                      padding: '2px',
                       border: sel ? '2px solid #3498db' : '1px solid #ddd',
                       borderRadius: '8px',
-                      background: 'white',
                       cursor: click ? 'pointer' : 'not-allowed'
                     }}
                   >
@@ -646,8 +645,8 @@ export default function App() {
                         src={cardData.image} 
                         alt={`${cardData.topContent} - ${cardData.bottomElement}`}
                         style={{ 
-                          width: '80px', 
-                          height: '112px', 
+                          width: '101px', 
+                          height: '141px', 
                           objectFit: 'contain',
                           borderRadius: '4px'
                         }}
@@ -677,136 +676,86 @@ export default function App() {
             {spellTransform !== null && canAct && (
               <p className="hint">Кликните свой рецепт, чтобы трансформировать его.</p>
             )}
-            {snap.builtRecipes.length === 0 && <span style={{ color: "var(--muted)" }}>пока нет</span>}
+            {snap.builtRecipes.length === 0 && <span style={{ color: "var(--muted)" }}>-</span>}
             <div style={{ display: 'flex', gap: '2rem' }}>
-              {/* Left column - Player 1 built recipes */}
+              {/* Left section - Player 1 built recipes */}
               <div style={{ flex: 1 }}>
                 <h3 style={{ marginTop: 0, color: "var(--accent)" }}>{snap.players[0]?.name || 'Левый игрок'}</h3>
-                {snap.players[0] && snap.builtRecipes.filter(b => b.ownerId === snap.players[0].id).map((b) => {
-                  const mine = b.ownerId === myId;
-                  const breakMode = spellBreakIdx !== null && canAct && mine;
-                  const transformMode = spellTransform !== null && canAct && mine;
-                  const isSelected = craftHandIndex !== null && craftDef?.needsBuilt?.length && craftBuiltIds.includes(b.instanceId);
-                  return (
-                    <div 
-                      key={b.instanceId} 
-                      className="built-row"
-                      style={{ 
-                        cursor: (transformMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default', 
-                        border: transformMode ? '2px solid var(--accent)' : isSelected ? '2px solid var(--accent)' : 'none',
-                        backgroundColor: isSelected ? 'rgba(var(--accent-rgb), 0.1)' : 'transparent',
-                        transform: isSelected ? 'scale(1.05)' : 'scale(1)',
-                        transition: 'all 0.2s ease'
-                      }}
-                      onClick={() => {
-                        console.log('RECIPE CLICKED FOR BREAK:', { 
-                          recipeId: b.instanceId, 
-                          recipeName: b.name,
-                          isMine: mine,
-                          breakMode: breakMode,
-                          spellBreakIdx: spellBreakIdx
-                        });
-                        if (transformMode && spellTransform) {
-                          setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
-                        }
-                        if (breakMode && spellBreakIdx !== null) {
-                          console.log('SETTING BREAKING RECIPE ID:', b.instanceId);
-                          setBreakingRecipeId(b.instanceId);
-                        }
-                        // Add craft selection logic
-                        if (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine) {
-                          toggleBuiltForCraft(b);
-                        }
-                      }}
-                    >
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}>
-                          <HandCardBlock
-                            card={b.card}
-                            index={-1}
-                            catalog={snap.recipeCatalog}
-                            canAct={false}
-                            craftHandIndex={null}
-                            spellSwap={null}
-                            spellTransform={null}
-                            onPlace={() => {}}
-                            onStartCraft={() => {}}
-                            onSpellTake={() => {}}
-                            onSpellBreak={() => {}}
-                            onSpellSwapStart={() => {}}
-                            onSpellSwapPickHand={() => {}}
-                            onSpellTransformStart={() => {}}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(4, 1fr)', 
+                  gap: '8px'
+                }}>
+                  {snap.players[0] && snap.builtRecipes.filter(b => b.ownerId === snap.players[0].id).map((b) => {
+                    const mine = b.ownerId === myId;
+                    const breakMode = spellBreakIdx !== null && canAct && mine;
+                    const transformMode = spellTransform !== null && canAct && mine;
+                    const craftSelected = craftHandIndex !== null && craftDef?.needsBuilt?.length && craftBuiltIds.includes(b.instanceId);
+                    const breakSelected = breakingRecipeId === b.instanceId;
+                    const transformSelected = spellTransform?.builtInstanceId === b.instanceId;
+                    const isSelected = craftSelected || breakSelected || transformSelected;
+                    const cursorMode = (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default';
+                    return (
+                      <HandCardBlock
+                        key={b.instanceId}
+                        card={b.card}
+                        index={-1}
+                        catalog={snap.recipeCatalog}
+                        canAct={false}
+                        craftHandIndex={null}
+                        spellSwap={null}
+                        spellTransform={null}
+                        onPlace={() => {}}
+                        onStartCraft={() => {}}
+                        onSpellTake={() => {}}
+                        onSpellBreak={() => {}}
+                        onSpellSwapStart={() => {}}
+                        onSpellSwapPickHand={() => {}}
+                        onSpellTransformStart={() => {}}
+                      />
+                    );
+                  })}
+                </div>
               </div>
               
-              {/* Right column - Player 2 built recipes */}
+              {/* Right section - Player 2 built recipes */}
               <div style={{ flex: 1 }}>
                 <h3 style={{ marginTop: 0, color: "var(--accent)" }}>{snap.players[1]?.name || 'Правый игрок'}</h3>
-                {snap.players[1] && snap.builtRecipes.filter(b => b.ownerId === snap.players[1].id).map((b) => {
-                  const mine = b.ownerId === myId;
-                  const breakMode = spellBreakIdx !== null && canAct && mine;
-                  const transformMode = spellTransform !== null && canAct && mine;
-                  const isSelected = craftHandIndex !== null && craftDef?.needsBuilt?.length && craftBuiltIds.includes(b.instanceId);
-                  return (
-                    <div 
-                      key={b.instanceId} 
-                      className="built-row"
-                      style={{ 
-                        cursor: (transformMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default', 
-                        border: transformMode ? '2px solid var(--accent)' : isSelected ? '2px solid var(--accent)' : 'none',
-                        backgroundColor: isSelected ? 'rgba(var(--accent-rgb), 0.1)' : 'transparent',
-                        transform: isSelected ? 'scale(1.05)' : 'scale(1)',
-                        transition: 'all 0.2s ease'
-                      }}
-                      onClick={() => {
-                        console.log('RECIPE CLICKED FOR BREAK:', { 
-                          recipeId: b.instanceId, 
-                          recipeName: b.name,
-                          isMine: mine,
-                          breakMode: breakMode,
-                          spellBreakIdx: spellBreakIdx
-                        });
-                        if (transformMode && spellTransform) {
-                          setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
-                        }
-                        if (breakMode && spellBreakIdx !== null) {
-                          console.log('SETTING BREAKING RECIPE ID:', b.instanceId);
-                          setBreakingRecipeId(b.instanceId);
-                        }
-                        // Add craft selection logic
-                        if (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine) {
-                          toggleBuiltForCraft(b);
-                        }
-                      }}
-                    >
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}>
-                          <HandCardBlock
-                            card={b.card}
-                            index={-1}
-                            catalog={snap.recipeCatalog}
-                            canAct={false}
-                            craftHandIndex={null}
-                            spellSwap={null}
-                            spellTransform={null}
-                            onPlace={() => {}}
-                            onStartCraft={() => {}}
-                            onSpellTake={() => {}}
-                            onSpellBreak={() => {}}
-                            onSpellSwapStart={() => {}}
-                            onSpellSwapPickHand={() => {}}
-                            onSpellTransformStart={() => {}}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(4, 1fr)', 
+                  gap: '8px'
+                }}>
+                  {snap.players[1] && snap.builtRecipes.filter(b => b.ownerId === snap.players[1].id).map((b) => {
+                    const mine = b.ownerId === myId;
+                    const breakMode = spellBreakIdx !== null && canAct && mine;
+                    const transformMode = spellTransform !== null && canAct && mine;
+                    const craftSelected = craftHandIndex !== null && craftDef?.needsBuilt?.length && craftBuiltIds.includes(b.instanceId);
+                    const breakSelected = breakingRecipeId === b.instanceId;
+                    const transformSelected = spellTransform?.builtInstanceId === b.instanceId;
+                    const isSelected = craftSelected || breakSelected || transformSelected;
+                    const cursorMode = (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default';
+                    return (
+                      <HandCardBlock
+                        key={b.instanceId}
+                        card={b.card}
+                        index={-1}
+                        catalog={snap.recipeCatalog}
+                        canAct={false}
+                        craftHandIndex={null}
+                        spellSwap={null}
+                        spellTransform={null}
+                        onPlace={() => {}}
+                        onStartCraft={() => {}}
+                        onSpellTake={() => {}}
+                        onSpellBreak={() => {}}
+                        onSpellSwapStart={() => {}}
+                        onSpellSwapPickHand={() => {}}
+                        onSpellTransformStart={() => {}}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </section>
@@ -819,23 +768,25 @@ export default function App() {
             {snap.yourHand && snap.yourHand.length > 0 ? (
               <div className="hand-row">
                 {snap.yourHand.map((c, i) => (
-                  <HandCardBlock
-                    key={c.id}
-                    card={c}
-                    index={i}
-                    catalog={snap.recipeCatalog}
-                    canAct={canAct && craftHandIndex === null}
-                    craftHandIndex={craftHandIndex}
-                    spellSwap={spellSwap}
-                    spellTransform={spellTransform}
-                    onPlace={() => place(i)}
-                    onStartCraft={() => onStartCraft(i)}
-                    onSpellTake={() => onSpellTake(i)}
-                    onSpellBreak={() => onSpellBreak(i)}
-                    onSpellSwapStart={() => onSpellSwapStart(i)}
-                    onSpellSwapPickHand={() => onSpellSwapPickHand(i)}
-                    onSpellTransformStart={() => setSpellTransform({ spellIdx: i, builtInstanceId: null })}
-                  />
+                  <div>
+                    <HandCardBlock
+                      key={c.id}
+                      card={c}
+                      index={i}
+                      catalog={snap.recipeCatalog}
+                      canAct={canAct && craftHandIndex === null}
+                      craftHandIndex={craftHandIndex}
+                      spellSwap={spellSwap}
+                      spellTransform={spellTransform}
+                      onPlace={() => place(i)}
+                      onStartCraft={() => onStartCraft(i)}
+                      onSpellTake={() => onSpellTake(i)}
+                      onSpellBreak={() => onSpellBreak(i)}
+                      onSpellSwapStart={() => onSpellSwapStart(i)}
+                      onSpellSwapPickHand={() => onSpellSwapPickHand(i)}
+                      onSpellTransformStart={() => setSpellTransform({ spellIdx: i, builtInstanceId: null })}
+                    />
+                  </div>
                 ))}
               </div>
             ) : (
@@ -1141,41 +1092,43 @@ function HandCardBlock({
           Низ (элемент): <ElementBadge el={card.bottomElement} />
         </div>
       </div>
-      <div className="row" style={{ flexWrap: "wrap", marginTop: 4 }}>
-        <button type="button" disabled={!canAct || busyCraft || !!spellSwap} onClick={onPlace}>
-          На стол
-        </button>
-        {card.face.kind === "recipe" && (
-          <button type="button" disabled={!canAct || !!spellSwap} onClick={onStartCraft}>
-            Готовить
+      {index !== -1 && (
+        <div className="row" style={{ flexWrap: "wrap", marginTop: 4 }}>
+          <button type="button" disabled={!canAct || busyCraft || !!spellSwap} onClick={onPlace}>
+            На стол
           </button>
-        )}
-        {card.face.kind === "spell" && card.face.spell === "take_table" && (
-          <button type="button" disabled={!canAct || busyCraft} onClick={onSpellTake}>
-            Играть
-          </button>
-        )}
-        {card.face.kind === "spell" && card.face.spell === "break_built" && (
-          <button type="button" disabled={!canAct || busyCraft} onClick={onSpellBreak}>
-            Играть
-          </button>
-        )}
-        {card.face.kind === "spell" && card.face.spell === "swap_elements" && (
-          <button type="button" disabled={!canAct || busyCraft} onClick={onSpellSwapStart}>
-            Играть
-          </button>
-        )}
-        {card.face.kind === "spell" && card.face.spell === "transform_built" && (
-          <button type="button" disabled={!canAct || busyCraft} onClick={onSpellTransformStart}>
-            Играть
-          </button>
-        )}
-        {showSwapHand && (
-          <button type="button" className="primary" onClick={onSpellSwapPickHand}>
-            Отдать эту
-          </button>
-        )}
-      </div>
+          {card.face.kind === "recipe" && (
+            <button type="button" disabled={!canAct || !!spellSwap} onClick={onStartCraft}>
+              Готовить
+            </button>
+          )}
+          {card.face.kind === "spell" && card.face.spell === "take_table" && (
+            <button type="button" disabled={!canAct || busyCraft} onClick={onSpellTake}>
+              Играть
+            </button>
+          )}
+          {card.face.kind === "spell" && card.face.spell === "break_built" && (
+            <button type="button" disabled={!canAct || busyCraft} onClick={onSpellBreak}>
+              Играть
+            </button>
+          )}
+          {card.face.kind === "spell" && card.face.spell === "swap_elements" && (
+            <button type="button" disabled={!canAct || busyCraft} onClick={onSpellSwapStart}>
+              Играть
+            </button>
+          )}
+          {card.face.kind === "spell" && card.face.spell === "transform_built" && (
+            <button type="button" disabled={!canAct || busyCraft} onClick={onSpellTransformStart}>
+              Играть
+            </button>
+          )}
+          {showSwapHand && (
+            <button type="button" className="primary" onClick={onSpellSwapPickHand}>
+              Отдать эту
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
