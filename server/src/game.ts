@@ -939,7 +939,7 @@ export function castSpellTransformBuilt(
     card: tableCard, // Карта со стола становится картой рецепта
     points: 0, // Трансформированные не дают очков игроку
     originalPoints: transformedPoints, // Сохраняем оригинальные очки для системы крафта
-    name: `Трансформированная: ${tableCard.face.kind === 'recipe' ? tableCard.face.defId : tableCard.face.kind}`, // Имя для отображения
+    name: `Трансформированный: ${tableCard.face.kind === 'recipe' ? getRecipeDef(tableCard.face.defId)?.name || tableCard.face.defId : tableCard.face.kind}`, // Имя для отображения
     ingredients: [] // Пустые ингредиенты для трансформированных карт
   };
   

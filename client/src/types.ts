@@ -47,6 +47,8 @@ export interface PublicBuiltRecipe {
   recipeDefId: string;
   name: string;
   points: number;
+  card: GameCard;
+  ingredients: GameCard[];
 }
 
 export interface PublicGameSnapshot {
