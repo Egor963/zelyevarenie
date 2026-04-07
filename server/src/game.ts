@@ -114,7 +114,7 @@ export function makeDeck(): GameCard[] {
     "33": { topType: "recipe", topContent: "зелье полиглотум", bottomElement: "белладонна", points: 2 },
     "34": { topType: "recipe", topContent: "эманация власти", bottomElement: "волны эфира", points: 2 },
     "35": { topType: "recipe", topContent: "настой прорицания", bottomElement: "камень крови", points: 2 },
-    "36": { topType: "recipe", topContent: "эликсир повелителя растений", bottomElement: "волны эфира", points: 3 },
+    "36": { topType: "recipe", topContent: "эликсир повелителя растений", bottomElement: "энергия мысли", points: 3 },
     "37": { topType: "spell", topContent: "заклятие трансформы", bottomElement: "крыло летучей мыши", points: 0 },
     "38": { topType: "spell", topContent: "заклятие познания", bottomElement: "белладонна", points: 0 },
     "39": { topType: "spell", topContent: "заклятие познания", bottomElement: "мушрумы", points: 0 },
