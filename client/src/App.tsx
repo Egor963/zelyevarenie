@@ -708,11 +708,18 @@ export default function App() {
                             setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
                           } else if (breakMode && mine) {
                             setBreakingRecipeId(b.instanceId);
+                          } else if (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine) {
+                            // Toggle selection for complex recipes
+                            if (craftBuiltIds.includes(b.instanceId)) {
+                              setCraftBuiltIds(prev => prev.filter(id => id !== b.instanceId));
+                            } else {
+                              setCraftBuiltIds(prev => [...prev, b.instanceId]);
+                            }
                           }
                         }}
                         style={{ 
-                          cursor: (transformMode || breakMode) && mine ? 'pointer' : 'default',
-                          border: (transformSelected || breakSelected) ? '3px solid #FFD700' : (activeSpellMode && mine ? '2px solid rgba(255, 215, 0, 0.3)' : 'none'),
+                          cursor: (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default',
+                          border: (transformSelected || breakSelected) ? '3px solid #FFD700' : (craftSelected ? '3px solid #FFD700' : (activeSpellMode && mine ? '2px solid rgba(255, 215, 0, 0.3)' : 'none')),
                           borderRadius: '8px',
                           padding: '2px',
                           transition: 'all 0.2s ease-in-out'
@@ -773,11 +780,18 @@ export default function App() {
                             setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
                           } else if (breakMode && mine) {
                             setBreakingRecipeId(b.instanceId);
+                          } else if (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine) {
+                            // Toggle selection for complex recipes
+                            if (craftBuiltIds.includes(b.instanceId)) {
+                              setCraftBuiltIds(prev => prev.filter(id => id !== b.instanceId));
+                            } else {
+                              setCraftBuiltIds(prev => [...prev, b.instanceId]);
+                            }
                           }
                         }}
                         style={{ 
-                          cursor: (transformMode || breakMode) && mine ? 'pointer' : 'default',
-                          border: (transformSelected || breakSelected) ? '3px solid #FFD700' : (activeSpellMode && mine ? '2px solid rgba(255, 215, 0, 0.3)' : 'none'),
+                          cursor: (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default',
+                          border: (transformSelected || breakSelected) ? '3px solid #FFD700' : (craftSelected ? '3px solid #FFD700' : (activeSpellMode && mine ? '2px solid rgba(255, 215, 0, 0.3)' : 'none')),
                           borderRadius: '8px',
                           padding: '2px',
                           transition: 'all 0.2s ease-in-out'
@@ -853,8 +867,15 @@ export default function App() {
                     </span>
                   ))}
                   {craftDef.needsBuilt?.map((nb, j) => (
-                    <span key={j} style={{ marginRight: 6 }}>
-                      собранный «{recipeByCatalog(snap.recipeCatalog, nb.recipeDefId)?.name ?? nb.recipeDefId}»×{nb.count}
+                    <span key={j} style={{ marginRight: 6, cursor: 'pointer' }}
+                      onClick={() => {
+                        const builtRecipe = snap.builtRecipes.find(br => br.recipeDefId === nb.recipeDefId);
+                        if (builtRecipe) {
+                          toggleBuiltForCraft(builtRecipe);
+                        }
+                      }}
+                    >
+                      +{nb.count}× «{recipeByCatalog(snap.recipeCatalog, nb.recipeDefId)?.name ?? nb.recipeDefId}»
                     </span>
                   ))}
                 </div>
