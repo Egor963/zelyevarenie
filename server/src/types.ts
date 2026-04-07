@@ -109,6 +109,12 @@ export interface PlayerState {
 
 export type GamePhase = "lobby" | "playing" | "ended";
 
+// Element stacks on table - element -> array of cards
+export interface ElementStack {
+  element: ElementId;
+  cards: GameCard[];
+}
+
 export interface GameState {
   phase: GamePhase;
   hostId: string;
@@ -120,6 +126,7 @@ export interface GameState {
   seenElements: Set<ElementId>;
   currentPlayerIndex: number;
   winnerName?: string;
+  elementStacks: ElementStack[];
 }
 
 export interface PublicPlayer {

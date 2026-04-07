@@ -6,7 +6,8 @@ import type {
   GameState,
   PlayerState,
   BuiltRecipe,
-  RecipeDef
+  RecipeDef,
+  ElementStack
 } from "./types.js";
 import { getRecipeDef, RECIPES } from "./recipes.js";
 import * as fs from "fs";
@@ -282,6 +283,7 @@ export function createEmptyGame(hostId: string, hostName: string): GameState {
     builtRecipes: [],
     seenElements: new Set(),
     currentPlayerIndex: 0,
+    elementStacks: []
   };
 }
 
@@ -310,7 +312,26 @@ export function startGame(game: GameState, requesterId: string): string | null {
 
   const deck = shuffle(makeDeck());
   const table: GameCard[] = [];
-  for (let i = 0; i < START_TABLE; i++) table.push(deck.pop()!);
+  const elementStacks: ElementStack[] = [];
+  
+  for (let i = 0; i < START_TABLE; i++) {
+    const card = deck.pop()!;
+    // Check if element already exists in initial table
+    const existingStack = elementStacks.find(s => s.element === card.bottomElement);
+    if (existingStack) {
+      // Add to existing stack
+      existingStack.cards.push(card);
+    } else {
+      // Create new stack
+      elementStacks.push({
+        element: card.bottomElement,
+        cards: [card]
+      });
+    }
+  }
+  
+  // Update table to show top cards from stacks
+  table.push(...elementStacks.map(stack => stack.cards[stack.cards.length - 1]));
 
   for (const p of game.players) {
     p.hand = [];
@@ -322,6 +343,7 @@ export function startGame(game: GameState, requesterId: string): string | null {
   game.discard = [];
   game.table = table;
   game.builtRecipes = [];
+  game.elementStacks = elementStacks; // Use the stacks we created
   game.seenElements = new Set();
   for (const c of table) game.seenElements.add(c.bottomElement);
 
@@ -434,7 +456,7 @@ export function placeOnTable(game: GameState, playerId: string, handIndex: numbe
   
   console.log(`Placing card: ${card.id}, element: ${card.bottomElement}, alreadyOnTable: ${elementAlreadyOnTable}`);
   
-  game.table.push(card);
+  addCardToTable(game, card);
 
   // Начисляем +1 очко только если такого элемента еще нет на столе
   if (!elementAlreadyOnTable) {
@@ -600,9 +622,14 @@ function completeRecipeCraft(
   elementalPick: GameCard[]
 ) {
   const isComplex = usedBuilt.length > 0;
-  const removeTableIds = new Set(tableCardIds);
-  game.table = game.table.filter((c) => !removeTableIds.has(c.id));
-
+  
+  // Remove cards from table using takeCardFromTable to preserve stacks
+  const removedCards: GameCard[] = [];
+  for (const cardId of tableCardIds) {
+    const card = takeCardFromTable(game, cardId);
+    if (card) removedCards.push(card);
+  }
+  
   const removeBuiltIds = new Set(usedBuilt.map((b) => b.instanceId));
   game.builtRecipes = game.builtRecipes.filter((b) => !removeBuiltIds.has(b.instanceId));
 
@@ -610,11 +637,11 @@ function completeRecipeCraft(
     console.log('🎯 COMPLEX RECIPE: returning ingredients to table');
     // Возвращаем ингредиенты использованных собранных рецептов на стол
     for (const b of usedBuilt) {
-      console.log('🎯 RETURNING INGREDIENTS FROM:', b.name);
-      game.table.push(b.card);
+      console.log('RETURNING INGREDIENTS FROM:', b.name);
+      addCardToTable(game, b.card);
       for (const ing of b.ingredients) {
-        console.log('🎯 RETURNING INGREDIENT:', ing.id, ing.bottomElement);
-        game.table.push(ing);
+        console.log('RETURNING INGREDIENT:', ing.id, ing.bottomElement);
+        addCardToTable(game, ing);
       }
     }
   }
@@ -644,6 +671,71 @@ function completeRecipeCraft(
   return null;
 }
 
+function addCardToTable(game: GameState, card: GameCard): void {
+  console.log('=== ADD CARD TO TABLE ===');
+  console.log('Card:', { id: card.id, element: card.bottomElement });
+  console.log('Table before:', game.table.map(c => ({ id: c.id, element: c.bottomElement })));
+  
+  // Find existing stack for this element
+  const existingStack = game.elementStacks.find(stack => stack.element === card.bottomElement);
+  
+  if (existingStack) {
+    // Add card to top of existing stack
+    console.log(`STACKING: adding ${card.id} to stack with ${existingStack.cards.length} cards`);
+    existingStack.cards.push(card);
+  } else {
+    // Create new stack
+    console.log(`NEW STACK: creating stack for ${card.bottomElement} with card ${card.id}`);
+    game.elementStacks.push({
+      element: card.bottomElement,
+      cards: [card]
+    });
+  }
+  
+  // Update table to show only top cards
+  game.table = game.elementStacks.map(stack => stack.cards[stack.cards.length - 1]);
+  
+  console.log('Table after:', game.table.map(c => ({ id: c.id, element: c.bottomElement })));
+  console.log('=== END ADD CARD ===');
+}
+
+function takeCardFromTable(game: GameState, cardId: string): GameCard | null {
+  console.log('=== TAKE CARD FROM TABLE ===');
+  console.log('Card ID to take:', cardId);
+  console.log('Stacks before:', game.elementStacks.map(s => ({ element: s.element, count: s.cards.length, topCard: s.cards[s.cards.length - 1]?.id })));
+  
+  // Find which stack contains this card
+  for (const stack of game.elementStacks) {
+    const cardIndex = stack.cards.findIndex(card => card.id === cardId);
+    if (cardIndex >= 0) {
+      // Remove card from stack
+      const [removedCard] = stack.cards.splice(cardIndex, 1);
+      
+      // If stack is empty, remove it entirely
+      if (stack.cards.length === 0) {
+        const stackIndex = game.elementStacks.indexOf(stack);
+        game.elementStacks.splice(stackIndex, 1);
+        console.log(`Stack ${stack.element} is empty, removing it`);
+      } else {
+        console.log(`Stack ${stack.element} now has ${stack.cards.length} cards, top is ${stack.cards[stack.cards.length - 1]?.id}`);
+      }
+      
+      // Update table to reflect new top cards
+      game.table = game.elementStacks.map(stack => stack.cards[stack.cards.length - 1]);
+      
+      console.log('Stacks after:', game.elementStacks.map(s => ({ element: s.element, count: s.cards.length, topCard: s.cards[s.cards.length - 1]?.id })));
+      console.log('Removed card:', { id: removedCard.id, element: removedCard.bottomElement });
+      console.log('=== END TAKE CARD ===');
+      
+      return removedCard;
+    }
+  }
+  
+  console.log('Card not found in any stack!');
+  console.log('=== END TAKE CARD ===');
+  return null;
+}
+
 export function castSpellTakeTable(
   game: GameState,
   playerId: string,
@@ -658,7 +750,8 @@ export function castSpellTakeTable(
   const idx = game.table.findIndex((c) => c.id === tableCardId);
   if (idx < 0) return "На столе нет этой карты";
 
-  const [fromTable] = game.table.splice(idx, 1);
+  const fromTable = takeCardFromTable(game, tableCardId);
+  if (!fromTable) return "Failed to take card from table";
   p.hand.splice(spellHandIndex, 1);
   
   // Проверяем это заклятие познания по элементу на карте
@@ -667,9 +760,9 @@ export function castSpellTakeTable(
   
   // Для заклятия познания карта уходит в шкаф, для других - в сброс
   if (isKnowledgeSpell) {
-    game.table.push(sc); // Заклятие познания уходит в шкаф
+    addCardToTable(game, sc); // Knowledge spell goes to table with stacking
   } else {
-    game.discard.push(sc); // Другие заклятия уходят в сброс
+    game.discard.push(sc); // Other spells go to discard
   }
   
   p.hand.push(fromTable!);
@@ -726,16 +819,16 @@ export function castSpellBreakBuilt(
       
       // Остальные карты возвращаем на стол
       const otherCards = bi.ingredients.filter((ing) => ing.id !== chosenCardId);
-      for (const card of otherCards) game.table.push(card);
+      for (const card of otherCards) addCardToTable(game, card);
       
       console.log('🎯 BREAK BUILT RETURNED TO TABLE:', otherCards.length);
     } else {
       // Если карта не найдена - возвращаем все
-      for (const ing of bi.ingredients) game.table.push(ing);
+      for (const ing of bi.ingredients) addCardToTable(game, ing);
     }
   } else {
     // Если карта не выбрана - возвращаем все
-    for (const ing of bi.ingredients) game.table.push(ing);
+    for (const ing of bi.ingredients) addCardToTable(game, ing);
   }
 
   afterSpell(game);
@@ -800,11 +893,11 @@ export function castSpellTransformBuilt(
     player: playerId 
   });
   
-  // Удаляем заклятие из руки
+  // Remove spell from hand
   p.hand.splice(spellHandIndex, 1);
-  game.table.push(sc); // Заклятие падает на стол
+  addCardToTable(game, sc); // Spell goes to table with stacking
   
-  // Удаляем собранный рецепт из собранных
+  // Remove built recipe from built recipes
   game.builtRecipes = game.builtRecipes.filter(br => br.instanceId !== builtInstanceId);
   
   // Remove the table card from table to prevent duplication
@@ -812,10 +905,10 @@ export function castSpellTransformBuilt(
   
   // Break down the recipe and put all cards on table
   // Recipe card itself
-  game.table.push(builtRecipe.card);
+  addCardToTable(game, builtRecipe.card);
   // Recipe ingredients
   for (const ingredient of builtRecipe.ingredients) {
-    game.table.push(ingredient);
+    addCardToTable(game, ingredient);
   }
   
   // Карта со стола становится собранным рецептом (не дает баллов!)
