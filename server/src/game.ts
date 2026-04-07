@@ -109,7 +109,7 @@ export function makeDeck(): GameCard[] {
     "28": { topType: "recipe", topContent: "эликсир знания", bottomElement: "родниковая вода", points: 2 },
     "29": { topType: "recipe", topContent: "эликсир тайного зрения", bottomElement: "крыло летучей мыши", points: 2 },
     "30": { topType: "recipe", topContent: "раствор-оберег", bottomElement: "перо феникса", points: 2 },
-    "31": { topType: "recipe", topContent: "эликсир мудрости", bottomElement: "квинтэссенция воли", points: 3 },
+    "31": { topType: "recipe", topContent: "эликсир мудрости", bottomElement: "астральная энергия", points: 3 },
     "32": { topType: "recipe", topContent: "эликсир забвения", bottomElement: "цветок папоротника", points: 2 },
     "33": { topType: "recipe", topContent: "зелье полиглотум", bottomElement: "белладонна", points: 2 },
     "34": { topType: "recipe", topContent: "эманация власти", bottomElement: "волны эфира", points: 2 },
