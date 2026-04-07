@@ -948,6 +948,20 @@ export function castSpellTransformBuilt(
     game.table.splice(chosenCardIndex, 1);
   }
   
+  // Create new built recipe with chosen card
+  const newBuiltRecipe: BuiltRecipe = {
+    instanceId: randomUUID(),
+    ownerId: playerId,
+    card: chosenCard,
+    recipeDefId: chosenCard.face.kind === "recipe" ? (chosenCard.face as any).defId : "transformed_card",
+    points: 1, // Default points for transformed card
+    originalPoints: 1,
+    name: chosenCard.face.kind === "recipe" ? (chosenCard.face as any).defId : "Transformed Card",
+    ingredients: [] // No ingredients for transformed card
+  };
+  
+  game.builtRecipes.push(newBuiltRecipe);
+  
   // Break down the recipe and put all cards on table
   // Recipe card itself
   addCardToTable(game, builtRecipe.card);
