@@ -496,6 +496,25 @@ function validateBuiltSelection(
     return allGreatElixirs as BuiltRecipe[];
   }
   
+  // Special logic for any_talisman
+  if (needsBuilt.some(n => n.recipeDefId === "any_talisman")) {
+    const needCount = needsBuilt.find(n => n.recipeDefId === "any_talisman")?.count ?? 0;
+    
+    // Check that all selected recipes are talismans (8 original points)
+    // And exclude great_magic_talisman itself from selection
+    const allTalismans = selected.filter(r => 
+      r!.originalPoints === 8 && r!.recipeDefId !== "great_magic_talisman"
+    );
+    
+    if (allTalismans.length !== needCount) {
+      console.log('any_talisman: need', needCount, 'talismans, got', allTalismans.length);
+      return null;
+    }
+    
+    console.log('any_talisman: validated', allTalismans.length, 'talismans');
+    return allTalismans as BuiltRecipe[];
+  }
+  
   // Стандартная логика для точного совпадения
   const needFlat = needsBuilt.flatMap((n) => Array.from({ length: n.count }, () => n.recipeDefId)).sort();
   const got = selected.map((b) => b!.recipeDefId).sort();
