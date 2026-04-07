@@ -686,23 +686,40 @@ export default function App() {
                   const mine = b.ownerId === myId;
                   const breakMode = spellBreakIdx !== null && canAct && mine;
                   const transformMode = spellTransform !== null && canAct && mine;
+                  const isSelected = craftHandIndex !== null && craftDef?.needsBuilt?.length && craftBuiltIds.includes(b.instanceId);
                   return (
                     <div 
                       key={b.instanceId} 
                       className="built-row"
-                      style={{ cursor: transformMode ? 'pointer' : 'default', border: transformMode ? '2px solid var(--accent)' : 'none' }}
+                      style={{ 
+                        cursor: (transformMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default', 
+                        border: transformMode ? '2px solid var(--accent)' : isSelected ? '2px solid var(--accent)' : 'none',
+                        backgroundColor: isSelected ? 'rgba(var(--accent-rgb), 0.1)' : 'transparent',
+                        transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                        transition: 'all 0.2s ease'
+                      }}
                       onClick={() => {
+                        console.log('RECIPE CLICKED FOR BREAK:', { 
+                          recipeId: b.instanceId, 
+                          recipeName: b.name,
+                          isMine: mine,
+                          breakMode: breakMode,
+                          spellBreakIdx: spellBreakIdx
+                        });
                         if (transformMode && spellTransform) {
                           setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
+                        }
+                        if (breakMode && spellBreakIdx !== null) {
+                          console.log('SETTING BREAKING RECIPE ID:', b.instanceId);
+                          setBreakingRecipeId(b.instanceId);
+                        }
+                        // Add craft selection logic
+                        if (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine) {
+                          toggleBuiltForCraft(b);
                         }
                       }}
                     >
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-                          <strong>{b.name}</strong>
-                          <span> {b.points} очк.</span>
-                          <span style={{ color: "var(--muted)" }}> ({b.ownerName})</span>
-                        </div>
                         <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}>
                           <HandCardBlock
                             card={b.card}
@@ -734,23 +751,40 @@ export default function App() {
                   const mine = b.ownerId === myId;
                   const breakMode = spellBreakIdx !== null && canAct && mine;
                   const transformMode = spellTransform !== null && canAct && mine;
+                  const isSelected = craftHandIndex !== null && craftDef?.needsBuilt?.length && craftBuiltIds.includes(b.instanceId);
                   return (
                     <div 
                       key={b.instanceId} 
                       className="built-row"
-                      style={{ cursor: transformMode ? 'pointer' : 'default', border: transformMode ? '2px solid var(--accent)' : 'none' }}
+                      style={{ 
+                        cursor: (transformMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default', 
+                        border: transformMode ? '2px solid var(--accent)' : isSelected ? '2px solid var(--accent)' : 'none',
+                        backgroundColor: isSelected ? 'rgba(var(--accent-rgb), 0.1)' : 'transparent',
+                        transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                        transition: 'all 0.2s ease'
+                      }}
                       onClick={() => {
+                        console.log('RECIPE CLICKED FOR BREAK:', { 
+                          recipeId: b.instanceId, 
+                          recipeName: b.name,
+                          isMine: mine,
+                          breakMode: breakMode,
+                          spellBreakIdx: spellBreakIdx
+                        });
                         if (transformMode && spellTransform) {
                           setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
+                        }
+                        if (breakMode && spellBreakIdx !== null) {
+                          console.log('SETTING BREAKING RECIPE ID:', b.instanceId);
+                          setBreakingRecipeId(b.instanceId);
+                        }
+                        // Add craft selection logic
+                        if (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine) {
+                          toggleBuiltForCraft(b);
                         }
                       }}
                     >
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-                          <strong>{b.name}</strong>
-                          <span> {b.points} очк.</span>
-                          <span style={{ color: "var(--muted)" }}> ({b.ownerName})</span>
-                        </div>
                         <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}>
                           <HandCardBlock
                             card={b.card}
