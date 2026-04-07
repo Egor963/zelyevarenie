@@ -678,73 +678,103 @@ export default function App() {
               <p className="hint">Кликните свой рецепт, чтобы трансформировать его.</p>
             )}
             {snap.builtRecipes.length === 0 && <span style={{ color: "var(--muted)" }}>пока нет</span>}
-            {snap.builtRecipes.map((b) => {
-              const mine = b.ownerId === myId;
-              const breakMode = spellBreakIdx !== null && canAct && mine;
-              const transformMode = spellTransform !== null && canAct && mine;
-              return (
-                <div 
-                  key={b.instanceId} 
-                  className="built-row"
-                  style={{ cursor: transformMode ? 'pointer' : 'default', border: transformMode ? '2px solid var(--accent)' : 'none' }}
-                  onClick={() => {
-                    if (transformMode && spellTransform) {
-                      setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
-                    }
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {/* Показываем полноценную карточку рецепта */}
-                    <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}>
-                      <HandCardBlock
-                        card={b.card}
-                        index={-1}
-                        catalog={snap.recipeCatalog}
-                        canAct={false}
-                        craftHandIndex={null}
-                        spellSwap={null}
-                        spellTransform={null}
-                        onPlace={() => {}}
-                        onStartCraft={() => {}}
-                        onSpellTake={() => {}}
-                        onSpellBreak={() => {}}
-                        onSpellSwapStart={() => {}}
-                        onSpellSwapPickHand={() => {}}
-                        onSpellTransformStart={() => {}}
-                      />
-                    </div>
-                    <div>
-                      <strong>{b.name}</strong>
-                      <span> {b.points} очк.</span>
-                      <span style={{ color: "var(--muted)" }}> ({b.ownerName})</span>
-                    </div>
-                  </div>
-                  {breakMode && (
-                    <button
-                      type="button"
-                      className="primary"
+            <div style={{ display: 'flex', gap: '2rem' }}>
+              {/* Left column - Player 1 built recipes */}
+              <div style={{ flex: 1 }}>
+                <h3 style={{ marginTop: 0, color: "var(--accent)" }}>{snap.players[0]?.name || 'Левый игрок'}</h3>
+                {snap.players[0] && snap.builtRecipes.filter(b => b.ownerId === snap.players[0].id).map((b) => {
+                  const mine = b.ownerId === myId;
+                  const breakMode = spellBreakIdx !== null && canAct && mine;
+                  const transformMode = spellTransform !== null && canAct && mine;
+                  return (
+                    <div 
+                      key={b.instanceId} 
+                      className="built-row"
+                      style={{ cursor: transformMode ? 'pointer' : 'default', border: transformMode ? '2px solid var(--accent)' : 'none' }}
                       onClick={() => {
-                        console.log('🎯 START BREAKING RECIPE:', { recipeId: b.instanceId });
-                        setBreakingRecipeId(b.instanceId);
-                        setChosenCardId(null);
+                        if (transformMode && spellTransform) {
+                          setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
+                        }
                       }}
                     >
-                      Разобрать
-                    </button>
-                  )}
-                  {craftHandIndex !== null && craftDef?.needsBuilt?.length ? (
-                    <label style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                      <input
-                        type="checkbox"
-                        checked={craftBuiltIds.includes(b.instanceId)}
-                        onChange={() => toggleBuiltForCraft(b)}
-                      />
-                      использовать
-                    </label>
-                  ) : null}
-                </div>
-              );
-            })}
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+                          <strong>{b.name}</strong>
+                          <span> {b.points} очк.</span>
+                          <span style={{ color: "var(--muted)" }}> ({b.ownerName})</span>
+                        </div>
+                        <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}>
+                          <HandCardBlock
+                            card={b.card}
+                            index={-1}
+                            catalog={snap.recipeCatalog}
+                            canAct={false}
+                            craftHandIndex={null}
+                            spellSwap={null}
+                            spellTransform={null}
+                            onPlace={() => {}}
+                            onStartCraft={() => {}}
+                            onSpellTake={() => {}}
+                            onSpellBreak={() => {}}
+                            onSpellSwapStart={() => {}}
+                            onSpellSwapPickHand={() => {}}
+                            onSpellTransformStart={() => {}}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              {/* Right column - Player 2 built recipes */}
+              <div style={{ flex: 1 }}>
+                <h3 style={{ marginTop: 0, color: "var(--accent)" }}>{snap.players[1]?.name || 'Правый игрок'}</h3>
+                {snap.players[1] && snap.builtRecipes.filter(b => b.ownerId === snap.players[1].id).map((b) => {
+                  const mine = b.ownerId === myId;
+                  const breakMode = spellBreakIdx !== null && canAct && mine;
+                  const transformMode = spellTransform !== null && canAct && mine;
+                  return (
+                    <div 
+                      key={b.instanceId} 
+                      className="built-row"
+                      style={{ cursor: transformMode ? 'pointer' : 'default', border: transformMode ? '2px solid var(--accent)' : 'none' }}
+                      onClick={() => {
+                        if (transformMode && spellTransform) {
+                          setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
+                        }
+                      }}
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+                          <strong>{b.name}</strong>
+                          <span> {b.points} очк.</span>
+                          <span style={{ color: "var(--muted)" }}> ({b.ownerName})</span>
+                        </div>
+                        <div style={{ transform: 'scale(0.8)', transformOrigin: 'top left' }}>
+                          <HandCardBlock
+                            card={b.card}
+                            index={-1}
+                            catalog={snap.recipeCatalog}
+                            canAct={false}
+                            craftHandIndex={null}
+                            spellSwap={null}
+                            spellTransform={null}
+                            onPlace={() => {}}
+                            onStartCraft={() => {}}
+                            onSpellTake={() => {}}
+                            onSpellBreak={() => {}}
+                            onSpellSwapStart={() => {}}
+                            onSpellSwapPickHand={() => {}}
+                            onSpellTransformStart={() => {}}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </section>
 
           <section className="panel">
