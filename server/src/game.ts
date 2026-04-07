@@ -807,10 +807,13 @@ export function castSpellTransformBuilt(
   // Удаляем собранный рецепт из собранных
   game.builtRecipes = game.builtRecipes.filter(br => br.instanceId !== builtInstanceId);
   
-  // Разбираем рецепт и кладем все карты в шкаф
-  // Карта самого рецепта
+  // Remove the table card from table to prevent duplication
+  game.table.splice(tableIdx, 1);
+  
+  // Break down the recipe and put all cards on table
+  // Recipe card itself
   game.table.push(builtRecipe.card);
-  // Ингредиенты рецепта
+  // Recipe ingredients
   for (const ingredient of builtRecipe.ingredients) {
     game.table.push(ingredient);
   }
