@@ -372,6 +372,9 @@ export const RECIPES: RecipeDef[] = [
     id: "great_magic_talisman",
     name: "великий талисман магии",
     needs: {},
+    needsBuilt: [
+      { recipeDefId: "any_talisman", count: 2 }
+    ],
     points: 10
   },
   // Трансформированная карта - универсальный ингредиент
