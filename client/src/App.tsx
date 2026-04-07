@@ -102,6 +102,7 @@ export default function App() {
   const [spellTransform, setSpellTransform] = useState<{ spellIdx: number; builtInstanceId: string | null } | null>(null);
   const [breakingRecipeId, setBreakingRecipeId] = useState<string | null>(null);
   const [chosenCardId, setChosenCardId] = useState<string | null>(null);
+  const [activeSpellMode, setActiveSpellMode] = useState<string | null>(null);
 
   const clearModes = useCallback(() => {
     setCraftHandIndex(null);
@@ -113,6 +114,7 @@ export default function App() {
     setSpellTransform(null);
     setBreakingRecipeId(null);
     setChosenCardId(null);
+    setActiveSpellMode(null);
   }, []);
 
   useEffect(() => {
@@ -270,16 +272,19 @@ export default function App() {
   const onSpellTake = (handIndex: number) => {
     clearModes();
     setSpellTakeIdx(handIndex);
+    setActiveSpellMode('take_table');
   };
 
   const onSpellBreak = (handIndex: number) => {
     clearModes();
     setSpellBreakIdx(handIndex);
+    setActiveSpellMode('break_built');
   };
 
   const onSpellSwapStart = (handIndex: number) => {
     clearModes();
     setSpellSwap({ spellIdx: handIndex, tableId: null });
+    setActiveSpellMode('swap_elements');
   };
 
   const onSpellSwapPickHand = (handIndex: number) => {
@@ -696,27 +701,52 @@ export default function App() {
                     const isSelected = craftSelected || breakSelected || transformSelected;
                     const cursorMode = (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default';
                     return (
-                      <HandCardBlock
+                      <div 
                         key={b.instanceId}
-                        card={b.card}
-                        index={-1}
-                        catalog={snap.recipeCatalog}
-                        canAct={false}
-                        craftHandIndex={null}
-                        spellSwap={null}
-                        spellTransform={null}
-                        onPlace={() => {}}
-                        onStartCraft={() => {}}
-                        onSpellTake={() => {}}
-                        onSpellBreak={() => {}}
-                        onSpellSwapStart={() => {}}
-                        onSpellSwapPickHand={() => {}}
-                        onSpellTransformStart={() => {}}
-                      />
+                        onClick={() => {
+                          if (transformMode && mine) {
+                            setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
+                          } else if (breakMode && mine) {
+                            setBreakingRecipeId(b.instanceId);
+                          }
+                        }}
+                        style={{ 
+                          cursor: (transformMode || breakMode) && mine ? 'pointer' : 'default',
+                          border: (transformSelected || breakSelected) ? '3px solid #FFD700' : (activeSpellMode && mine ? '2px solid rgba(255, 215, 0, 0.3)' : 'none'),
+                          borderRadius: '8px',
+                          padding: '2px',
+                          transition: 'all 0.2s ease-in-out'
+                        }}
+                      >
+                        <HandCardBlock
+                          card={b.card}
+                          index={-1}
+                          catalog={snap.recipeCatalog}
+                          canAct={false}
+                          craftHandIndex={null}
+                          spellSwap={null}
+                          spellTransform={null}
+                          onPlace={() => {}}
+                          onStartCraft={() => {}}
+                          onSpellTake={() => {}}
+                          onSpellBreak={() => {}}
+                          onSpellSwapStart={() => {}}
+                          onSpellSwapPickHand={() => {}}
+                          onSpellTransformStart={() => {}}
+                        />
+                      </div>
                     );
                   })}
                 </div>
               </div>
+              
+              {/* Vertical divider line */}
+              <div style={{
+                width: '2px',
+                backgroundColor: 'var(--accent)',
+                opacity: 0.3,
+                margin: '0 1rem'
+              }} />
               
               {/* Right section - Player 2 built recipes */}
               <div style={{ flex: 1 }}>
@@ -736,23 +766,40 @@ export default function App() {
                     const isSelected = craftSelected || breakSelected || transformSelected;
                     const cursorMode = (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default';
                     return (
-                      <HandCardBlock
+                      <div 
                         key={b.instanceId}
-                        card={b.card}
-                        index={-1}
-                        catalog={snap.recipeCatalog}
-                        canAct={false}
-                        craftHandIndex={null}
-                        spellSwap={null}
-                        spellTransform={null}
-                        onPlace={() => {}}
-                        onStartCraft={() => {}}
-                        onSpellTake={() => {}}
-                        onSpellBreak={() => {}}
-                        onSpellSwapStart={() => {}}
-                        onSpellSwapPickHand={() => {}}
-                        onSpellTransformStart={() => {}}
-                      />
+                        onClick={() => {
+                          if (transformMode && mine) {
+                            setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
+                          } else if (breakMode && mine) {
+                            setBreakingRecipeId(b.instanceId);
+                          }
+                        }}
+                        style={{ 
+                          cursor: (transformMode || breakMode) && mine ? 'pointer' : 'default',
+                          border: (transformSelected || breakSelected) ? '3px solid #FFD700' : (activeSpellMode && mine ? '2px solid rgba(255, 215, 0, 0.3)' : 'none'),
+                          borderRadius: '8px',
+                          padding: '2px',
+                          transition: 'all 0.2s ease-in-out'
+                        }}
+                      >
+                        <HandCardBlock
+                          card={b.card}
+                          index={-1}
+                          catalog={snap.recipeCatalog}
+                          canAct={false}
+                          craftHandIndex={null}
+                          spellSwap={null}
+                          spellTransform={null}
+                          onPlace={() => {}}
+                          onStartCraft={() => {}}
+                          onSpellTake={() => {}}
+                          onSpellBreak={() => {}}
+                          onSpellSwapStart={() => {}}
+                          onSpellSwapPickHand={() => {}}
+                          onSpellTransformStart={() => {}}
+                        />
+                      </div>
                     );
                   })}
                 </div>
@@ -784,7 +831,10 @@ export default function App() {
                       onSpellBreak={() => onSpellBreak(i)}
                       onSpellSwapStart={() => onSpellSwapStart(i)}
                       onSpellSwapPickHand={() => onSpellSwapPickHand(i)}
-                      onSpellTransformStart={() => setSpellTransform({ spellIdx: i, builtInstanceId: null })}
+                      onSpellTransformStart={() => {
+                      setSpellTransform({ spellIdx: i, builtInstanceId: null });
+                      setActiveSpellMode('transform_built');
+                    }}
                     />
                   </div>
                 ))}
@@ -910,7 +960,7 @@ export default function App() {
                       const payload = { 
                         spellHandIndex: spellBreakIdx, 
                         builtInstanceId: breakingRecipeId,
-                        chosenCardId 
+                        chosenCardId: chosenCardId
                       };
                       
                       console.log('🎯 CONFIRM BREAK PAYLOAD:', payload);

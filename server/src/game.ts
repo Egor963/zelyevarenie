@@ -776,9 +776,9 @@ export function castSpellBreakBuilt(
   playerId: string,
   spellHandIndex: number,
   builtInstanceId: string,
-  chosenCardId?: string
+  chosenCardIdx?: string | undefined
 ): string | null {
-  console.log('🎯 BREAK BUILT START:', { playerId, builtInstanceId, chosenCardId });
+  console.log('🎯 BREAK BUILT START:', { playerId, builtInstanceId, chosenCardIdx });
   
   if (game.phase !== "playing") return "Игра не идёт";
   const p = currentPlayer(game);
@@ -797,29 +797,43 @@ export function castSpellBreakBuilt(
   game.builtRecipes = game.builtRecipes.filter((b) => b.instanceId !== builtInstanceId);
 
   // Если выбрана конкретная карточка - забираем ее себе (без очков)
-  if (chosenCardId) {
-    const chosenCard = bi.ingredients.find((ing) => ing.id === chosenCardId);
+  if (chosenCardIdx) {
+    const chosenCard = bi.ingredients.find((ing) => ing.id === chosenCardIdx);
     if (chosenCard) {
       console.log('🎯 BREAK BUILT CHOSEN CARD:', chosenCard);
       
-      // Создаем новый "рецепт" из одной карточки
-      const newBuiltRecipe: BuiltRecipe = {
-        instanceId: `built-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        ownerId: playerId,
-        card: chosenCard,
-        recipeDefId: `single_card_${chosenCard.bottomElement}`,
-        points: 0, // Без очков
-        originalPoints: 0, // Без оригинальных очков
-        name: `Карточка: ${chosenCard.bottomElement}`,
-        ingredients: [chosenCard] // Сохраняем как ингредиент
-      };
-      
-      game.builtRecipes.push(newBuiltRecipe);
-      console.log('🎯 BREAK BUILT NEW RECIPE ADDED:', newBuiltRecipe);
+      if (chosenCard.face.kind === "spell") {
+        // Если выбрано заклятие - добавляем в руку
+        p.hand.push(chosenCard);
+        console.log('🎯 BREAK BUILT SPELL ADDED TO HAND:', chosenCard);
+      } else {
+        // Если выбрана обычная карта - создаем новый рецепт
+        const newBuiltRecipe: BuiltRecipe = {
+          instanceId: `built-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          ownerId: playerId,
+          card: chosenCard,
+          recipeDefId: `single_card_${chosenCard.bottomElement}`,
+          points: 0, // Без очков
+          originalPoints: 0, // Без оригинальных очков
+          name: `Карточка: ${chosenCard.bottomElement}`,
+          ingredients: [chosenCard] // Сохраняем как ингредиент
+        };
+        
+        game.builtRecipes.push(newBuiltRecipe);
+        console.log('🎯 BREAK BUILT NEW RECIPE ADDED:', newBuiltRecipe);
+      }
       
       // Остальные карты возвращаем на стол
-      const otherCards = bi.ingredients.filter((ing) => ing.id !== chosenCardId);
-      for (const card of otherCards) addCardToTable(game, card);
+      const otherCards = bi.ingredients.filter((ing) => ing.id !== chosenCardIdx);
+      for (const card of otherCards) {
+        if (card.face.kind === "spell") {
+          // Заклятия добавляем в руку
+          p.hand.push(card);
+        } else {
+          // Остальные карты на стол
+          addCardToTable(game, card);
+        }
+      }
       
       console.log('🎯 BREAK BUILT RETURNED TO TABLE:', otherCards.length);
     } else {
@@ -870,7 +884,7 @@ export function castSpellTransformBuilt(
   playerId: string,
   spellHandIndex: number,
   builtInstanceId: string,
-  tableCardId: string
+  chosenCardIdx?: string | undefined
 ): string | null {
   if (game.phase !== "playing") return "Игра не идёт";
   const p = currentPlayer(game);
@@ -882,16 +896,44 @@ export function castSpellTransformBuilt(
   const builtRecipe = game.builtRecipes.find(br => br.instanceId === builtInstanceId && br.ownerId === playerId);
   if (!builtRecipe) return "Можно трансформировать только свои собранные рецепты";
   
-  // Находим карту на столе
-  const tableIdx = game.table.findIndex((c) => c.id === tableCardId);
-  if (tableIdx < 0) return "На столе нет этой карты";
-  const tableCard = game.table[tableIdx]!;
+  // Если chosenCardIdx не указан, разрушаем рецепт
+  if (!chosenCardIdx) {
+    // Remove spell from hand
+    p.hand.splice(spellHandIndex, 1);
+    addCardToTable(game, sc); // Spell goes to table with stacking
+    
+    // Remove built recipe from built recipes
+    game.builtRecipes = game.builtRecipes.filter(br => br.instanceId !== builtInstanceId);
+    
+    // Remove table card from table to prevent duplication
+    const tableIdx = game.table.findIndex((c) => c.id === builtRecipe.card.id);
+    if (tableIdx >= 0) {
+      game.table.splice(tableIdx, 1);
+    }
+    
+    // Break down the recipe and put all cards on table
+    // Recipe card itself
+    addCardToTable(game, builtRecipe.card);
+    // Recipe ingredients
+    for (const ingredient of builtRecipe.ingredients) {
+      addCardToTable(game, ingredient);
+    }
+    
+    console.log('🎯 BREAK COMPLETE:', { 
+      brokenRecipe: builtRecipe.recipeDefId,
+      player: playerId 
+    });
+    
+    // После разрушения игрок делает дополнительный ход как в познании
+    afterSpell(game, true); // Дополнительный ход как у заклятия познания
+    return null;
+  }
   
-  console.log('🎯 TRANSFORM BUILT:', { 
-    builtRecipe: builtRecipe.recipeDefId, 
-    tableCard: tableCard.bottomElement,
-    player: playerId 
-  });
+  // Если chosenCardIdx указан, выбираем карту для разрушения
+  const chosenCard = game.table.find((c) => c.id === chosenCardIdx);
+  if (!chosenCard) return "На столе нет этой карты";
+  
+  console.log('🎯 BREAK WITH CHOSEN CARD:', { chosenCard, builtRecipe });
   
   // Remove spell from hand
   p.hand.splice(spellHandIndex, 1);
@@ -900,8 +942,11 @@ export function castSpellTransformBuilt(
   // Remove built recipe from built recipes
   game.builtRecipes = game.builtRecipes.filter(br => br.instanceId !== builtInstanceId);
   
-  // Remove the table card from table to prevent duplication
-  game.table.splice(tableIdx, 1);
+  // Remove chosen card from table
+  const chosenCardIndex = game.table.findIndex((c) => c.id === chosenCardIdx);
+  if (chosenCardIndex >= 0) {
+    game.table.splice(chosenCardIndex, 1);
+  }
   
   // Break down the recipe and put all cards on table
   // Recipe card itself
@@ -911,46 +956,13 @@ export function castSpellTransformBuilt(
     addCardToTable(game, ingredient);
   }
   
-  // Карта со стола становится собранным рецептом (не дает баллов!)
-  // Определяем тип трансформированной карты
-  let transformedRecipeId = "transformed_card";
-  let transformedPoints = 0; // По умолчанию 0 очков
-  
-  if (tableCard.face.kind === "recipe") {
-    // Если это рецепт, используем его реальный ID и очки
-    transformedRecipeId = tableCard.face.defId;
-    // Получаем очки из определения рецепта
-    const recipeDef = getRecipeDef(tableCard.face.defId);
-    transformedPoints = recipeDef?.points ?? 0;
-  } else if (tableCard.face.kind === "spell") {
-    // Если это заклятие, создаем специальный ID
-    transformedRecipeId = "transformed_spell";
-    transformedPoints = 0;
-  } else {
-    // Для других типов карты используем универсальный ID
-    transformedRecipeId = "transformed_card";
-    transformedPoints = 0;
-  }
-  
-  const newBuiltRecipe: BuiltRecipe = {
-    instanceId: `built_${Date.now()}_${playerId}`,
-    recipeDefId: transformedRecipeId, // Используем реальный ID трансформированной карты
-    ownerId: playerId,
-    card: tableCard, // Карта со стола становится картой рецепта
-    points: 0, // Трансформированные не дают очков игроку
-    originalPoints: transformedPoints, // Сохраняем оригинальные очки для системы крафта
-    name: `Трансформированный: ${tableCard.face.kind === 'recipe' ? getRecipeDef(tableCard.face.defId)?.name || tableCard.face.defId : tableCard.face.kind}`, // Имя для отображения
-    ingredients: [] // Пустые ингредиенты для трансформированных карт
-  };
-  
-  game.builtRecipes.push(newBuiltRecipe);
-  
-  console.log('🎯 TRANSFORM COMPLETE:', { 
-    newBuilt: newBuiltRecipe,
-    tableNowHas: game.table.length 
+  console.log('🎯 BREAK WITH CHOSEN COMPLETE:', { 
+    brokenRecipe: builtRecipe.recipeDefId,
+    chosenCard: chosenCard.id,
+    player: playerId 
   });
   
-  // После трансформы игрок делает дополнительный ход как в познании
+  // После разрушения игрок делает дополнительный ход как в познании
   afterSpell(game, true); // Дополнительный ход как у заклятия познания
   return null;
 }
