@@ -924,8 +924,8 @@ export function castSpellTransformBuilt(
       player: playerId 
     });
     
-    // После разрушения игрок делает дополнительный ход как в познании
-    afterSpell(game, true); // Дополнительный ход как у заклятия познания
+    // После разрушения игрок делает дополнительный ход как и другие заклятия
+    afterSpell(game);
     return null;
   }
   
@@ -976,7 +976,7 @@ export function castSpellTransformBuilt(
     player: playerId 
   });
   
-  // После разрушения игрок делает дополнительный ход как в познании
-  afterSpell(game, true); // Дополнительный ход как у заклятия познания
+  // После трансформации игрок делает дополнительный ход как и другие заклятия
+  afterSpell(game);
   return null;
 }
