@@ -699,16 +699,16 @@ export default function App() {
                     const breakSelected = breakingRecipeId === b.instanceId;
                     const transformSelected = spellTransform?.builtInstanceId === b.instanceId;
                     const isSelected = craftSelected || breakSelected || transformSelected;
-                    const cursorMode = (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default';
+                    const cursorMode = (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length )) ? 'pointer' : 'default';
                     return (
                       <div 
                         key={b.instanceId}
                         onClick={() => {
-                          if (transformMode && mine) {
+                          if (transformMode ) {
                             setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
-                          } else if (breakMode && mine) {
+                          } else if (breakMode ) {
                             setBreakingRecipeId(b.instanceId);
-                          } else if (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine) {
+                          } else if (craftHandIndex !== null && craftDef?.needsBuilt?.length ) {
                             // Toggle selection for complex recipes
                             if (craftBuiltIds.includes(b.instanceId)) {
                               setCraftBuiltIds(prev => prev.filter(id => id !== b.instanceId));
@@ -718,7 +718,7 @@ export default function App() {
                           }
                         }}
                         style={{ 
-                          cursor: (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default',
+                          cursor: (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length )) ? 'pointer' : 'default',
                           border: (transformSelected || breakSelected) ? '3px solid #FFD700' : (craftSelected ? '3px solid #FFD700' : (activeSpellMode && mine ? '2px solid rgba(255, 215, 0, 0.3)' : 'none')),
                           borderRadius: '8px',
                           padding: '2px',
@@ -771,16 +771,16 @@ export default function App() {
                     const breakSelected = breakingRecipeId === b.instanceId;
                     const transformSelected = spellTransform?.builtInstanceId === b.instanceId;
                     const isSelected = craftSelected || breakSelected || transformSelected;
-                    const cursorMode = (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default';
+                    const cursorMode = (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length )) ? 'pointer' : 'default';
                     return (
                       <div 
                         key={b.instanceId}
                         onClick={() => {
-                          if (transformMode && mine) {
+                          if (transformMode ) {
                             setSpellTransform({ ...spellTransform, builtInstanceId: b.instanceId });
-                          } else if (breakMode && mine) {
+                          } else if (breakMode ) {
                             setBreakingRecipeId(b.instanceId);
-                          } else if (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine) {
+                          } else if (craftHandIndex !== null && craftDef?.needsBuilt?.length ) {
                             // Toggle selection for complex recipes
                             if (craftBuiltIds.includes(b.instanceId)) {
                               setCraftBuiltIds(prev => prev.filter(id => id !== b.instanceId));
@@ -790,7 +790,7 @@ export default function App() {
                           }
                         }}
                         style={{ 
-                          cursor: (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length && mine)) ? 'pointer' : 'default',
+                          cursor: (transformMode || breakMode || (craftHandIndex !== null && craftDef?.needsBuilt?.length )) ? 'pointer' : 'default',
                           border: (transformSelected || breakSelected) ? '3px solid #FFD700' : (craftSelected ? '3px solid #FFD700' : (activeSpellMode && mine ? '2px solid rgba(255, 215, 0, 0.3)' : 'none')),
                           borderRadius: '8px',
                           padding: '2px',
