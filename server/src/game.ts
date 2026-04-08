@@ -837,10 +837,6 @@ export function castSpellBreakBuilt(
       addCardToTable(game, bi.card);      // Если карта не найдена - возвращаем все
       for (const ing of bi.ingredients) if (ing.id !== chosenCardIdx) addCardToTable(game, ing);
     }
-    // Если карта не выбрана - возвращаем все
-      // Add the recipe card itself to table
-    addCardToTable(game, bi.card);
-    for (const ing of bi.ingredients) if (ing.id !== chosenCardIdx) addCardToTable(game, ing);
     afterSpell(game, true); // Turno adicional como en el hechizo de conocimiento
   }
   
@@ -944,7 +940,12 @@ export function castSpellTransformBuilt(
   const chosenCardIndex = game.table.findIndex((c) => c.id === chosenCardIdx);
   // Remove chosen card from table using proper function
   takeCardFromTable(game, chosenCardIdx);  
-  // Create new built recipe with chosen card
+  
+  // If chosen card is a spell - add to hand instead of creating built recipe
+  if (chosenCard.face.kind === "spell") {
+    p.hand.push(chosenCard);
+    console.log("🎯 TRANSFORM SPELL ADDED TO HAND:", chosenCard);
+  } else {    // Create new built recipe with chosen card
   const newBuiltRecipe: BuiltRecipe = {
     instanceId: randomUUID(),
     ownerId: playerId,
@@ -957,9 +958,9 @@ export function castSpellTransformBuilt(
   };
   
   game.builtRecipes.push(newBuiltRecipe);
+  }
   
-  // Break down the recipe and put all cards on table
-  // Recipe card itself
+  // Break down the recipe and put all cards on table (always execute)  // Recipe card itself
   addCardToTable(game, builtRecipe.card);
   // Recipe ingredients
   for (const ingredient of builtRecipe.ingredients) {
