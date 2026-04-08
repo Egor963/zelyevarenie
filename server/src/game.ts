@@ -762,7 +762,7 @@ export function castSpellTakeTable(
   if (isKnowledgeSpell) {
     addCardToTable(game, sc); // Knowledge spell goes to table with stacking
   } else {
-    game.discard.push(sc); // Other spells go to discard
+    addCardToTable(game, sc); // Spell goes to table with stacking // Other spells go to discard
   }
   
   p.hand.push(fromTable!);
@@ -793,7 +793,7 @@ export function castSpellBreakBuilt(
   console.log('🎯 BREAK BUILT RECIPE:', { name: bi.name, ingredients: bi.ingredients });
 
   p.hand.splice(spellHandIndex, 1);
-  game.discard.push(sc);
+  addCardToTable(game, sc); // Spell goes to table with stacking
   game.builtRecipes = game.builtRecipes.filter((b) => b.instanceId !== builtInstanceId);
 
   // Если выбрана конкретная карточка - забираем ее себе (без очков)
@@ -823,29 +823,27 @@ export function castSpellBreakBuilt(
         console.log('🎯 BREAK BUILT NEW RECIPE ADDED:', newBuiltRecipe);
       }
       
-      // Остальные карты возвращаем на стол
+      // Add the recipe card itself to table
+      addCardToTable(game, bi.card);      // Остальные карты возвращаем на стол
       const otherCards = bi.ingredients.filter((ing) => ing.id !== chosenCardIdx);
       for (const card of otherCards) {
-        if (card.face.kind === "spell") {
-          // Заклятия добавляем в руку
-          p.hand.push(card);
-        } else {
-          // Остальные карты на стол
-          addCardToTable(game, card);
-        }
+        // All remaining cards go to table (regardless of type)
+        addCardToTable(game, card);          // Остальные карты на стол
       }
       
       console.log('🎯 BREAK BUILT RETURNED TO TABLE:', otherCards.length);
     } else {
-      // Если карта не найдена - возвращаем все
-      for (const ing of bi.ingredients) addCardToTable(game, ing);
+      // Add the recipe card itself to table
+      addCardToTable(game, bi.card);      // Если карта не найдена - возвращаем все
+      for (const ing of bi.ingredients) if (ing.id !== chosenCardIdx) addCardToTable(game, ing);
     }
-  } else {
     // Если карта не выбрана - возвращаем все
-    for (const ing of bi.ingredients) addCardToTable(game, ing);
+      // Add the recipe card itself to table
+    addCardToTable(game, bi.card);
+    for (const ing of bi.ingredients) if (ing.id !== chosenCardIdx) addCardToTable(game, ing);
+    afterSpell(game, true); // Turno adicional como en el hechizo de conocimiento
   }
-
-  afterSpell(game);
+  
   console.log('🎯 BREAK BUILT SUCCESS');
   return null;
 }
@@ -873,9 +871,9 @@ export function castSpellSwap(
   p.hand[otherHandIndex] = tableCard;
   game.table[ti] = hc;
   p.hand.splice(spellHandIndex, 1);
-  game.discard.push(sc);
+  addCardToTable(game, sc); // Spell goes to table with stacking
 
-  afterSpell(game);
+  afterSpell(game, true);
   return null;
 }
 
@@ -925,7 +923,7 @@ export function castSpellTransformBuilt(
     });
     
     // После разрушения игрок делает дополнительный ход как и другие заклятия
-    afterSpell(game);
+    afterSpell(game, true);
     return null;
   }
   
@@ -977,6 +975,6 @@ export function castSpellTransformBuilt(
   });
   
   // После трансформации игрок делает дополнительный ход как и другие заклятия
-  afterSpell(game);
+  afterSpell(game, true);
   return null;
 }
