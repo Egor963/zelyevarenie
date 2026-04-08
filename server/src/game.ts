@@ -506,7 +506,7 @@ function validateBuiltSelection(
     // Проверяем что все выбранные рецепты - великие эликсиры (6 оригинальных очков)
     // И исключаем сам верховный эликсир из выбора
     const allGreatElixirs = selected.filter(r => 
-      r!.originalPoints === 6 && r!.recipeDefId !== "supreme_elixir"
+      ["great_omen_elixir", "great_resurrection_elixir", "great_clairvoyance_elixir", "great_protection_elixir", "great_disappearance_elixir", "great_timeless_elixir", "great_power_elixir", "great_love_elixir"].includes(r!.recipeDefId)
     );
     
     if (allGreatElixirs.length !== needCount) {
@@ -525,7 +525,7 @@ function validateBuiltSelection(
     // Check that all selected recipes are talismans (8 original points)
     // And exclude great_magic_talisman itself from selection
     const allTalismans = selected.filter(r => 
-      r!.originalPoints === 8 && r!.recipeDefId !== "great_magic_talisman"
+      ["knowledge_talisman", "palantir_talisman", "teleport_talisman", "beasts_master_talisman"].includes(r!.recipeDefId)
     );
     
     if (allTalismans.length !== needCount) {
