@@ -942,10 +942,8 @@ export function castSpellTransformBuilt(
   
   // Remove chosen card from table
   const chosenCardIndex = game.table.findIndex((c) => c.id === chosenCardIdx);
-  if (chosenCardIndex >= 0) {
-    game.table.splice(chosenCardIndex, 1);
-  }
-  
+  // Remove chosen card from table using proper function
+  takeCardFromTable(game, chosenCardIdx);  
   // Create new built recipe with chosen card
   const newBuiltRecipe: BuiltRecipe = {
     instanceId: randomUUID(),
