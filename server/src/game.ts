@@ -658,7 +658,7 @@ function completeRecipeCraft(
     points: recipe.points,
     originalPoints: recipe.points, // Обычные рецепты сохраняют свои очки
     name: recipe.name,
-    ingredients: elementalPick,
+    ingredients: [...usedBuilt.map(b => b.card), ...elementalPick],
   };
 
   game.builtRecipes.push(newBuilt);
@@ -812,7 +812,7 @@ export function castSpellBreakBuilt(
           instanceId: `built-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           ownerId: playerId,
           card: chosenCard,
-          recipeDefId: `single_card_${chosenCard.bottomElement}`,
+          recipeDefId: chosenCard.face.kind === "recipe" ? (chosenCard.face as any).defId : "single_card",
           points: 0, // Без очков
           originalPoints: 0, // Без оригинальных очков
           name: `Карточка: ${chosenCard.bottomElement}`,
