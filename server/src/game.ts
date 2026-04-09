@@ -302,7 +302,7 @@ function currentPlayer(game: GameState): PlayerState {
 export function scoreTrackMax(game: GameState): number {
   const scores = game.players.map((p) => p.score);
   const m = scores.length ? Math.max(...scores) : 0;
-  return Math.max(300, m + 8, Math.ceil(m / 12) * 12);
+  return Math.max(200, m + 8, Math.ceil(m / 12) * 12);
 }
 
 export function startGame(game: GameState, requesterId: string): string | null {
