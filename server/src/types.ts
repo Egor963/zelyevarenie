@@ -127,6 +127,7 @@ export interface GameState {
   currentPlayerIndex: number;
   winnerName?: string;
   elementStacks: ElementStack[];
+  lastAction?: string;
 }
 
 export interface PublicPlayer {
@@ -162,4 +163,5 @@ export interface PublicGameSnapshot {
   /** Максимум на треке очков (динамический). */
   scoreTrackMax: number;
   yourHand?: GameCard[];
+  lastAction?: string;
 }

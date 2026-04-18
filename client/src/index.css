@@ -289,3 +289,14 @@ code.room {
   border: 1px dashed var(--accent-dim);
   background: rgba(201, 162, 39, 0.06);
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}

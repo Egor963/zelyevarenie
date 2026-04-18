@@ -67,7 +67,9 @@ function publicSnapshot(game: GameState, forPlayerId: string | null): PublicGame
     winnerName: game.winnerName,
     scoreTrackMax: scoreTrackMax(game),
     yourHand: you?.hand,
+    lastAction: game.lastAction,
   };
+  console.log('🎯 SERVER SNAPSHOT DEBUG:', { lastAction: game.lastAction });
 }
 
 type Room = {

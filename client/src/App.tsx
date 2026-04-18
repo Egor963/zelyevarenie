@@ -80,6 +80,8 @@ function ScoreTrack({ players, max }: { players: PublicPlayer[]; max: number }) 
 export default function App() {
   const socketRef = useRef<Socket | null>(null);
   const [snap, setSnap] = useState<PublicGameSnapshot | null>(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [playerName, setPlayerName] = useState(() => {
     try {
       return localStorage.getItem("zelye_name") ?? "";
@@ -175,6 +177,21 @@ export default function App() {
       console.log('💾 GAME STATE SAVED TO URL:', { roomId, playerName: currentPlayer?.name });
     }
   }, [roomId, snap?.players, playerName]);
+
+  // Показываем плашку с последним действием
+  useEffect(() => {
+    console.log('🎯 TOAST DEBUG:', { lastAction: snap?.lastAction, showToast, toastMessage });
+    if (snap?.lastAction) {
+      setToastMessage(snap.lastAction);
+      setShowToast(true);
+      console.log('🎯 TOAST SHOWING:', snap.lastAction);
+      // Скрываем через 7 секунд
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [snap?.lastAction]);
 
   // Восстанавливаем состояние игры из URL при загрузке
   useEffect(() => {
@@ -506,6 +523,26 @@ export default function App() {
           )}
         </p>
       </header>
+
+      {showToast && toastMessage && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: 'rgba(201, 162, 39, 1)',
+          color: 'var(--text)',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+          zIndex: 1000,
+          fontSize: '1rem',
+          fontWeight: '500',
+          animation: 'fadeIn 0.3s ease-in'
+        }}>
+          {toastMessage}
+        </div>
+      )}
 
       {showLobby && (
         <section className="panel">

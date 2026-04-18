@@ -64,4 +64,5 @@ export interface PublicGameSnapshot {
   winnerName?: string;
   scoreTrackMax: number;
   yourHand?: GameCard[];
+  lastAction?: string;
 }

@@ -466,6 +466,7 @@ export function placeOnTable(game: GameState, playerId: string, handIndex: numbe
     console.log(`No points added - element already on table`);
   }
 
+  game.lastAction = `${p.name} выложил ${card.bottomElement} на стол`;
   finishMainAction(game);
   return null;
 }
@@ -666,6 +667,7 @@ function completeRecipeCraft(
   p.score += recipe.points;
   applyHalfPointsToOwners(game, recipe.points, usedBuilt, p.id);
 
+  game.lastAction = `${p.name} собрал ${recipe.name}`;
   finishMainAction(game);
   console.log('🎯 CRAFT RECIPE SUCCESS!');
   return null;
@@ -767,6 +769,7 @@ export function castSpellTakeTable(
   
   p.hand.push(fromTable!);
 
+  game.lastAction = `${p.name} использовал заклятие «Взять со стола»`;
   afterSpell(game, isKnowledgeSpell);
   return null;
 }
@@ -841,6 +844,7 @@ export function castSpellBreakBuilt(
   }
   
   console.log('🎯 BREAK BUILT SUCCESS');
+  game.lastAction = `${p.name} использовал заклятие «Разрушение»`;
   return null;
 }
 
@@ -869,6 +873,7 @@ export function castSpellSwap(
   p.hand.splice(spellHandIndex, 1);
   addCardToTable(game, sc); // Spell goes to table with stacking
 
+  game.lastAction = `${p.name} использовал заклятие «Обмен»`;
   afterSpell(game, true);
   return null;
 }
@@ -974,6 +979,7 @@ export function castSpellTransformBuilt(
   });
   
   // После трансформации игрок делает дополнительный ход как и другие заклятия
+  game.lastAction = `${p.name} использовал заклятие «Трансформа»`;
   afterSpell(game, true);
   return null;
 }
